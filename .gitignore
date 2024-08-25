@@ -36,3 +36,6 @@
 
 # VS code folder
 *.vscode
+
+# Other
+*.html
