@@ -3,7 +3,7 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 
 ### Features added:
 - Integrator and derivative component.
-- Linear SISO object representation based on physical model - single differential equation with primitive state variables dependencies, e.g., \( x = \int \dot{x} \).
+- Linear SISO object representation based on physical model - single differential equation with primitive state variables dependencies.
 
 ### features to be added:
 - A way of plotting the objects responses to have an easy tool to testing.
