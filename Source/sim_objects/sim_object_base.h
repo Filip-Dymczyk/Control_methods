@@ -1,16 +1,17 @@
 // Author: Filip Dymczyk
-// Description : Base class for components.
+// Description : Base simulation object.
 
 #pragma once
 #include <iostream>
 
-class ComponentBase
+class SimumlationObjectBase
 {
 public:
-    ComponentBase(double timelevel) : _timelevel(timelevel) {}
+    SimumlationObjectBase() : _timelevel(0.0) {}
+    SimumlationObjectBase(double const timelevel) : _timelevel(timelevel) {}
     
     virtual void
-    update(double input) = 0;
+    update(double const input) = 0;
 
     double const
     get_timelevel() const
@@ -26,7 +27,7 @@ public:
 
 protected:
     void
-    set_value(double value)
+    set_value(double const value)
     {
         _value = value;
     }

@@ -2,15 +2,15 @@
 // Description : Derivative class.
 
 #pragma once
-#include "component_base.h"
+#include "sim_object_base.h"
 
-class Derivative : public ComponentBase
+class Derivative : public SimumlationObjectBase
 {
 public:
-    Derivative(double timelevel) : ComponentBase(timelevel) {}
+    Derivative(double const timelevel) : SimumlationObjectBase(timelevel) {}
 
     void
-    update(double input) override
+    update(double const input) override
     {
         double const derivative = (input - _previous_value) / get_timelevel();
         set_value(derivative);
