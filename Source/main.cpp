@@ -6,6 +6,7 @@
 #include "sim_objects/derivative.h"
 #include "sim_objects/object.h"
 #include "sim_objects/pid.h"
+#include "sim_objects/control_system.h"
 
 void test_components(double const dt, std::size_t const count)
 {
@@ -27,7 +28,7 @@ void test_components(double const dt, std::size_t const count)
 void test_object(double const dt, std::size_t const count)
 {
     using Object = ObjectStandardRepresentation<double, 2>;
-    Object::coeffs coeffs = {-1.0, -1.0, 1.0};
+    Object::coeffs coeffs = {1.0, 1.0, 1.0};
     Object::initial_state init_state = {0.0, 0.0};
     Object second_order_object(dt, coeffs, init_state);
 
@@ -63,10 +64,48 @@ void test_pid(double const dt, std::size_t const count)
     }
 }
 
+void test_open_loop(double const dt, std::size_t const count)
+{
+    ObjectStandardRepresentation<double, 2> object {dt, {1.0, 1.0, 1.0}, {0.0, 0.0}};
+    PID pid {dt, {1.0, 1.0, 0.0}};
+    Control<ObjectStandardRepresentation<double, 2>, PID> control_loop {object, pid, ControlMode::OPEN_LOOP};
+    double t = 0;
+    for(std::size_t i = 0; i < count; i++)
+    {
+        double set_point = 0;
+        if(t > 1.0)
+        {
+            set_point = 1.0;
+        }
+        std::cout << "Output: " << control_loop.get_output() << " at time: "<< t << std::endl;
+        control_loop.update(set_point);
+        t += dt;
+    }
+}
+
+void closed_open_loop(double const dt, std::size_t const count)
+{
+    ObjectStandardRepresentation<double, 2> object {dt, {1.0, -1.0, 1.0}, {0.0, 0.0}};
+    PID pid {dt, {6.0, 0.0, 0.0}};
+    Control<ObjectStandardRepresentation<double, 2>, PID> control_loop {object, pid, ControlMode::CLOSED_LOOP};
+    double t = 0;
+    for(std::size_t i = 0; i < count; i++)
+    {
+        double set_point = 0;
+        if(t > 1.0)
+        {
+            set_point = 1.0;
+        }
+        std::cout << "Output: " << control_loop.get_output() << " at time: "<< t << std::endl;
+        control_loop.update(set_point);
+        t += dt;
+    }
+}
+
 int main()
 {
-    double const dt = 0.01f;
-    std::size_t const count = 300;
-    test_pid(dt, count);
+    double const dt = 0.1f;
+    std::size_t const count = 50;
+    closed_open_loop(dt, count);
     return 0;
 }
