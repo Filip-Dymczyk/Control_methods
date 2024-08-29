@@ -12,11 +12,11 @@ class State
 public:
     using initial_state = std::array<T, order>;
 
-    State(double const timelevel, initial_state const & init_state)
+    State(double const time_step, initial_state const & init_state)
     {
         for(std::size_t i = 0; i < order; i++)
         {
-            Integrator I (timelevel, init_state[i]);
+            Integrator I (time_step, init_state[i]);
             _integrators[i] = I;
         }
     }
@@ -41,6 +41,9 @@ private:
     std::array<Integrator, order> _integrators;
 };
 
+// NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by corresponding coefficients + input value.
+// Lower order derivatives are equal to the integral of a higher one - simple relation.
+// We allow to set up desired initial conditions.
 template<typename T, std::size_t order>
 class ObjectStandardRepresentation : public SimumlationObjectBase
 {   
@@ -49,7 +52,7 @@ public:
     using initial_state = std::array<T, order>;
     using base_type = T;
 
-    ObjectStandardRepresentation(double const timelevel, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(timelevel), _coefficients(coefficients), _state(timelevel, init_state)
+    ObjectStandardRepresentation(double const time_step, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(time_step), _coefficients(coefficients), _state(time_step, init_state)
     {}
 
     std::size_t const
