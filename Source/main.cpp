@@ -1,10 +1,11 @@
 // Control methods for linear SISO  dynamical systems.
 // Author: Filip Dymczyk
 
+#include "math.h"
 #include "sim_objects/integrator.h"
 #include "sim_objects/derivative.h"
 #include "sim_objects/object.h"
-#include "math.h"
+#include "sim_objects/pid.h"
 
 void test_components(double const dt, std::size_t const count)
 {
@@ -44,10 +45,28 @@ void test_object(double const dt, std::size_t const count)
     }
 }
 
+void test_pid(double const dt, std::size_t const count)
+{
+    PID pid {dt, {1.0, 1.0, 0.0}};
+
+    double t = 0;
+    for(std::size_t i = 0; i < count; i++)
+    {
+        double input = 0;
+        if(t >= 1.0)
+        {
+            input = 1.0;
+        }
+        std::cout << "Output: " << pid.get_value() << " at time: "<< t << std::endl;
+        pid.update(input);
+        t += dt;
+    }
+}
+
 int main()
 {
     double const dt = 0.01f;
     std::size_t const count = 300;
-    test_object(dt, count);
+    test_pid(dt, count);
     return 0;
 }
