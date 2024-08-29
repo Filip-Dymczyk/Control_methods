@@ -83,7 +83,7 @@ public:
         {
             if(i < _coefficients.size() - 1)
             {
-                highest_order_derivative_value += _coefficients[i] * _state.get_value(i);
+                highest_order_derivative_value -= _coefficients[i] * _state.get_value(i);
             }
             else
             {
