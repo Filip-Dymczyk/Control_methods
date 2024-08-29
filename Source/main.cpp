@@ -68,7 +68,7 @@ void test_open_loop(double const dt, std::size_t const count)
 {
     ObjectStandardRepresentation<double, 2> object {dt, {1.0, 1.0, 1.0}, {0.0, 0.0}};
     PID pid {dt, {1.0, 1.0, 0.0}};
-    Control<ObjectStandardRepresentation<double, 2>, PID> control_loop {object, pid, ControlMode::OPEN_LOOP};
+    ControlSystem<ObjectStandardRepresentation<double, 2>, PID> control_loop {object, pid, ControlMode::OPEN_LOOP};
     double t = 0;
     for(std::size_t i = 0; i < count; i++)
     {
@@ -87,7 +87,7 @@ void closed_open_loop(double const dt, std::size_t const count)
 {
     ObjectStandardRepresentation<double, 2> object {dt, {1.0, -1.0, 1.0}, {0.0, 0.0}};
     PID pid {dt, {6.0, 0.0, 0.0}};
-    Control<ObjectStandardRepresentation<double, 2>, PID> control_loop {object, pid, ControlMode::CLOSED_LOOP};
+    ControlSystem<ObjectStandardRepresentation<double, 2>, PID> control_loop {object, pid, ControlMode::CLOSED_LOOP};
     double t = 0;
     for(std::size_t i = 0; i < count; i++)
     {

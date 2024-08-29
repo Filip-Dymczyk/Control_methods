@@ -10,10 +10,10 @@ enum class ControlMode
 };
 
 template<typename ObjectT, typename ControllerT>
-class Control
+class ControlSystem
 {
 public:
-    Control(ObjectT const & object, ControllerT const & controller, ControlMode const & control_mode) : _object(object), _controller(controller), _control_mode(control_mode) {}
+    ControlSystem(ObjectT const & object, ControllerT const & controller, ControlMode const & control_mode) : _object(object), _controller(controller), _control_mode(control_mode) {}
 
     void
     update(double const set_point)
