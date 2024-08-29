@@ -41,6 +41,9 @@ private:
     std::array<Integrator, order> _integrators;
 };
 
+// NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by corresponding coefficients + input value.
+// Lower order derivatives are equal to the integral of a higher one - simple relation.
+// We allow to set up desired initial conditions.
 template<typename T, std::size_t order>
 class ObjectStandardRepresentation : public SimumlationObjectBase
 {   
