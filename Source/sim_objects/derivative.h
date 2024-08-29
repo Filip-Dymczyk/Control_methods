@@ -7,12 +7,12 @@
 class Derivative : public SimumlationObjectBase
 {
 public:
-    Derivative(double const timelevel) : SimumlationObjectBase(timelevel) {}
+    Derivative(double const time_step) : SimumlationObjectBase(time_step) {}
 
     void
     update(double const input) override
     {
-        double const derivative = (input - _previous_value) / get_timelevel();
+        double const derivative = (input - _previous_value) / get_time_step();
         set_value(derivative);
         _previous_value = input;
     }

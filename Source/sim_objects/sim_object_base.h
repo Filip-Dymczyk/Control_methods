@@ -7,16 +7,16 @@
 class SimumlationObjectBase
 {
 public:
-    SimumlationObjectBase() : _timelevel(0.0) {}
-    SimumlationObjectBase(double const timelevel) : _timelevel(timelevel) {}
+    SimumlationObjectBase() : _time_step(0.0) {}
+    SimumlationObjectBase(double const time_step) : _time_step(time_step) {}
     
     virtual void
     update(double const input) = 0;
 
     double const
-    get_timelevel() const
+    get_time_step() const
     {
-        return _timelevel;
+        return _time_step;
     }
 
     double const
@@ -33,5 +33,5 @@ protected:
     }
 private:
     double _value {};
-    double _timelevel {};
+    double _time_step {};
 };
