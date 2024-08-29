@@ -7,9 +7,8 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - PID controller.
 - Open and closed loop control with PID controller.
 
-### features to be added:
+### Features to be added:
 - A way of plotting the objects responses to have an easy tool to testing.
-- [DONE] Open and closed loop control with PID controller.
 - Managing tests.
 - PID tuning.
 - Other control methods.
