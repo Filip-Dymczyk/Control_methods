@@ -8,7 +8,7 @@ class Integrator : public SimumlationObjectBase
 {
 public:
     Integrator() : SimumlationObjectBase() {}
-    Integrator(double const timelevel, double const initial_state = 0) : SimumlationObjectBase(timelevel) 
+    Integrator(double const time_step, double const initial_state = 0) : SimumlationObjectBase(time_step) 
     {
         set_value(initial_state);
     }
@@ -16,7 +16,7 @@ public:
     void
     update(double const input) override
     {
-        set_value(get_value() + input * get_timelevel());
+        set_value(get_value() + input * get_time_step());
     }
 };
 
