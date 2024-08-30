@@ -36,6 +36,12 @@ public:
     {
         return _set_point;
     }
+    
+    double const
+    get_control() const
+    {
+        return _controller.get_value();
+    }
 
     double const
     get_output() const
