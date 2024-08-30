@@ -17,7 +17,6 @@
                 "-L",
                 "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\libs",
                 "-lpython311"
-
             ],
             "options": {
                 "cwd": "${fileDirname}"
