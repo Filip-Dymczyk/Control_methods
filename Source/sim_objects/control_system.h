@@ -6,7 +6,8 @@
 enum class ControlMode
 {
     OPEN_LOOP,
-    CLOSED_LOOP
+    CLOSED_LOOP,
+    NONE
 };
 
 template<typename ObjectT, typename ControllerT>
@@ -21,14 +22,14 @@ public:
         _set_point = set_point;
         if(_control_mode == ControlMode::OPEN_LOOP)
         {
-            _object.update(set_point);
+            _controller.update(set_point);
         }
         else
         {
             double const error = set_point - _object.get_value();
             _controller.update(error);
-            _object.update(_controller.get_value());
         }
+        _object.update(_controller.get_value());
     }
 
     double const
