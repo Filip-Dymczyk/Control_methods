@@ -6,11 +6,11 @@
 #include "sim_object_base.h"
 #include "integrator.h"
 
-template<typename T, std::size_t order>
+template<std::size_t order>
 class State
 {
 public:
-    using initial_state = std::array<T, order>;
+    using initial_state = std::array<double, order>;
 
     State(double const time_step, initial_state const & init_state)
     {
@@ -46,13 +46,12 @@ private:
 // Object coefficients interpretion: e.g. x'' = -ax' - bx + cu.
 // When entering coeficients beware of mistakingly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
-template<typename T, std::size_t order>
+template<std::size_t order>
 class ObjectStandardRepresentation : public SimumlationObjectBase
 {   
 public:
-    using coeffs = std::array<T, order + 1>;
-    using initial_state = std::array<T, order>;
-    using base_type = T;
+    using coeffs = std::array<double, order + 1>;
+    using initial_state = std::array<double, order>;
 
     ObjectStandardRepresentation(double const time_step, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(time_step), _coefficients(coefficients), _state(time_step, init_state)
     {}
@@ -98,15 +97,8 @@ public:
         // Output (x) - last integrator value;
         set_value(_state.get_value(_order - 1));
     }
-
-    double const
-    x() const
-    {
-        return get_value();
-    }
-
 private:
     std::size_t _order = order;
     coeffs _coefficients;
-    State<T, order> _state;
+    State<order> _state;
 };
