@@ -7,6 +7,8 @@
 #include "sim_objects/object.h"
 #include "sim_objects/pid.h"
 #include "sim_objects/control_system.h"
+#include "matplotlibcpp/matplotlibcpp.h"
+namespace plt = matplotlibcpp;
 
 void test_components(double const dt, std::size_t const count)
 {
@@ -104,8 +106,7 @@ void closed_open_loop(double const dt, std::size_t const count)
 
 int main()
 {
-    double const dt = 0.1f;
-    std::size_t const count = 50;
-    closed_open_loop(dt, count);
+    plt::plot({1, 2, 3, 4}, "*");
+    plt::show();
     return 0;
 }
