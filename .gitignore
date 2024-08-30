@@ -34,8 +34,5 @@
 # Build folder
 *builds*
 
-# VS code folder
-*.vscode
-
 # Other
 *.html
