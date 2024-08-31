@@ -4,6 +4,7 @@
 #include "sim_objects/object.h"
 #include "sim_objects/pid.h"
 #include "test_with_plot.h"
+#include "signals/signals.h"
 
 int main()
 {
@@ -11,13 +12,14 @@ int main()
     double const time_step = 0.1;
     TestWithPlot test(sim_time, time_step);
     PID pid {time_step, {5.0, 1.0, 0.0}};
-    ObjectStandardRepresentation<2> object_open_loop(time_step, {1.0, 1.0, 1.0}, {0.0, 1.0});
-    ObjectStandardRepresentation<2> object_unstable(time_step, {1.0, -1.0, 1.0}, {0.0, 1.0});
-
-    test.test_component(pid);
-    test.test_open_loop_control<2>({1.0, 1.0, 1.0}, {0.0, 1.0}, {5.0, 1.0, 0.0});
-    test.test_open_loop_control<ObjectStandardRepresentation<2>>(object_open_loop, pid);
-    test.test_closed_loop_control<2>({1.0, -1.0, 1.0}, {0.0, 1.0}, {5.0, 1.0, 0.0});
-    test.test_closed_loop_control<ObjectStandardRepresentation<2>>(object_unstable, pid);
+    ObjectStandardRepresentation<2> object_open_loop(time_step, {1.0, 1.0, 1.0}, {0.0, 0.0});
+    ObjectStandardRepresentation<2> object_unstable(time_step, {1.0, -1.0, 1.0}, {0.0, 0.0});
+    Heaviside heaviside {};
+    Ramp ramp {};
+    Rectangle rectangle {0.0, 3.0};
+    SineWave sine_wave {0.0, 1.0, 3.14, 1.0};
+    test.test_component<PID>(pid, &ramp);
+    test.test_open_loop_control<ObjectStandardRepresentation<2>>(object_open_loop, pid, &sine_wave);
+    test.test_closed_loop_control<ObjectStandardRepresentation<2>>(object_unstable, pid, &sine_wave);
     return 0;
 }

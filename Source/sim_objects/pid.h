@@ -21,11 +21,11 @@ public:
     PID(double const time_step, PID_Params params) : SimumlationObjectBase(time_step), _params(params) {}
     
     void
-    update(double const input) override
+    update(double const error) override
     {   
-        _error_int.update(input);
-        _error_der.update(input);
-        set_value(_params.kp * input + _params.ki * _error_int.get_value() + _params.kd * _error_der.get_value());
+        _error_int.update(error);
+        _error_der.update(error);
+        set_value(_params.kp * error + _params.ki * _error_int.get_value() + _params.kd * _error_der.get_value());
     }
 private:  
     PID_Params _params {};

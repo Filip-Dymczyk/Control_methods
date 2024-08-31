@@ -6,6 +6,7 @@
 #include "sim_object_base.h"
 #include "integrator.h"
 
+// NOTE: Class representing state variables.
 template<std::size_t order>
 class State
 {
@@ -75,7 +76,7 @@ public:
     }
 
     void 
-    update(double const input) override
+    update(double const control) override
     {
         double highest_order_derivative_value = 0;
         
@@ -88,7 +89,7 @@ public:
             }
             else
             {
-                highest_order_derivative_value += _coefficients[i] * input;
+                highest_order_derivative_value += _coefficients[i] * control;
             }
         }
         // Update state variables values:
