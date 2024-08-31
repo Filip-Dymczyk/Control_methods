@@ -43,9 +43,9 @@ public:
         plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::OPEN_LOOP, plot_control);
     }
 
-    template<typename ComponentT, typename InputSignalT>
+    template<typename ComponentT>
     void
-    test_component(ComponentT component, InputSignalT input_signal)
+    test_component(ComponentT component, Signal* input_signal)
     {
         PlottingBuffers const buffers = simulate_component(component, input_signal);
 
@@ -92,9 +92,9 @@ private:
         return {time, set_point, control, output};
     }
 
-    template<typename ComponentT, typename InputSignalT>
+    template<typename ComponentT>
     PlottingBuffers const
-    simulate_component(ComponentT object, InputSignalT input_signal)
+    simulate_component(ComponentT object, Signal* input_signal)
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
@@ -104,11 +104,11 @@ private:
         while(t < _sim_time)
         {
             time.push_back(t);
-            object.update(input_signal.get_value());   
-            set_point.push_back(input_signal.get_value());
+            object.update(input_signal -> get_value());   
+            set_point.push_back(input_signal -> get_value());
             output.push_back(object.get_value());
             t += _time_step;
-            input_signal.update(t);
+            input_signal -> update(t);
         }  
         return {time, set_point, {}, output};
     }
