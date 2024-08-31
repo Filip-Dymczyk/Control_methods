@@ -88,7 +88,6 @@ private:
     double _end_time {};
 };
 
-
 // NOTE: Sine wave - {a * sin(w * t) + b; t > t0
 //                   {0.0; t <= t0.
 class SineWave : public Signal
