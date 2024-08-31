@@ -17,8 +17,9 @@ int main()
     Heaviside heaviside {};
     Ramp ramp {};
     Rectangle rectangle {0.0, 3.0};
-    test.test_component<PID, Ramp>(pid, ramp);
-    test.test_open_loop_control<ObjectStandardRepresentation<2>, Rectangle>(object_open_loop, pid, rectangle);
-    test.test_closed_loop_control<ObjectStandardRepresentation<2>, Rectangle>(object_unstable, pid, rectangle);
+    SineWave sine_wave {0.0, 1.0, 3.14, 1.0};
+    test.test_component<PID>(pid, &ramp);
+    test.test_open_loop_control<ObjectStandardRepresentation<2>>(object_open_loop, pid, &sine_wave);
+    test.test_closed_loop_control<ObjectStandardRepresentation<2>>(object_unstable, pid, &sine_wave);
     return 0;
 }

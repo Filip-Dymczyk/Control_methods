@@ -87,3 +87,21 @@ public:
 private:
     double _end_time {};
 };
+
+
+// NOTE: Sine wave - {a * sin(w * t) + b; t > t0
+//                   {0.0; t <= t0.
+class SineWave : public Signal
+{
+public:
+    SineWave(double const start_time, double const scaler, double const omega, double const offset) : Signal(start_time, scaler), _omega(omega), _offset(offset) {}
+
+    void
+    update(double const time) override
+    {
+        set_value((time > _start_time) ? (_scaler * sin(_omega * time) + _offset) : 0.0);
+    }
+private:
+    double _omega {};
+    double _offset {};
+};
