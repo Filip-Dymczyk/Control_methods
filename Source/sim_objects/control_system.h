@@ -10,6 +10,7 @@ enum class ControlMode
     NONE
 };
 
+// NOTE: Open/closed control system comprised of an object model and a controller.
 template<typename ObjectT, typename ControllerT>
 class ControlSystem
 {

@@ -6,6 +6,7 @@
 #include "sim_object_base.h"
 #include "integrator.h"
 
+// NOTE: Class representing state variables.
 template<std::size_t order>
 class State
 {
