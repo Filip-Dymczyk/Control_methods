@@ -11,7 +11,7 @@ public:
     SimumlationObjectBase(double const time_step) : _time_step(time_step) {}
     
     virtual void
-    update(double const input) = 0;
+    update(double const /*some input*/) = 0;
 
     double const
     get_time_step() const
