@@ -1,5 +1,5 @@
 // Author: Filip Dymczyk
-// Description : Basic input signals.
+// Description : Basic signals.
 
 #pragma once
 
