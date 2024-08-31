@@ -8,8 +8,10 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Open and closed loop control with PID controller.
 - Possibility to plot responses using Matplotlibcpp.
 - Test API using plots.
+- Basic signals: Heaviside, ramp, rectangle, sine wave.
 
 ### Features to be added:
+- Testing managed using framework.
 - PID tuning.
 - Other control methods.
 - State space model represantation.
