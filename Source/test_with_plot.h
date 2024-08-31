@@ -72,6 +72,7 @@ private:
     PlottingBuffers const
     simulate_open_closed_loop(ObjectT object, PID pid, Signal* input_signal, ControlMode const & control_mode)
     {
+        input_signal -> reset();
         ControlSystem<ObjectT, PID> control_loop {object, pid, control_mode};
         std::vector<double> time {};
         std::vector<double> set_point {};
@@ -96,6 +97,7 @@ private:
     PlottingBuffers const
     simulate_component(ComponentT object, Signal* input_signal)
     {
+        input_signal -> reset();
         std::vector<double> time {};
         std::vector<double> set_point {};
         std::vector<double> output {};

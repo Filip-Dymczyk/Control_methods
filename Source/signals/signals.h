@@ -29,6 +29,12 @@ public:
     {
         _scaler = scaler;
     }
+
+    void
+    reset()
+    {
+        _value = 0.0;
+    }
 protected:
     double _start_time {};
     double _scaler {};
