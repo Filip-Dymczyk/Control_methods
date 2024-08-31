@@ -17,7 +17,7 @@ int main()
     Heaviside heaviside {};
     Ramp ramp {};
     Rectangle rectangle {0.0, 3.0};
-    test.test_component(pid, ramp);
+    test.test_component<PID, Ramp>(pid, ramp);
     test.test_open_loop_control<ObjectStandardRepresentation<2>, Rectangle>(object_open_loop, pid, rectangle);
     test.test_closed_loop_control<ObjectStandardRepresentation<2>, Rectangle>(object_unstable, pid, rectangle);
     return 0;
