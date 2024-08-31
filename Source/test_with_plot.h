@@ -7,6 +7,7 @@
 #include "sim_objects/pid.h"
 #include "sim_objects/object.h"
 #include "sim_objects/control_system.h"
+#include "signals/signals.h"
 
 namespace plt = matplotlibcpp;
 
@@ -24,18 +25,18 @@ class TestWithPlot
 public:
     TestWithPlot(double const sim_time, double const time_step) : _sim_time(sim_time), _time_step(time_step) {}
 
-    template<typename ObjectT, typename InputSignalT>
+    template<typename ObjectT>
     void
-    test_closed_loop_control(ObjectT object, PID pid, InputSignalT input_signal, bool const plot_control = false)
+    test_closed_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false)
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::CLOSED_LOOP);
 
         plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::CLOSED_LOOP, plot_control);
     }
 
-    template<typename ObjectT, typename InputSignalT>
+    template<typename ObjectT>
     void
-    test_open_loop_control(ObjectT object, PID pid, InputSignalT input_signal, bool const plot_control = false)
+    test_open_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false)
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::OPEN_LOOP);
 
@@ -67,9 +68,9 @@ private:
     double _sim_time {};
     double _time_step {};
 
-    template<typename ObjectT, typename InputSignalT>
+    template<typename ObjectT>
     PlottingBuffers const
-    simulate_open_closed_loop(ObjectT object, PID pid, InputSignalT input_signal, ControlMode const & control_mode)
+    simulate_open_closed_loop(ObjectT object, PID pid, Signal* input_signal, ControlMode const & control_mode)
     {
         ControlSystem<ObjectT, PID> control_loop {object, pid, control_mode};
         std::vector<double> time {};
@@ -81,12 +82,12 @@ private:
         while(t < _sim_time)
         {
             time.push_back(t);
-            control_loop.update(input_signal.get_value());
-            set_point.push_back(input_signal.get_value());
+            control_loop.update(input_signal -> get_value());
+            set_point.push_back(input_signal -> get_value());
             control.push_back(control_loop.get_control());
             output.push_back(control_loop.get_output());
             t += _time_step;
-            input_signal.update(t);
+            input_signal -> update(t);
         }  
         return {time, set_point, control, output};
     }
