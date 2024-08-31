@@ -57,3 +57,21 @@ public:
     }
 };
 
+class Rectangle : public Heaviside
+{
+public:
+    Rectangle(double const start_time, double const end_time, double const coefficient = 1.0) : Heaviside(start_time, coefficient)
+    {
+        assert(end_time > start_time);
+        _end_time = end_time;
+    }
+
+    void
+    update(double const time) override
+    {
+        set_value((time > _start_time && time < _end_time) ? _coefficient : 0.0);
+    }
+
+private:
+    double _end_time {};
+};

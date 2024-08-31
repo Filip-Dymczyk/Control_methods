@@ -16,8 +16,9 @@ int main()
     ObjectStandardRepresentation<2> object_unstable(time_step, {1.0, -1.0, 1.0}, {0.0, 0.0});
     Heaviside heaviside {};
     Ramp ramp {};
+    Rectangle rectangle {0.0, 3.0};
     test.test_component(pid, ramp);
-    test.test_open_loop_control<ObjectStandardRepresentation<2>, Ramp>(object_open_loop, pid, ramp);
-    test.test_closed_loop_control<ObjectStandardRepresentation<2>, Ramp>(object_unstable, pid, ramp);
+    test.test_open_loop_control<ObjectStandardRepresentation<2>, Rectangle>(object_open_loop, pid, rectangle);
+    test.test_closed_loop_control<ObjectStandardRepresentation<2>, Rectangle>(object_unstable, pid, rectangle);
     return 0;
 }
