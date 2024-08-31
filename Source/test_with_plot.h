@@ -24,44 +24,20 @@ class TestWithPlot
 public:
     TestWithPlot(double const sim_time, double const time_step) : _sim_time(sim_time), _time_step(time_step) {}
 
-    template<std::size_t order>
+    template<typename ObjectT, typename InputSignalT>
     void
-    test_closed_loop_control(std::array<double, order + 1> object_coeffs, std::array<double, order> init_state, PID::PID_Params pid_params, bool const plot_control = false)
+    test_closed_loop_control(ObjectT object, PID pid, InputSignalT input_signal, bool const plot_control = false)
     {
-        ObjectStandardRepresentation<order> object {_time_step, object_coeffs, init_state};
-        PID pid {_time_step, pid_params};
-
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, ControlMode::CLOSED_LOOP);
+        PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::CLOSED_LOOP);
 
         plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::CLOSED_LOOP, plot_control);
     }
 
-    template<typename ObjectT>
+    template<typename ObjectT, typename InputSignalT>
     void
-    test_closed_loop_control(ObjectT object, PID pid, bool const plot_control = false)
+    test_open_loop_control(ObjectT object, PID pid, InputSignalT input_signal, bool const plot_control = false)
     {
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, ControlMode::CLOSED_LOOP);
-
-        plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::CLOSED_LOOP, plot_control);
-    }
-
-    template<std::size_t order>
-    void
-    test_open_loop_control(std::array<double, order + 1> object_coeffs, std::array<double, order> init_state, PID::PID_Params pid_params, bool const plot_control = false)
-    {
-        ObjectStandardRepresentation<order> object {_time_step, object_coeffs, init_state};
-        PID pid {_time_step, pid_params};
-
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, ControlMode::OPEN_LOOP);
-
-        plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::OPEN_LOOP, plot_control);
-    }
-
-    template<typename ObjectT>
-    void
-    test_open_loop_control(ObjectT object, PID pid, bool const plot_control = false)
-    {
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, ControlMode::OPEN_LOOP);
+        PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::OPEN_LOOP);
 
         plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::OPEN_LOOP, plot_control);
     }
@@ -91,9 +67,9 @@ private:
     double _sim_time {};
     double _time_step {};
 
-    template<typename ObjectT>
+    template<typename ObjectT, typename InputSignalT>
     PlottingBuffers const
-    simulate_open_closed_loop(ObjectT object, PID pid, ControlMode const & control_mode)
+    simulate_open_closed_loop(ObjectT object, PID pid, InputSignalT input_signal, ControlMode const & control_mode)
     {
         ControlSystem<ObjectT, PID> control_loop {object, pid, control_mode};
         std::vector<double> time {};
@@ -105,17 +81,12 @@ private:
         while(t < _sim_time)
         {
             time.push_back(t);
-            double sp = 0.0;
-            if(t > 1.0)
-            {
-                sp = 1.0;
-            }
-            control_loop.update(sp);
-            
-            set_point.push_back(sp);
+            control_loop.update(input_signal.get_value());
+            set_point.push_back(input_signal.get_value());
             control.push_back(control_loop.get_control());
             output.push_back(control_loop.get_output());
             t += _time_step;
+            input_signal.update(t);
         }  
         return {time, set_point, control, output};
     }
