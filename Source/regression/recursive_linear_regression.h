@@ -11,13 +11,13 @@ class RecursiveLinearRegression
     using VectorT = std::array<double, n>;
     using MatrixT = std::array<std::array<double, n>, n>;
 public:
-    RecursiveLinearRegression(double const lambda, std::array<double, n> coefficients) : _lambda(lambda) 
+    RecursiveLinearRegression(double const lambda) : _lambda(lambda) 
     {
         _P = create_diagonal_matrix<MatrixT>(1.0);
     }
 
     void
-    update(std::array<double, n> current_coefficients, std::array<double, n> x, double const y_meas, double const y_calc)
+    update(VectorT const & current_coefficients, VectorT const & x, double const y_meas, double const y_calc)
     {
         VectorT K = matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x);
         scale_vector<VectorT>(K, 1.0 / (_lambda + vectors_multiplication_scalar_product<VectorT>(x, matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x))));
@@ -30,13 +30,13 @@ public:
         scale_matrix<MatrixT>(_P, 1.0 / _lambda);
     }
 
-    std::array<double, n> const &
+    VectorT const &
     get_coefss() const
     {
         return _coefficients;
     }
 private:
     double _lambda {};
-    std::array<std::array<double, n>, n> _P {};
-    std::array<double, n> _coefficients {};
+    MatrixT _P {};
+    VectorT _coefficients {};
 };
