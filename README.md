@@ -9,6 +9,8 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Possibility to plot responses using Matplotlibcpp.
 - Test API using plots.
 - Basic signals: Heaviside, ramp, rectangle, sine wave.
+- Vectors and matrices algebra operations.
+- Recursive linear regression.
 
 ### Features to be added:
 - Testing managed using framework.
