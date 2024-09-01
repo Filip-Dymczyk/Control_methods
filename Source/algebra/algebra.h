@@ -11,11 +11,11 @@ create_diagonal_matrix(double scalar = 1.0)
     MatrixT out_matrix {};
     
     assert(out_matrix.size());
-    assert(out_matrix[0].size());
+    assert(out_matrix.size());
 
-    for(std::size_t i = 0; i < n; i++)
+    for(std::size_t i = 0; i < out_matrix.size(); i++)
     {
-        for(std::size_t j = 0; j < n; j++)
+        for(std::size_t j = 0; j < out_matrix[0].size(); j++)
         {
             if(i == j)
             {
@@ -32,6 +32,7 @@ VectorT
 matrix_vector_multiplication_vector_product(MatrixT const & matrix, VectorT const & vector)
 {
     assert(matrix.size());
+    assert(matrix[0].size());
     assert(vector.size());
     assert(matrix[0].size() == vector.size());
 
@@ -129,7 +130,7 @@ subtract_matrices(MatrixT const & m_lhs, MatrixT const & m_rhs)
 
     for(std::size_t i = 0; i < m_lhs.size(); i++)
     {
-        for(std::size_t j = 0; j < m_rhs.size(); j++)
+        for(std::size_t j = 0; j < m_rhs[0].size(); j++)
         {
             out_matrix[i][j] = m_lhs[i][j] - m_rhs[i][j];
         }
@@ -144,4 +145,36 @@ scale_matrix(MatrixT & matrix, double const scaler)
 {
     assert(matrix.size());
     assert(matrix[0].size());
+
+    for(std::size_t i = 0; i < matrix.size(); i++)
+    {
+        for(std::size_t j = 0; j < matrix[0].size(); j++)
+        {
+            matrix[i][j] *= scaler;
+        }
+    }
 }
+
+ template<typename VectorT, typename MatrixT>
+ VectorT
+ vector_matrix_multiplication_vector_product(VectorT const & vector_T, MatrixT const & matrix)
+ {  
+    assert(vector_T.size());
+    assert(matrix.size());
+    assert(matrix[0].size());
+    assert(vector_T.size() == matrix.size());
+
+    VectorT out_vector {};
+
+    for(std::size_t i = 0; i < vector_T.size(); i++)
+    {
+        double column_value {};
+        for(std::size_t j = 0; j < matrix.size(); j++)
+        {
+            column_value += vector_T[j] * matrix[j][i];
+        }
+        out_vector[i] = column_value;
+    }
+
+    return out_vector;
+ }
