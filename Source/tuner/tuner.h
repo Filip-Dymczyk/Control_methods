@@ -11,9 +11,12 @@ public:
     Tuner(ControlSystemT const & control_system, RegressionT const & regression) : _control_system(control_system), _regression(regression) {}
 
     void
-    update()
+    update(Signal* signal)
     {
-        _control_system.update();
+        _control_system.update(signal -> get_value());
+
+
+        signal.update()
     }
 private:
     ControlSystemT & _control_system {};
