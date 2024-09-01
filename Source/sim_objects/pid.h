@@ -23,11 +23,19 @@ public:
     void
     update(double const error) override
     {   
+        _error = error;
         _error_int.update(error);
         _error_der.update(error);
         set_value(_params.kp * error + _params.ki * _error_int.get_value() + _params.kd * _error_der.get_value());
     }
-private:  
+
+    double const
+    get_error() const
+    {
+        return _error;
+    }
+private:
+    double _error {};
     PID_Params _params {};
     Integrator _error_int {get_time_step()};
     Derivative _error_der {get_time_step()};
