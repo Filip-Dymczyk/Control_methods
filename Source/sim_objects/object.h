@@ -13,7 +13,7 @@ class State
 public:
     using initial_state = std::array<double, order>;
 
-    State(double const time_step, initial_state const & init_state)
+    State(double time_step, initial_state const & init_state)
     {
         for(std::size_t i = 0; i < order; i++)
         {
@@ -22,14 +22,14 @@ public:
         }
     }
 
-    double const
-    get_value(std::size_t const idx) const
+    double
+    get_value(std::size_t idx) const
     {
         return _integrators[idx].get_value();
     }
 
     void
-    update(double const input)
+    update(double input)
     {
         // Next integrals of state derivatives:
         _integrators[0].update(input);
@@ -54,10 +54,10 @@ public:
     using coeffs = std::array<double, order + 1>;
     using initial_state = std::array<double, order>;
 
-    ObjectStandardRepresentation(double const time_step, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(time_step), _coefficients(coefficients), _state(time_step, init_state)
+    ObjectStandardRepresentation(double time_step, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(time_step), _coefficients(coefficients), _state(time_step, init_state)
     {}
 
-    std::size_t const
+    std::size_t
     get_order() const
     {
         return _order;
@@ -69,14 +69,8 @@ public:
         return _coefficients;
     }
 
-    coeffs
-    get_coeffs() const
-    {
-        return _coefficients;
-    }
-
     void 
-    update(double const control) override
+    update(double control) override
     {
         double highest_order_derivative_value = 0;
         

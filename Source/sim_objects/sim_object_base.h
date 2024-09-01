@@ -8,18 +8,18 @@ class SimumlationObjectBase
 {
 public:
     SimumlationObjectBase() : _time_step(0.0) {}
-    SimumlationObjectBase(double const time_step) : _time_step(time_step) {}
+    SimumlationObjectBase(double time_step) : _time_step(time_step) {}
     
     virtual void
-    update(double const /*some input*/) = 0;
+    update(double /*some input*/) = 0;
 
-    double const
+    double
     get_time_step() const
     {
         return _time_step;
     }
 
-    double const
+    double
     get_value() const
     {
         return _value;
@@ -27,7 +27,7 @@ public:
 
 protected:
     void
-    set_value(double const value)
+    set_value(double value)
     {
         _value = value;
     }

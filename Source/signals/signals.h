@@ -7,25 +7,25 @@
 class Signal
 {
 public:
-    Signal(double const start_time, double const scaler) : _start_time(start_time), _scaler(scaler) {}
+    Signal(double start_time, double scaler) : _start_time(start_time), _scaler(scaler) {}
 
     virtual void
-    update(double const time) = 0;
+    update(double time) = 0;
 
-    double const 
+    double 
     get_value() const
     {
         return _value;
     }
 
     void
-    set_start_time(double const start_time)
+    set_start_time(double start_time)
     {
         _start_time = start_time;
     }
 
     void
-    set_scaler(double const scaler)
+    set_scaler(double scaler)
     {
         _scaler = scaler;
     }
@@ -40,7 +40,7 @@ protected:
     double _scaler {};
 
     void
-    set_value(double const value)
+    set_value(double value)
     {
         _value = value;
     }
@@ -52,10 +52,10 @@ private:
 class Heaviside : public Signal
 {
 public:
-    Heaviside(double const start_time = 0.0, double const scaler = 1.0) : Signal(start_time, scaler) {}
+    Heaviside(double start_time = 0.0, double scaler = 1.0) : Signal(start_time, scaler) {}
 
     void
-    update(double const time) override
+    update(double time) override
     {
         set_value((time > _start_time) ? _scaler : 0.0);
     }
@@ -65,10 +65,10 @@ public:
 class Ramp : public Heaviside
 {
 public:
-    Ramp(double const start_time = 0.0, double const scaler = 1.0) : Heaviside(start_time, scaler) {}
+    Ramp(double start_time = 0.0, double scaler = 1.0) : Heaviside(start_time, scaler) {}
 
     void
-    update(double const time) override
+    update(double time) override
     {
         Heaviside::update(time);
         set_value(time * get_value());
@@ -79,14 +79,14 @@ public:
 class Rectangle : public Signal
 {
 public:
-    Rectangle(double const start_time, double const end_time, double const scaler = 1.0) : Signal(start_time, scaler)
+    Rectangle(double start_time, double end_time, double scaler = 1.0) : Signal(start_time, scaler)
     {
         assert(end_time > start_time);
         _end_time = end_time;
     }
 
     void
-    update(double const time) override
+    update(double time) override
     {
         set_value((time > _start_time && time < _end_time) ? _scaler : 0.0);
     }
@@ -99,10 +99,10 @@ private:
 class SineWave : public Signal
 {
 public:
-    SineWave(double const start_time, double const scaler, double const omega, double const offset) : Signal(start_time, scaler), _omega(omega), _offset(offset) {}
+    SineWave(double start_time, double scaler, double omega, double offset) : Signal(start_time, scaler), _omega(omega), _offset(offset) {}
 
     void
-    update(double const time) override
+    update(double time) override
     {
         set_value((time > _start_time) ? (_scaler * sin(_omega * time) + _offset) : 0.0);
     }

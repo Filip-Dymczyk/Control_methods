@@ -3,7 +3,7 @@
 
 #pragma once
 #include <math.h>
-#include "3rdParty/matplotlibcpp/matplotlibcpp.h"
+#include "matplotlibcpp/matplotlibcpp.h"
 #include "sim_objects/pid.h"
 #include "sim_objects/object.h"
 #include "sim_objects/control_system.h"
@@ -23,7 +23,7 @@ class TestWithPlot
     };
 
 public:
-    TestWithPlot(double const sim_time, double const time_step) : _sim_time(sim_time), _time_step(time_step) {}
+    TestWithPlot(double sim_time, double time_step) : _sim_time(sim_time), _time_step(time_step) {}
 
     template<typename ObjectT>
     void
@@ -53,13 +53,13 @@ public:
     }
 
     void
-    set_sim_time(double const sim_time)
+    set_sim_time(double sim_time)
     {
         _sim_time = sim_time;
     }
 
     void
-    set_time_step(double const time_step)
+    set_time_step(double time_step)
     {
         _time_step = time_step;
     }
@@ -116,7 +116,7 @@ private:
     }
 
     void
-    plot_test(std::vector<double> time, std::vector<double> set_point, std::vector<double> control, std::vector<double> output, ControlMode const & control_mode, bool const plot_control)
+    plot_test(std::vector<double> const & time, std::vector<double> const & set_point, std::vector<double> const & control, std::vector<double> const & output, ControlMode const & control_mode, bool plot_control)
     {
         plt::figure();
         switch(control_mode) 

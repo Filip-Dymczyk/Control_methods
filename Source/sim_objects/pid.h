@@ -18,10 +18,10 @@ public:
         double kd {};
     };
 
-    PID(double const time_step, PID_Params params) : SimumlationObjectBase(time_step), _params(params) {}
+    PID(double time_step, PID_Params const & params) : SimumlationObjectBase(time_step), _params(params) {}
     
     void
-    update(double const error) override
+    update(double error) override
     {   
         _error = error;
         _error_int.update(error);
@@ -29,7 +29,7 @@ public:
         set_value(_params.kp * error + _params.ki * _error_int.get_value() + _params.kd * _error_der.get_value());
     }
 
-    double const
+    double
     get_error() const
     {
         return _error;

@@ -33,19 +33,19 @@ public:
         _object.update(_controller.get_value());
     }
 
-    double const
+    double
     get_set_point() const
     {
         return _set_point;
     }
     
-    double const
+    double
     get_control() const
     {
         return _controller.get_value();
     }
 
-    double const
+    double
     get_output() const
     {
         return _object.get_value();

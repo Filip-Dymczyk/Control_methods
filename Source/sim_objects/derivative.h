@@ -8,10 +8,10 @@
 class Derivative : public SimumlationObjectBase
 {
 public:
-    Derivative(double const time_step) : SimumlationObjectBase(time_step) {}
+    Derivative(double time_step) : SimumlationObjectBase(time_step) {}
 
     void
-    update(double const input) override
+    update(double input) override
     {
         assert(get_time_step() > 0.0);
         double const derivative = (input - _previous_value) / get_time_step();
