@@ -2,15 +2,34 @@
 // Description : Basic signals.
 
 #pragma once
+#include "sim_objects/integrator.h"
 
 // NOTE: Base class for signals.
 class Signal
 {
 public:
-    Signal(double start_time, double scaler) : _start_time(start_time), _scaler(scaler) {}
+    struct SignalBasicParameters
+    {
+        double start_time;
+        double scaler;
+    };
+
+    Signal(double time_step, SignalBasicParameters const & params = {0.0, 1.0}) : _timer(time_step), _params(params) {}
 
     virtual void
-    update(double time) = 0;
+    update() = 0;
+
+    void
+    update_timer()
+    {
+        _timer.update(1.0);
+    }
+
+    double
+    time() const
+    {
+        return _timer.get_value();
+    }
 
     double 
     get_value() const
@@ -18,26 +37,20 @@ public:
         return _value;
     }
 
-    void
-    set_start_time(double start_time)
+    void 
+    set_parmeters(SignalBasicParameters const & params)
     {
-        _start_time = start_time;
-    }
-
-    void
-    set_scaler(double scaler)
-    {
-        _scaler = scaler;
+        _params = params;
     }
 
     void
     reset()
     {
         _value = 0.0;
+        _timer.reset();
     }
 protected:
-    double _start_time {};
-    double _scaler {};
+    SignalBasicParameters _params {};
 
     void
     set_value(double value)
@@ -46,18 +59,20 @@ protected:
     }
 private:
     double _value {};
+    Integrator _timer {};
 };
 
 // NOTE: Heaviside function - a * 1(t - t0).
 class Heaviside : public Signal
 {
 public:
-    Heaviside(double start_time = 0.0, double scaler = 1.0) : Signal(start_time, scaler) {}
+    Heaviside(double time_step, SignalBasicParameters const & params = {0.0, 1.0}) : Signal(time_step, params) {}
 
     void
-    update(double time) override
+    update() override
     {
-        set_value((time > _start_time) ? _scaler : 0.0);
+        set_value((time() > _params.start_time) ? _params.scaler : 0.0);
+        update_timer();
     }
 };
 
@@ -65,13 +80,14 @@ public:
 class Ramp : public Heaviside
 {
 public:
-    Ramp(double start_time = 0.0, double scaler = 1.0) : Heaviside(start_time, scaler) {}
+    Ramp(double time_step, SignalBasicParameters const & params = {0.0, 1.0}) : Heaviside(time_step, params) {}
 
     void
-    update(double time) override
+    update() override
     {
-        Heaviside::update(time);
-        set_value(time * get_value());
+        double const input_time = time();
+        Heaviside::update();
+        set_value(input_time * get_value());
     }
 };
 
@@ -79,16 +95,17 @@ public:
 class Rectangle : public Signal
 {
 public:
-    Rectangle(double start_time, double end_time, double scaler = 1.0) : Signal(start_time, scaler)
+    Rectangle(double time_step, double end_time, SignalBasicParameters const & params = {0.0, 1.0}) : Signal(time_step, params)
     {
-        assert(end_time > start_time);
+        assert(end_time > _params.start_time);
         _end_time = end_time;
     }
 
     void
-    update(double time) override
+    update() override
     {
-        set_value((time > _start_time && time < _end_time) ? _scaler : 0.0);
+        set_value((time() > _params.start_time && time() < _end_time) ? _params.scaler : 0.0);
+        update_timer();
     }
 private:
     double _end_time {};
@@ -99,12 +116,13 @@ private:
 class SineWave : public Signal
 {
 public:
-    SineWave(double start_time, double scaler, double omega, double offset) : Signal(start_time, scaler), _omega(omega), _offset(offset) {}
+    SineWave(double time_step, double omega, double offset, SignalBasicParameters const & params = {0.0, 1.0}) : Signal(time_step, params), _omega(omega), _offset(offset) {}
 
     void
-    update(double time) override
+    update() override
     {
-        set_value((time > _start_time) ? (_scaler * sin(_omega * time) + _offset) : 0.0);
+        set_value((time() > _params.start_time) ? (_params.scaler * sin(_omega * time()) + _offset) : 0.0);
+        update_timer();
     }
 private:
     double _omega {};
