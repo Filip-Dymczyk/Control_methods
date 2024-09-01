@@ -3,9 +3,10 @@
 
 #include "sim_objects/object.h"
 #include "sim_objects/pid.h"
-#include "test_with_plot.h"
+#include "test/test_with_plot.h"
 #include "signals/signals.h"
 #include "algebra/algebra.h"
+#include "regression/recursive_linear_regression.h"
 
 int main()
 {
