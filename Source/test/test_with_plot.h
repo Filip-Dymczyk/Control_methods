@@ -3,7 +3,7 @@
 
 #pragma once
 #include <math.h>
-#include "matplotlibcpp/matplotlibcpp.h"
+#include "3rdParty/matplotlibcpp/matplotlibcpp.h"
 #include "sim_objects/pid.h"
 #include "sim_objects/object.h"
 #include "sim_objects/control_system.h"
