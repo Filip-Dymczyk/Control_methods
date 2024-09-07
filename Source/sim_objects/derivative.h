@@ -3,7 +3,6 @@
 
 #pragma once
 #include "sim_object_base.h"
-#include <assert.h>
 
 class Derivative : public SimumlationObjectBase
 {

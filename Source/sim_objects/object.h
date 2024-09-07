@@ -5,6 +5,7 @@
 #include <array>
 #include "sim_object_base.h"
 #include "integrator.h"
+#include <assert.h>
 
 // NOTE: Class representing state variables.
 template<std::size_t order>
@@ -15,6 +16,8 @@ public:
 
     State(double time_step, initial_state const & init_state)
     {
+        assert(order > 0u);
+
         for(std::size_t i = 0; i < order; i++)
         {
             Integrator I (time_step, init_state[i]);
