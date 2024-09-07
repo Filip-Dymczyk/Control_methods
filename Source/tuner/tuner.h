@@ -8,17 +8,42 @@ template<typename ControlSystemT, typename RegressionT>
 class Tuner
 {
 public:
-    Tuner(ControlSystemT const & control_system, RegressionT const & regression) : _control_system(control_system), _regression(regression) {}
+    Tuner(Signal * signal, ControlSystemT & control_system, RegressionT const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
 
     void
-    update(Signal* signal)
+    update()
     {
-        _control_system.update(signal -> get_value());
+        _control_system.update(_signal -> get_value());
+        _signal -> update();
+        _regression.update(_control_system.get_x(), _control_system.get_error());
+        _control_system.set_pid_params(_regression.get_coeffs());
+    }
 
+    double 
+    get_time() const
+    {
+        return _signal -> time();
+    }
 
-        signal.update()
+    double
+    get_set_point() const
+    {
+        return _control_system.get_set_point();
+    }
+
+    double
+    get_output() const
+    {
+       return _control_system.get_output(); 
+    }
+
+    double 
+    get_control() const
+    {
+        return _control_system.get_control();
     }
 private:
+    Signal * _signal {};
     ControlSystemT & _control_system {};
     RegressionT _regression {};
 };
