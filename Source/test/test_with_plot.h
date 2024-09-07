@@ -8,6 +8,7 @@
 #include "sim_objects/object.h"
 #include "sim_objects/control_system.h"
 #include "signals/signals.h"
+#include "tuner/tuner.h"
 
 namespace plt = matplotlibcpp;
 
@@ -27,7 +28,7 @@ public:
 
     template<typename ObjectT>
     void
-    test_closed_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false)
+    test_closed_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::CLOSED_LOOP);
 
@@ -36,7 +37,7 @@ public:
 
     template<typename ObjectT>
     void
-    test_open_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false)
+    test_open_loop_control(ObjectT object, PID pid, Signal * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::OPEN_LOOP);
 
@@ -45,11 +46,20 @@ public:
 
     template<typename ComponentT>
     void
-    test_component(ComponentT component, Signal* input_signal)
+    test_component(ComponentT component, Signal * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_component(component, input_signal);
 
-        plot_test(buffers, ControlMode::NONE, false);
+        plot_test(buffers, ControlMode::NONE, plot_control);
+    }
+
+    template<typename TunerT>
+    void
+    test_tuner(TunerT tuner) const 
+    {
+        PlottingBuffers const buffers = simulate_tuner<TunerT>(tuner);
+
+        plot_test(buffers, ControlMode::CLOSED_LOOP, false);
     }
 
     void
@@ -62,7 +72,7 @@ private:
 
     template<typename ObjectT>
     PlottingBuffers const
-    simulate_open_closed_loop(ObjectT object, PID pid, Signal* input_signal, ControlMode const & control_mode)
+    simulate_open_closed_loop(ObjectT object, PID pid, Signal * input_signal, ControlMode const & control_mode) const 
     {
         input_signal -> reset();
         ControlSystem<ObjectT, PID> control_loop {object, pid, control_mode};
@@ -85,7 +95,7 @@ private:
 
     template<typename ComponentT>
     PlottingBuffers const
-    simulate_component(ComponentT object, Signal* input_signal)
+    simulate_component(ComponentT object, Signal * input_signal) const 
     {
         input_signal -> reset();
         std::vector<double> time {};
@@ -103,8 +113,28 @@ private:
         return {time, set_point, {}, output};
     }
 
+    template<typename TunerT>
+    PlottingBuffers const
+    simulate_tuner(TunerT tuner) const 
+    {
+        std::vector<double> time {};
+        std::vector<double> set_point {};
+        std::vector<double> control {};
+        std::vector<double> output {};
+        
+        while(tuner.get_time() < _sim_time)
+        {
+            time.push_back(tuner.get_time());
+            tuner.update();
+            set_point.push_back(tuner.get_set_point());
+            control.push_back(tuner.get_control());
+            output.push_back(tuner.get_output());
+        }  
+        return {time, set_point, control, output};
+    }
+
     void
-    plot_test(PlottingBuffers const & buffers, ControlMode const & control_mode, bool plot_control)
+    plot_test(PlottingBuffers const & buffers, ControlMode const & control_mode, bool plot_control) const 
     {
         plt::figure();
         switch(control_mode) 
