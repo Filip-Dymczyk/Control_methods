@@ -6,6 +6,7 @@
 #include "sim_object_base.h"
 #include "integrator.h"
 #include <assert.h>
+#include <random>
 
 // NOTE: Class representing state variables.
 template<std::size_t order>
@@ -50,6 +51,7 @@ private:
 // Object coefficients interpretion: e.g. x'' = -ax' - bx + cu.
 // When entering coeficients beware of mistakingly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
+// Object already simulates measurement white noises (output).
 template<std::size_t order>
 class ObjectStandardRepresentation : public SimumlationObjectBase
 {   
@@ -93,10 +95,19 @@ public:
         _state.update(highest_order_derivative_value);
 
         // Output (x) - last integrator value;
-        set_value(_state.get_value(_order - 1));
+        set_value(_state.get_value(_order - 1) + measurement_noise());
     }
 private:
     std::size_t _order = order;
     coeffs _coefficients;
     State<order> _state;
+
+    std::mt19937 generator;
+    std::normal_distribution<double> distribution {0.0, 0.1};
+
+    double
+    measurement_noise()
+    {
+        return distribution(generator);
+    }
 };
