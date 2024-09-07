@@ -34,6 +34,18 @@ public:
     {
         return _error;
     }
+
+    std::array<double, 3> const
+    get_x() const 
+    {
+        return {_error, _error_int.get_value(), _error_der.get_value()};
+    }
+
+    void
+    set_pid_params(PID_Params params)
+    {
+        _params = params;
+    }
 private:
     double _error {};
     PID_Params _params {};

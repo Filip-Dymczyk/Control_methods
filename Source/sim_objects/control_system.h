@@ -50,6 +50,24 @@ public:
     {
         return _object.get_value();
     }
+
+    double
+    get_error() const
+    {
+        return _controller.get_error();
+    }
+
+    std::array<double, 3> const 
+    get_x() const 
+    {
+        return _controller.get_x();
+    }
+    
+    void
+    set_pid_params(std::array<double, 3> params)
+    {
+        _controller.set_pid_params({params.at(0), params.at(1), params.at(2)});
+    }
 private:
     double _set_point {};
     ControlMode _control_mode {};
