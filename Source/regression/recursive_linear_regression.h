@@ -13,11 +13,7 @@ class RecursiveLinearRegression
 public:
     RecursiveLinearRegression(double const lambda = 0.99) 
     {
-        if(lambda > 1.0 || lambda < 0.0)
-        {
-            lambda = 1.0;
-        }
-        _lambda = lambda;
+        _lambda = (lambda > 0.0 && lambda <= 1.0) ? lambda : 1.0;
         _P = create_diagonal_matrix<MatrixT>(1.0);
     }
 
