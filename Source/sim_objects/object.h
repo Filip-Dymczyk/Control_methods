@@ -48,7 +48,7 @@ private:
 
 // NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by corresponding coefficients + input value.
 // Lower order derivatives are equal to the integral of a higher one - simple relation.
-// Object coefficients interpretion: e.g. x'' = -ax' - bx + cu.
+// Object coefficients interpretaion: e.g. x'' = -ax' - bx + cu.
 // When entering coeficients beware of mistakingly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
