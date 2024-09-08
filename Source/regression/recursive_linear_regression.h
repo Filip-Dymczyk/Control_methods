@@ -20,8 +20,13 @@ public:
     void
     update(VectorT const & x, double const epsilon)
     {
+        double const e = 10e-6;
+
         VectorT K = matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x);
-        scale_vector<VectorT>(K, 1.0 / (_lambda + vectors_multiplication_scalar_product<VectorT>(x, matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x))));
+        double const scalar = vectors_multiplication_scalar_product<VectorT>(x, matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x));
+        
+        double const denominator = std::max(scalar + _lambda, e);
+        scale_vector<VectorT>(K, 1.0 / denominator);
         
         VectorT K_epsilon_scaled = K;
         scale_vector<VectorT>(K_epsilon_scaled, epsilon);
