@@ -11,10 +11,10 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Basic signals: Heaviside, ramp, rectangle, sine wave.
 - Vectors and matrices algebra operations.
 - Recursive linear regression.
+- PID tuning using RLS.
 
 ### Features to be added:
 - Testing managed using framework.
-- PID tuning.
 - Other control methods.
 - State space model represantation.
 - GUI for easier usage of the app.
