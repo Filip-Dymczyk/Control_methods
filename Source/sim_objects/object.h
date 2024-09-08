@@ -62,18 +62,6 @@ public:
     ObjectStandardRepresentation(double time_step, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(time_step), _coefficients(coefficients), _state(time_step, init_state)
     {}
 
-    std::size_t
-    get_order() const
-    {
-        return _order;
-    }
-    
-    coeffs const &
-    get_coefss() const
-    {
-        return _coefficients;
-    }
-
     void 
     update(double control) override
     {
@@ -96,6 +84,18 @@ public:
 
         // Output (x) - last integrator value;
         set_value(_state.get_value(_order - 1) + measurement_noise());
+    }
+
+    std::size_t
+    get_order() const
+    {
+        return _order;
+    }
+    
+    coeffs const &
+    get_coefss() const
+    {
+        return _coefficients;
     }
 private:
     std::size_t _order = order;

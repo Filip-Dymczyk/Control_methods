@@ -8,7 +8,7 @@ class Integrator : public SimumlationObjectBase
 {
 public:
     Integrator() : SimumlationObjectBase() {}
-    Integrator(double time_step, double initial_state = 0) : SimumlationObjectBase(time_step) 
+    Integrator(double time_step, double initial_state = 0.0) : SimumlationObjectBase(time_step) 
     {
         set_value(initial_state);
     }

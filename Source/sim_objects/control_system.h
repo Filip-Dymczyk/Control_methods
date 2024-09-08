@@ -64,7 +64,7 @@ public:
     }
     
     void
-    set_pid_params(std::array<double, 3> params)
+    set_pid_params(std::array<double, 3> const & params)
     {
         _controller.set_pid_params({params.at(0), params.at(1), params.at(2)});
     }
