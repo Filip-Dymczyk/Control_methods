@@ -5,6 +5,8 @@
 #include <array>
 #include "sim_object_base.h"
 #include "integrator.h"
+#include <assert.h>
+#include <random>
 
 // NOTE: Class representing state variables.
 template<std::size_t order>
@@ -13,8 +15,10 @@ class State
 public:
     using initial_state = std::array<double, order>;
 
-    State(double const time_step, initial_state const & init_state)
+    State(double time_step, initial_state const & init_state)
     {
+        assert(order > 0u);
+
         for(std::size_t i = 0; i < order; i++)
         {
             Integrator I (time_step, init_state[i]);
@@ -22,14 +26,14 @@ public:
         }
     }
 
-    double const
-    get_value(std::size_t const idx) const
+    double
+    get_value(std::size_t idx) const
     {
         return _integrators[idx].get_value();
     }
 
     void
-    update(double const input)
+    update(double input)
     {
         // Next integrals of state derivatives:
         _integrators[0].update(input);
@@ -44,9 +48,10 @@ private:
 
 // NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by corresponding coefficients + input value.
 // Lower order derivatives are equal to the integral of a higher one - simple relation.
-// Object coefficients interpretion: e.g. x'' = -ax' - bx + cu.
+// Object coefficients interpretaion: e.g. x'' = -ax' - bx + cu.
 // When entering coeficients beware of mistakingly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
+// Object already simulates measurement white noises (output).
 template<std::size_t order>
 class ObjectStandardRepresentation : public SimumlationObjectBase
 {   
@@ -54,29 +59,11 @@ public:
     using coeffs = std::array<double, order + 1>;
     using initial_state = std::array<double, order>;
 
-    ObjectStandardRepresentation(double const time_step, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(time_step), _coefficients(coefficients), _state(time_step, init_state)
+    ObjectStandardRepresentation(double time_step, coeffs const & coefficients, initial_state const & init_state) : SimumlationObjectBase(time_step), _coefficients(coefficients), _state(time_step, init_state)
     {}
 
-    std::size_t const
-    get_order() const
-    {
-        return _order;
-    }
-    
-    coeffs const &
-    get_coefss() const
-    {
-        return _coefficients;
-    }
-
-    coeffs
-    get_coeffs() const
-    {
-        return _coefficients;
-    }
-
     void 
-    update(double const control) override
+    update(double control) override
     {
         double highest_order_derivative_value = 0;
         
@@ -96,10 +83,31 @@ public:
         _state.update(highest_order_derivative_value);
 
         // Output (x) - last integrator value;
-        set_value(_state.get_value(_order - 1));
+        set_value(_state.get_value(_order - 1) + measurement_noise());
+    }
+
+    std::size_t
+    get_order() const
+    {
+        return _order;
+    }
+    
+    coeffs const &
+    get_coefss() const
+    {
+        return _coefficients;
     }
 private:
     std::size_t _order = order;
     coeffs _coefficients;
     State<order> _state;
+
+    std::mt19937 generator;
+    std::normal_distribution<double> distribution {0.0, 0.1};
+
+    double
+    measurement_noise()
+    {
+        return distribution(generator);
+    }
 };

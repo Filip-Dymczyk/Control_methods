@@ -3,11 +3,12 @@
 
 #pragma once
 #include <math.h>
-#include "3rdParty/matplotlibcpp/matplotlibcpp.h"
+#include "matplotlibcpp/matplotlibcpp.h"
 #include "sim_objects/pid.h"
 #include "sim_objects/object.h"
 #include "sim_objects/control_system.h"
 #include "signals/signals.h"
+#include "tuner/tuner.h"
 
 namespace plt = matplotlibcpp;
 
@@ -23,54 +24,55 @@ class TestWithPlot
     };
 
 public:
-    TestWithPlot(double const sim_time, double const time_step) : _sim_time(sim_time), _time_step(time_step) {}
+    TestWithPlot(double sim_time) : _sim_time(sim_time) {}
 
     template<typename ObjectT>
     void
-    test_closed_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false)
+    test_closed_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::CLOSED_LOOP);
 
-        plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::CLOSED_LOOP, plot_control);
+        plot_test(buffers, ControlMode::CLOSED_LOOP, plot_control);
     }
 
     template<typename ObjectT>
     void
-    test_open_loop_control(ObjectT object, PID pid, Signal* input_signal, bool const plot_control = false)
+    test_open_loop_control(ObjectT object, PID pid, Signal * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, pid, input_signal, ControlMode::OPEN_LOOP);
 
-        plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::OPEN_LOOP, plot_control);
+        plot_test(buffers, ControlMode::OPEN_LOOP, plot_control);
     }
 
     template<typename ComponentT>
     void
-    test_component(ComponentT component, Signal* input_signal)
+    test_component(ComponentT component, Signal * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_component(component, input_signal);
 
-        plot_test(buffers.time, buffers.set_point, buffers.control, buffers.output, ControlMode::NONE, false);
+        plot_test(buffers, ControlMode::NONE, plot_control);
+    }
+
+    template<typename TunerT>
+    void
+    test_tuner(TunerT tuner) const 
+    {
+        PlottingBuffers const buffers = simulate_tuner<TunerT>(tuner);
+
+        plot_test(buffers, ControlMode::CLOSED_LOOP, false);
     }
 
     void
-    set_sim_time(double const sim_time)
+    set_sim_time(double sim_time)
     {
         _sim_time = sim_time;
     }
-
-    void
-    set_time_step(double const time_step)
-    {
-        _time_step = time_step;
-    }
-
 private:
     double _sim_time {};
-    double _time_step {};
 
     template<typename ObjectT>
     PlottingBuffers const
-    simulate_open_closed_loop(ObjectT object, PID pid, Signal* input_signal, ControlMode const & control_mode)
+    simulate_open_closed_loop(ObjectT object, PID pid, Signal * input_signal, ControlMode const & control_mode) const 
     {
         input_signal -> reset();
         ControlSystem<ObjectT, PID> control_loop {object, pid, control_mode};
@@ -79,44 +81,60 @@ private:
         std::vector<double> control {};
         std::vector<double> output {};
         
-        double t = 0;
-        while(t < _sim_time)
+        while(input_signal -> time() < _sim_time)
         {
-            time.push_back(t);
+            time.push_back(input_signal -> time());
             control_loop.update(input_signal -> get_value());
             set_point.push_back(input_signal -> get_value());
             control.push_back(control_loop.get_control());
             output.push_back(control_loop.get_output());
-            t += _time_step;
-            input_signal -> update(t);
+            input_signal -> update();
         }  
         return {time, set_point, control, output};
     }
 
     template<typename ComponentT>
     PlottingBuffers const
-    simulate_component(ComponentT object, Signal* input_signal)
+    simulate_component(ComponentT object, Signal * input_signal) const 
     {
         input_signal -> reset();
         std::vector<double> time {};
         std::vector<double> set_point {};
         std::vector<double> output {};
 
-        double t = 0;
-        while(t < _sim_time)
+        while(input_signal -> time() < _sim_time)
         {
-            time.push_back(t);
+            time.push_back(input_signal -> time());
             object.update(input_signal -> get_value());   
             set_point.push_back(input_signal -> get_value());
             output.push_back(object.get_value());
-            t += _time_step;
-            input_signal -> update(t);
+            input_signal -> update();
         }  
         return {time, set_point, {}, output};
     }
 
+    template<typename TunerT>
+    PlottingBuffers const
+    simulate_tuner(TunerT tuner) const 
+    {
+        std::vector<double> time {};
+        std::vector<double> set_point {};
+        std::vector<double> control {};
+        std::vector<double> output {};
+        
+        while(tuner.get_time() < _sim_time)
+        {
+            time.push_back(tuner.get_time());
+            tuner.update();
+            set_point.push_back(tuner.get_set_point());
+            control.push_back(tuner.get_control());
+            output.push_back(tuner.get_output());
+        }  
+        return {time, set_point, control, output};
+    }
+
     void
-    plot_test(std::vector<double> time, std::vector<double> set_point, std::vector<double> control, std::vector<double> output, ControlMode const & control_mode, bool const plot_control)
+    plot_test(PlottingBuffers const & buffers, ControlMode const & control_mode, bool plot_control) const 
     {
         plt::figure();
         switch(control_mode) 
@@ -138,12 +156,12 @@ private:
             }
         } 
         
-        plt::plot(time, set_point, "r-", {{"label", "set point"}});
+        plt::plot(buffers.time, buffers.set_point, "r-", {{"label", "set point"}});
         if(plot_control)
         {
-            plt::plot(time, control, "y-", {{"label", "control"}});
+            plt::plot(buffers.time, buffers.control, "y-", {{"label", "control"}});
         }
-        plt::plot(time, output, "b-", {{"label", "output"}});
+        plt::plot(buffers.time, buffers.output, "b-", {{"label", "output"}});
         plt::xlabel("Time [s]");
         plt::ylabel("y");
         plt::legend("best");

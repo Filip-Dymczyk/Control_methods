@@ -33,22 +33,40 @@ public:
         _object.update(_controller.get_value());
     }
 
-    double const
+    double
     get_set_point() const
     {
         return _set_point;
     }
     
-    double const
+    double
     get_control() const
     {
         return _controller.get_value();
     }
 
-    double const
+    double
     get_output() const
     {
         return _object.get_value();
+    }
+
+    double
+    get_error() const
+    {
+        return _controller.get_error();
+    }
+
+    std::array<double, 3> const 
+    get_x() const 
+    {
+        return _controller.get_x();
+    }
+    
+    void
+    set_pid_params(std::array<double, 3> const & params)
+    {
+        _controller.set_pid_params({params.at(0), params.at(1), params.at(2)});
     }
 private:
     double _set_point {};

@@ -15,13 +15,7 @@ create_diagonal_matrix(double scalar = 1.0)
 
     for(std::size_t i = 0; i < out_matrix.size(); i++)
     {
-        for(std::size_t j = 0; j < out_matrix[0].size(); j++)
-        {
-            if(i == j)
-            {
-                out_matrix[i][j] = scalar;
-            }
-        }
+        out_matrix[i][i] = scalar;
     }
 
     return out_matrix;

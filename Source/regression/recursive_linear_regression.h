@@ -11,27 +11,33 @@ class RecursiveLinearRegression
     using VectorT = std::array<double, n>;
     using MatrixT = std::array<std::array<double, n>, n>;
 public:
-    RecursiveLinearRegression(double const lambda) : _lambda(lambda) 
+    RecursiveLinearRegression(double const lambda = 0.99) 
     {
+        _lambda = (lambda > 0.0 && lambda <= 1.0) ? lambda : 1.0;
         _P = create_diagonal_matrix<MatrixT>(1.0);
     }
 
     void
-    update(VectorT const & current_coefficients, VectorT const & x, double const y_meas, double const y_calc)
+    update(VectorT const & x, double const epsilon)
     {
+        double const e = 10e-6;
+
         VectorT K = matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x);
-        scale_vector<VectorT>(K, 1.0 / (_lambda + vectors_multiplication_scalar_product<VectorT>(x, matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x))));
+        double const scalar = vectors_multiplication_scalar_product<VectorT>(x, matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_P, x));
+        
+        double const denominator = std::max(scalar + _lambda, e);
+        scale_vector<VectorT>(K, 1.0 / denominator);
         
         VectorT K_epsilon_scaled = K;
-        scale_vector<VectorT>(K_epsilon_scaled, y_meas - y_calc);
-        _coefficients = add_vectors<VectorT>(current_coefficients, K_epsilon_scaled);
+        scale_vector<VectorT>(K_epsilon_scaled, epsilon);
+        _coefficients = add_vectors<VectorT>(_coefficients, K_epsilon_scaled);
 
         _P = subtract_matrices<MatrixT>(_P, vectors_multiplication_matrix_product<MatrixT, VectorT>(K, vector_matrix_multiplication_vector_product<VectorT, MatrixT>(x, _P)));
-        scale_matrix<MatrixT>(_P, 1.0 / _lambda);
+        scale_matrix<MatrixT>(_P, _lambda);
     }
 
     VectorT const &
-    get_coefss() const
+    get_coeffs() const
     {
         return _coefficients;
     }
