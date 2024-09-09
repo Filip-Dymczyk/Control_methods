@@ -77,7 +77,14 @@
         "xhash": "cpp",
         "xtree": "cpp",
         "*.rh": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "any": "cpp",
+        "csignal": "cpp",
+        "deque": "cpp",
+        "set": "cpp",
+        "span": "cpp",
+        "unordered_set": "cpp",
+        "variant": "cpp"
     },
-    "C_Cpp.errorSquiggles": "enabled"
+    "C_Cpp.errorSquiggles": "enabled",
 }

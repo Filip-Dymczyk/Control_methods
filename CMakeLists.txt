@@ -22,7 +22,7 @@ add_library(
 
 target_include_directories(
     algebra INTERFACE
-    ${CMAKE_CURRENT_SOURCE_DIR}/Source/algebra
+    ${CMAKE_CURRENT_SOURCE_DIR}/Source
 )
 
 add_executable(
