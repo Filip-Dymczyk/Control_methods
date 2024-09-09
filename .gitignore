@@ -33,6 +33,7 @@
 
 # Build folder
 *builds*
+*build*
 
 # Other
 *.html
