@@ -97,8 +97,7 @@
             "type": "shell",
             "command": "ctest",
             "args": [
-                "--output-on-failure",
-                "--verbose"
+                "--output-on-failure"
             ],
             "group": {
                 "kind": "test",
