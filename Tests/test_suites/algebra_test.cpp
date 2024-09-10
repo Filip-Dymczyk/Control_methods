@@ -7,28 +7,128 @@
 
 class AlgebraTest : public testing::Test
 {
-protected:
     using VectorT = std::array<double, 2>;
     using MatrixT = std::array<std::array<double, 2>, 2>;
 
-    VectorT test_vectorA {1.0, 2.0};
-    MatrixT test_vectorB {1.0, 2.0};
-
+    VectorT const test_vectorA {1.0, 2.0};
+    MatrixT const test_matrixA {{{1.0, 2.0}, {1.0, 2.0}}};
+    MatrixT const test_matrixB {{{-1.0, 3.0}, {4.0, 1.0}}};
+protected:
     void
-    check_diagonal_matrix(MatrixT const & matrix, double scalar)
+    check_diagonal_matrix() const 
     {
-        for(std::size_t i = 0; i < matrix.size(); i++)
+        double const scalar = 2.0;
+        MatrixT const out = create_diagonal_matrix<MatrixT>(scalar);
+
+        float const zero = 0.0f;
+        for(std::size_t i = 0; i < out.size(); i++)
         {
-            for(std::size_t j = 0; j < matrix[0].size(); j++)
+            for(std::size_t j = 0; j < out[0].size(); j++)
             {
                 if(i == j)
                 {
-                    EXPECT_FLOAT_EQ(scalar, matrix[i][j]);
+                    EXPECT_FLOAT_EQ(cast_to_float(scalar), cast_to_float(out[i][j]));
                 }
                 else
                 {
-                    EXPECT_FLOAT_EQ(0.0, matrix[i][j]);
+                    EXPECT_FLOAT_EQ(zero, cast_to_float(out[i][j]));
                 } 
+            }
+        }
+    }
+
+    void
+    check_matrix_vector_multiplication_vector_product() const
+    {
+        VectorT const out = matrix_vector_multiplication_vector_product<MatrixT, VectorT>(test_matrixA, test_vectorA);
+        VectorT const expected_out {5.0, 5.0};
+        check_vector_values(expected_out, out);
+    }
+
+    void
+    check_vectors_multiplication_scalar_product() const
+    {
+        double const out = vectors_multiplication_scalar_product<VectorT>(test_vectorA, test_vectorA);
+        float const expected_out = 5.0f;
+        EXPECT_FLOAT_EQ(expected_out, cast_to_float(out));
+    }
+
+    void
+    check_vector_scaling() const 
+    {
+        double const scaler = 2.0;
+        VectorT out = test_vectorA;
+        scale_vector<VectorT>(out, scaler);
+        VectorT const expected_out {2.0, 4.0};
+        check_vector_values(expected_out, out);
+    }
+
+    void
+    check_vectors_addition() const 
+    {
+        VectorT const out = add_vectors<VectorT>(test_vectorA, test_vectorA);
+        VectorT const expected_out {2.0, 4.0};
+        check_vector_values(expected_out, out);
+    }
+
+    void
+    check_vectors_multiplication_matrix_product() const
+    {
+        MatrixT const out = vectors_multiplication_matrix_product<MatrixT>(test_vectorA, test_vectorA);
+        MatrixT const expected_out {{{1.0, 2.0}, {2.0, 4.0}}};
+        check_matrix_values(expected_out, out);
+    }
+
+    void
+    check_matrices_subtraction() const
+    {
+        MatrixT const out = subtract_matrices<MatrixT>(test_matrixA, test_matrixB);
+        MatrixT const expected_out {{{2.0, -1.0}, {-3.0, 1.0}}};
+        check_matrix_values(expected_out, out);
+    }
+
+    void
+    check_matrix_scaling() const 
+    {
+        double const scaler = 2.0;
+        MatrixT out = test_matrixA;
+        scale_matrix<MatrixT>(out, scaler);
+        MatrixT const expected_out {{{2.0, 4.0}, {2.0, 4.0}}};
+        check_matrix_values(expected_out, out);
+    }
+
+    void
+    check_vector_matrix_multiplication_vector_product() const
+    {
+        VectorT const out = vector_matrix_multiplication_vector_product<VectorT, MatrixT>(test_vectorA, test_matrixA);
+        VectorT const expected_out {3.0, 6.0};
+        check_vector_values(expected_out, out);
+    }
+
+private:
+    float
+    cast_to_float(double scalar) const 
+    {
+        return static_cast<float>(scalar);
+    }
+
+    void
+    check_vector_values(VectorT const & expected_out, VectorT const & out) const 
+    {
+        for(std::size_t i = 0; i < out.size(); i++)
+        {
+            EXPECT_FLOAT_EQ(cast_to_float(expected_out[i]), cast_to_float(out[i]));
+        }
+    }
+
+    void
+    check_matrix_values(MatrixT const & expected_out, MatrixT const & out) const 
+    {
+        for(std::size_t i = 0; i < out.size(); i++)
+        {
+            for(std::size_t j = 0; j < out[0].size(); j++)
+            {
+                EXPECT_FLOAT_EQ(cast_to_float(expected_out[i][j]), cast_to_float(out[i][j]));
             }
         }
     }
@@ -36,76 +136,45 @@ protected:
 
 TEST_F(AlgebraTest, CreateDiagonalMatrixTest) 
 {
-    double scalar = 2.0;
-    MatrixT diagonal = create_diagonal_matrix<MatrixT>(scalar);
-    check_diagonal_matrix(diagonal, scalar);
-}       
+    check_diagonal_matrix();
+}  
 
-// using VectorT = std::array<double, 2>;
-    // using MatrixT = std::array<std::array<double, 2>, 2>;
-    // MatrixT diagonal = create_diagonal_matrix<MatrixT>();
-    // for(auto const & row : diagonal)
-    // {
-    //     for(auto const & elem : row)
-    //     {
-    //         std::cout << elem << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
+TEST_F(AlgebraTest, MatrixVectorMultiplicationVectorProductTest)
+{
+    check_matrix_vector_multiplication_vector_product();
+}
 
-    // VectorT v {1.0, 2.0};
-    // MatrixT m {{{1.0, 2.0}, {1.0, 2.0}}};
-    // VectorT out = matrix_vector_multiplication_vector_product<MatrixT, VectorT>(m, v);
-    // for(auto const & elem : out)
-    // {
-    //     std::cout << elem << "\n";
-    // }
+TEST_F(AlgebraTest, VectorsMultiplicationScalarProductTest)
+{
+    check_vectors_multiplication_scalar_product();
+}
 
-    // std::cout << vectors_multiplication_scalar_product<std::array<double, 2>>(v, v) << "\n";
-    // scale_vector(out, 0.2);
-    // for(auto const & elem : out)
-    // {
-    //     std::cout << elem << "\n";
-    // }
+TEST_F(AlgebraTest, VectorScalingTest)
+{
+    check_vector_scaling();
+}
 
-    // VectorT adding_result = add_vectors(out, v);
-    // for(auto const & elem : adding_result)
-    // {
-    //     std::cout << elem << "\n";
-    // }
+TEST_F(AlgebraTest, VectorsAdditionTest)
+{
+    check_vectors_addition();
+}
 
-    // MatrixT mul_result = vectors_multiplication_matrix_product<MatrixT, VectorT>(v, v);
-    // for(auto const & row : mul_result)
-    // {
-    //     for(auto const & elem : row)
-    //     {
-    //         std::cout << elem << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
+TEST_F(AlgebraTest, VectorsMultiplicationMatrixProductTest)
+{
+    check_vectors_multiplication_matrix_product();
+}
 
-    // MatrixT subtract_result = subtract_matrices<MatrixT>(mul_result, m);
-    // for(auto const & row : subtract_result)
-    // {
-    //     for(auto const & elem : row)
-    //     {
-    //         std::cout << elem << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
+TEST_F(AlgebraTest, MatricesSubtractionTest)
+{
+    check_matrices_subtraction();
+}
 
-    // scale_matrix<MatrixT>(subtract_result, 2.0);
-    // for(auto const & row : subtract_result)
-    // {
-    //     for(auto const & elem : row)
-    //     {
-    //         std::cout << elem << ", ";
-    //     }
-    //     std::cout << "\n";
-    // }
+TEST_F(AlgebraTest, MatrixScalingTest)
+{
+    check_matrix_scaling();
+}
 
-    // VectorT mul_product = vector_matrix_multiplication_vector_product<VectorT, MatrixT>(v, m);
-    // for(auto const & elem : mul_product)
-    // {
-    //     std::cout << elem << "\n";
-    // }
+TEST_F(AlgebraTest, VectorMatrixMultiplicationVectorProductTest)
+{
+    check_vector_matrix_multiplication_vector_product();
+}
