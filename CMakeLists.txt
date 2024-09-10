@@ -26,31 +26,28 @@ include(GoogleTest)
 enable_testing()
 #-------------------------------------------------
 
-# Define INTERFACE libraries for headers.
-# NOTE: add more if needed.
+# Include directories to search for headers.
 #-------------------------------------------------
-add_library(algebra INTERFACE)
-add_library(signals INTERFACE)
-#-------------------------------------------------
-
-# Specify directories containing headers.
-# NOTE: add more if needed.
-#-------------------------------------------------
-target_include_directories(algebra INTERFACE ${PROJECT_SOURCE_DIR}/Source)
-target_include_directories(signals INTERFACE ${PROJECT_SOURCE_DIR}/Source)
+include_directories(
+  "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\include"
+  "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy\\core\\include"
+  Source
+  3rdParty
+  Tests
+)
 #-------------------------------------------------
 
-# Helper macro to simplify the addition of test executables with libraries.
+# Helper macro to simplify the addition of test executables.
 #-------------------------------------------------
-macro(add_test_executable_with_libs test_name test_source libs)
+macro(add_test_executable test_name test_source)
   add_executable(${test_name} ${test_source})
-  target_link_libraries(${test_name} GTest::gtest_main ${libs})
+  target_link_libraries(${test_name} GTest::gtest_main)
   gtest_discover_tests(${test_name})
 endmacro()
 #-------------------------------------------------
 
 # Add test executables with corresponding defined library.
 #-------------------------------------------------
-add_test_executable_with_libs(algebra_test Tests/test_suites/algebra_test.cpp algebra)
-add_test_executable_with_libs(signals_test Tests/test_suites/signals_test.cpp signals)
+add_test_executable(algebra_test Tests/test_suites/algebra_test.cpp)
+add_test_executable(signals_test Tests/test_suites/signals_test.cpp)
 #-------------------------------------------------

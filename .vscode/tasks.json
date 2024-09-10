@@ -57,6 +57,7 @@
             "args": [
                 "-S", ".",
                 "-B", "builds/test_builds"
+                
             ],
             "group": {
                 "kind": "build",
@@ -69,7 +70,8 @@
             "type": "shell",
             "command": "cmake",
             "args": [
-                "--build", "builds/test_builds"
+                "--build", "builds/test_builds",
+                "--config=Release"
             ],
             "dependsOn": "CMake: Configure",
             "group": {
