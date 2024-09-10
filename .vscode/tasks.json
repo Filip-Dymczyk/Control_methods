@@ -9,7 +9,7 @@
                 "-g",
                 "${workspaceFolder}\\Source\\main.cpp",
                 "-o",
-                "${workspaceFolder}\\builds\\main.exe",
+                "${workspaceFolder}\\builds\\app_build\\app.exe",
                 "-I",
                 "${workspaceFolder}\\Source",
                 "-I",
@@ -37,7 +37,7 @@
         {
             "label": "Run Application.",
             "type": "shell",
-            "command": "${workspaceFolder}\\builds\\main.exe",
+            "command": "${workspaceFolder}\\builds\\app_build\\app.exe",
             "group": {
                 "kind": "test",
                 "isDefault": true
