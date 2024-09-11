@@ -10,7 +10,7 @@
 
 namespace plt = matplotlibcpp;
 
-// NOTE: Allows to components and control systems by plotting: set point, output and optionally - control value.
+// NOTE: Allows to test components and control systems by plotting: set point, output and optionally - control value.
 class TestWithPlot
 {
     struct PlottingBuffers
