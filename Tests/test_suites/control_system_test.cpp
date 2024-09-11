@@ -1,5 +1,5 @@
 // Author: Filip Dymczyk
-// Description : Unit tests for individual components with sine wave signal as an input.
+// Description : Unit tests for control system - open/closed loop.
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
