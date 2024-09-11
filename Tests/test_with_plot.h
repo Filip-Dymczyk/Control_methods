@@ -6,19 +6,13 @@
 #include <string>
 #include "matplotlibcpp/matplotlibcpp.h"
 #include "signals/signals.h"
+#include "sim_objects/control_system.h"
 
 namespace plt = matplotlibcpp;
 
 // NOTE: Allows to components and control systems by plotting: set point, output and optionally - control value.
 class TestWithPlot
 {
-    enum class ControlMode : uint8_t
-    {
-        NONE,
-        OPEN_LOOP,
-        CLOSED_LOOP
-    };
-
     struct PlottingBuffers
     {
         std::vector<double> time {};
