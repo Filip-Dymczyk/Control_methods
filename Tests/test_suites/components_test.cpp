@@ -38,7 +38,7 @@ protected:
         test_component<ObjectStandardRepresentation<2>>(object, &sine_wave);
     }
 private:
-    double const _time_step = 0.001;
+    double const _time_step = 0.01;
     SineWave sine_wave {_time_step, 1.0, 1.0};
     Integrator integrator {_time_step};
     Derivative derivative {_time_step};

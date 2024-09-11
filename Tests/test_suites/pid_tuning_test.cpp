@@ -16,8 +16,7 @@ class PidTuningTest :  public testing::Test, public TestWithPlot
     using Base = TestWithPlot;
     using ObjectT =  ObjectStandardRepresentation<order>;
     using ControlSystemT = ControlSystem<ObjectT, PID>;
-    using RLS = RecursiveLinearRegression<order + 1>;
-    using TunerT = Tuner<ControlSystemT, RLS>;
+    using TunerT = Tuner<ControlSystemT, RecursiveLinearRegression<order + 1>>;
 protected:
     PidTuningTest() : TestWithPlot(30.0) {}
 
@@ -34,7 +33,7 @@ protected:
     }
 
 private:
-    double const _time_step = 0.1;
+    double const _time_step = 0.01;
     SineWave sine_wave1 {_time_step, 1.0, 1.0};
     SineWave sine_wave2 {_time_step, 1.0, 1.0};
     PID pid {_time_step, {0.25, 1.0, 0.3}};

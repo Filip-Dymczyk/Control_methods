@@ -65,7 +65,7 @@ vectors_multiplication_scalar_product(VectorT const & vector_T, VectorT const & 
 
 template<typename VectorT>
 void
-scale_vector(VectorT & vector, double const scaler)
+scale_vector(VectorT & vector, double scaler)
 {
     assert(vector.size());
 
@@ -135,7 +135,7 @@ subtract_matrices(MatrixT const & m_lhs, MatrixT const & m_rhs)
 
 template<typename MatrixT>
 void
-scale_matrix(MatrixT & matrix, double const scaler)
+scale_matrix(MatrixT & matrix, double scaler)
 {
     assert(matrix.size());
     assert(matrix[0].size());
