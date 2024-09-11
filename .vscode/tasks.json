@@ -95,11 +95,13 @@
             "detail": "Task buidling all tests defined in the CMakeLists.txt."
         },
         {
-            "label": "Run Tests.",
+            "label": "Run Tests by the test suite name.",
             "type": "shell",
             "command": "ctest",
             "args": [
-                "--output-on-failure"
+                "--output-on-failure",
+                "-R",
+                "${input:testName}"
             ],
             "group": {
                 "kind": "test",
@@ -112,5 +114,13 @@
             "detail": "Task running all tests which have been built."
         }
     ],
-    "version": "2.0.0"   
+    "version": "2.0.0",
+    "inputs": [
+        {
+            "id": "testName",
+            "type": "promptString",
+            "description": "Enter the test name or pattern to run",
+            "default": ""
+        }
+    ]
 }

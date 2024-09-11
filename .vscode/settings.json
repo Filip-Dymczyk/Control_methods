@@ -84,7 +84,7 @@
         "set": "cpp",
         "span": "cpp",
         "unordered_set": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
     },
     "C_Cpp.errorSquiggles": "enabled",
 }
