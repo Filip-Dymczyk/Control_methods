@@ -7,11 +7,6 @@
 
 class SignalsTest : public testing::Test, public TestWithPlot
 {
-    double const _time_step = 0.001;
-    Heaviside heaviside {_time_step};
-    Ramp ramp {_time_step};
-    Rectangle rect {_time_step, 3.0};
-    SineWave sine_wave {_time_step, 1.0, 1.0};
 protected:
     SignalsTest() : TestWithPlot(15.0) {}
 
@@ -38,6 +33,12 @@ protected:
     {
         test_signal(&sine_wave, signal_plot_title);
     }
+private:
+    double const _time_step = 0.001;
+    Heaviside heaviside {_time_step};
+    Ramp ramp {_time_step};
+    Rectangle rect {_time_step, 3.0};
+    SineWave sine_wave {_time_step, 1.0, 1.0};
 };
 
 TEST_F(SignalsTest, HeavisideTest)
