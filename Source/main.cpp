@@ -1,4 +1,4 @@
-// Control methods for linear SISO  dynamical systems.
+// Control methods for linear SISO dynamical systems.
 // Author: Filip Dymczyk
 
 int main()
