@@ -71,7 +71,7 @@ public:
     void
     update() override
     {
-        set_value((time() > _params.start_time) ? _params.scaler : 0.0);
+        set_value((time() >= _params.start_time) ? _params.scaler : 0.0);
         update_timer();
     }
 };
@@ -104,7 +104,7 @@ public:
     void
     update() override
     {
-        set_value((time() > _params.start_time && time() < _end_time) ? _params.scaler : 0.0);
+        set_value((time() >= _params.start_time && time() <= _end_time) ? _params.scaler : 0.0);
         update_timer();
     }
 private:
@@ -121,7 +121,7 @@ public:
     void
     update() override
     {
-        set_value((time() > _params.start_time) ? (_params.scaler * sin(_omega * time()) + _offset) : 0.0);
+        set_value((time() >= _params.start_time) ? (_params.scaler * sin(_omega * time()) + _offset) : 0.0);
         update_timer();
     }
 private:

@@ -11,14 +11,14 @@ class RecursiveLinearRegression
     using VectorT = std::array<double, n>;
     using MatrixT = std::array<std::array<double, n>, n>;
 public:
-    RecursiveLinearRegression(double const lambda = 0.99) 
+    RecursiveLinearRegression(double lambda = 0.99) 
     {
         _lambda = (lambda > 0.0 && lambda <= 1.0) ? lambda : 1.0;
         _P = create_diagonal_matrix<MatrixT>(1.0);
     }
 
     void
-    update(VectorT const & x, double const epsilon)
+    update(VectorT const & x, double epsilon)
     {
         double const e = 10e-6;
 

@@ -18,6 +18,6 @@ public:
         _previous_value = input;
     }
 private:
-    double _previous_value;
+    double _previous_value {};
 };
 

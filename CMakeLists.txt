@@ -50,4 +50,7 @@ endmacro()
 #-------------------------------------------------
 add_test_executable(algebra_test Tests/test_suites/algebra_test.cpp)
 add_test_executable(signals_test Tests/test_suites/signals_test.cpp)
+add_test_executable(components_test Tests/test_suites/components_test.cpp)
+add_test_executable(control_system_test Tests/test_suites/control_system_test.cpp)
+add_test_executable(pid_tuning_test Tests/test_suites/pid_tuning_test.cpp)
 #-------------------------------------------------

@@ -81,10 +81,26 @@
             "problemMatcher": []
         },
         {
+            "label": "CMake: Build Again", // Forcing the build for the second time to ensure correct python libraries import.
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "builds/test_builds",
+                "--config=Release"
+            ],
+            "dependsOn": "CMake: Build",
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Build Tests.",
             "dependsOn": [
                 "CMake: Configure",
-                "CMake: Build"
+                "CMake: Build",
+                "CMake: Build Again"
             ],
             "dependsOrder": "sequence",
             "group": {
