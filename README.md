@@ -1,5 +1,7 @@
-## Repository Overview
-The aim of this repository is to increase the knowledge about dynamical systems and control methods as well as - OOP programming skills. It uses c++17 to implement the logic of dynamical systems itself. On top of that, external library - matplotlibcpp is used to display the time reponses of the created simulation objects. Components are tested using Googletest testing framewok.
+## Author : Filip Dymczyk.
+
+## Repository overview
+The aim of this repository is to increase the knowledge about dynamical systems and control methods, as well as, OOP programming skills. It uses c++17 for implementation. On top of that, it uses: Matplotlibcpp - to display the time reponses of the created simulation objects and GoogleTest - to test the projects elements.
 
 ### Features added:
 - Integrator and derivative component.
@@ -10,11 +12,11 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Test API using plots.
 - Basic signals: Heaviside, ramp, rectangle, sine wave.
 - Vectors and matrices algebra operations.
-- Recursive linear regression.
+- Recursive linear regression implementation.
 - PID tuning using RLS.
 - Testing managed via Googletest.
 
 ### Features to be added:
+- GUI for easier usage of the app.
 - Other control methods.
 - State space model represantation.
-- GUI for easier usage of the app.
