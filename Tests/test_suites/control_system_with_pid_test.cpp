@@ -8,12 +8,12 @@
 #include "sim_objects/object.h"
 
 static constexpr uint8_t order = 2u;
-class ControlSystemTest :  public testing::Test, public TestWithPlot
+class ControlSystemWithPidTest :  public testing::Test, public TestWithPlot
 {   
     using Base = TestWithPlot;
     using ObjectT =  ObjectStandardRepresentation<order>;
 protected:
-    ControlSystemTest() : TestWithPlot(15.0) {}
+    ControlSystemWithPidTest() : TestWithPlot(15.0) {}
 
     void
     test_open_loop_control()
@@ -34,12 +34,12 @@ private:
     ObjectT object {_time_step, {1.0, 1.0, 1.0}, {0.0, 0.0}};
 };
 
-TEST_F(ControlSystemTest, OpenLoopControlTest)
+TEST_F(ControlSystemWithPidTest, OpenLoopControlTest)
 {
     test_open_loop_control();
 }
 
-TEST_F(ControlSystemTest, ClosedLoopControlTest)
+TEST_F(ControlSystemWithPidTest, ClosedLoopControlTest)
 {
     test_closed_loop_control();
 }
