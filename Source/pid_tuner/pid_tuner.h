@@ -8,11 +8,11 @@
 #include "sim_objects/control_system.h"
 
 template<std::size_t order>
-class Tuner
+class PidTuner
 {
     using ObjectT = ObjectStandardRepresentation<order>;
 public:
-    Tuner(Signal * signal, ControlSystem<ObjectT, PID> & control_system, RecursiveLinearRegression const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
+    PidTuner(Signal * signal, ControlSystem<ObjectT, PID> & control_system, RecursiveLinearRegression const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
 
     void
     update()
