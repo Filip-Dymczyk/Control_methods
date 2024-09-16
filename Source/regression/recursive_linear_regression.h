@@ -5,11 +5,10 @@
 #include <array>
 #include "algebra/algebra.h"
 
-template<std::size_t n>
 class RecursiveLinearRegression
 {
-    using VectorT = std::array<double, n>;
-    using MatrixT = std::array<std::array<double, n>, n>;
+    using VectorT = std::array<double, 3u>;
+    using MatrixT = std::array<std::array<double, 3u>, 3u>;
 public:
     RecursiveLinearRegression(double lambda = 0.99) 
     {
