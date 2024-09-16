@@ -98,7 +98,7 @@ public:
         return _coefficients;
     }
 private:
-    std::size_t _order = order;
+    std::size_t const _order = order;
     coeffs _coefficients;
     State<order> _state;
 
