@@ -17,6 +17,7 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Testing managed via Googletest.
 
 ### Features to be added:
+- Other regulator types.
 - GUI for easier usage of the app.
 - Other control methods.
 - State space model represantation.
