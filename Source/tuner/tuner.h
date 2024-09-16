@@ -3,12 +3,16 @@
 
 #pragma once
 #include "signals/signals.h"
+#include "sim_objects/object.h"
+#include "regression/recursive_linear_regression.h"
+#include "sim_objects/control_system.h"
 
-template<typename ControlSystemT, typename RegressionT>
+template<std::size_t order>
 class Tuner
 {
+    using ObjectT = ObjectStandardRepresentation<order>;
 public:
-    Tuner(Signal * signal, ControlSystemT & control_system, RegressionT const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
+    Tuner(Signal * signal, ControlSystem<ObjectT, PID> & control_system, RecursiveLinearRegression const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
 
     void
     update()
@@ -16,7 +20,7 @@ public:
         _control_system.update(_signal -> get_value());
         _signal -> update();
         _regression.update(_control_system.get_x(), _control_system.get_error());
-        _control_system.set_pid_params(_regression.get_coeffs());
+        _control_system.get_controller().set_params({_regression.get_coeffs()[0], _regression.get_coeffs()[1], _regression.get_coeffs()[2]});
     }
 
     double 
@@ -44,6 +48,6 @@ public:
     }
 private:
     Signal * _signal {};
-    ControlSystemT & _control_system {};
-    RegressionT _regression {};
+    ControlSystem<ObjectT, PID> & _control_system {};
+    RecursiveLinearRegression _regression {};
 };

@@ -16,7 +16,7 @@ class PidTuningTest :  public testing::Test, public TestWithPlot
     using Base = TestWithPlot;
     using ObjectT =  ObjectStandardRepresentation<order>;
     using ControlSystemT = ControlSystem<ObjectT, PID>;
-    using TunerT = Tuner<ControlSystemT, RecursiveLinearRegression<order + 1>>;
+    using TunerT = Tuner<order>;
 protected:
     PidTuningTest() : TestWithPlot(30.0) {}
 
