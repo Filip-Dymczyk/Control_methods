@@ -23,11 +23,11 @@ public:
     update(double error) override
     {   
         set_error(error);
-        if(error >= get_params().hist)
+        if(error >= (get_params().hist) / 2.0)
         {
             set_value(get_params().A2);
         }
-        else if(error <= 0.0)
+        else if(error <= (-get_params().hist) / 2.0)
         {
             set_value(get_params().A1);
         }
