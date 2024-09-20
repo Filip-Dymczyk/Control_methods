@@ -18,18 +18,18 @@ protected:
     void
     test_open_loop_control()
     {
-        Base::test_open_loop_control<ObjectT, TwoPositionController>(object, two_position_controller, &rect, true);
+        Base::test_open_loop_control<ObjectT, TwoPositionController>(object, two_position_controller, &pulse, true);
     }
 
     void
     test_closed_loop_control()
     {
-        Base::test_closed_loop_control<ObjectT, TwoPositionController>(object, two_position_controller, &rect, true);
+        Base::test_closed_loop_control<ObjectT, TwoPositionController>(object, two_position_controller, &pulse, true);
     }
 
 private:
     double const _time_step = 0.01;
-    PulseWave rect {_time_step, 0.75, 4.0};
+    PulseWave pulse {_time_step, 0.75, 4.0};
     TwoPositionController two_position_controller {_time_step, {0.0, 1.0, 1.0}};
     ObjectT object {_time_step, {1.0, 1.0, 1.0}, {0.0, 0.0}};
 };
