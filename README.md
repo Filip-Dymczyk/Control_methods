@@ -15,9 +15,9 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Recursive linear regression implementation.
 - PID tuning using RLS.
 - Testing managed via Googletest.
+- Two-position (Bang-Bang) controller.'
 
 ### Features to be added:
-- Other regulator types.
+- State space model represantation.
 - GUI for easier usage of the app.
 - Other control methods.
-- State space model represantation.
