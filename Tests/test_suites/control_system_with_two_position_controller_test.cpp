@@ -29,7 +29,7 @@ protected:
 
 private:
     double const _time_step = 0.01;
-    Rectangle rect {_time_step, 10.0};
+    PulseWave rect {_time_step, 0.75, 4.0};
     TwoPositionController two_position_controller {_time_step, {0.0, 1.0, 1.0}};
     ObjectT object {_time_step, {1.0, 1.0, 1.0}, {0.0, 0.0}};
 };
