@@ -33,7 +33,7 @@ protected:
     }
 
     void
-    test_object()
+    test_object_differential_equation_representation()
     {
         test_component<ObjectDifferentialEquationRepresentation<2>>(object, &sine_wave);
     }
@@ -61,7 +61,7 @@ TEST_F(ComponentsTest, PidTest)
     test_pid();
 }
 
-TEST_F(ComponentsTest, ObjectTest)
+TEST_F(ComponentsTest, ObjectDifferentialEquationRepresentationTest)
 {
-    test_object();
+    test_object_differential_equation_representation();
 }
