@@ -117,9 +117,9 @@ public:
     }
 protected:
     void
-    reset_on_time()
+    reset_on_timer()
     {
-        _on_time = 0.0;
+        _on_timer = 0.0;
     }
 private:
     double _on_time {};
@@ -154,4 +154,26 @@ public:
 private:
     double _omega {};
     double _offset {};
+};
+
+// NOTE: Pulse wave comprising of continuous rectangles happening with given duty cycle and period.
+class PulseWave : public Rectangle
+{
+public:
+    PulseWave(double time_step, double duty_cycle, double period, SignalBasicParameters const & params = {}) : Rectangle(time_step, duty_cycle * period, params), _period(period) {}
+
+    void
+    update() override
+    {
+        Rectangle::update();
+        if(time() >= _periods_counter * _period)
+        {
+            _periods_counter++;
+            reset_on_timer();
+        }
+    }
+
+private:
+    std::uint32_t _periods_counter {1u};
+    double _period {};
 };
