@@ -10,7 +10,7 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Open and closed loop control with PID controller.
 - Possibility to plot responses using Matplotlibcpp.
 - Test API using plots.
-- Basic signals: Heaviside, ramp, rectangle, sine wave.
+- Basic signals: Heaviside, ramp, rectangle, sine wave, pulse wave.
 - Vectors and matrices algebra operations.
 - Recursive linear regression implementation.
 - PID tuning using RLS.
