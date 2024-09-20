@@ -10,11 +10,11 @@ class Signal
 public:
     struct SignalBasicParameters
     {
-        double start_time;
-        double scaler;
+        double start_time {};
+        double scaler {1.0};
     };
 
-    Signal(double time_step, SignalBasicParameters const & params = {0.0, 1.0}) : _timer(time_step), _params(params) {}
+    Signal(double time_step, SignalBasicParameters const & params) : _timer(time_step), _params(params) {}
 
     virtual void
     update() = 0;
@@ -29,6 +29,12 @@ public:
     time() const
     {
         return _timer.get_value();
+    }
+
+    double
+    get_time_step() const
+    {
+        return _timer.get_time_step();
     }
 
     double 
@@ -66,7 +72,7 @@ private:
 class Heaviside : public Signal
 {
 public:
-    Heaviside(double time_step, SignalBasicParameters const & params = {0.0, 1.0}) : Signal(time_step, params) {}
+    Heaviside(double time_step, SignalBasicParameters const & params = {}) : Signal(time_step, params) {}
 
     void
     update() override
@@ -80,7 +86,7 @@ public:
 class Ramp : public Heaviside
 {
 public:
-    Ramp(double time_step, SignalBasicParameters const & params = {0.0, 1.0}) : Heaviside(time_step, params) {}
+    Ramp(double time_step, SignalBasicParameters const & params = {}) : Heaviside(time_step, params) {}
 
     void
     update() override
@@ -95,20 +101,41 @@ public:
 class Rectangle : public Signal
 {
 public:
-    Rectangle(double time_step, double end_time, SignalBasicParameters const & params = {0.0, 1.0}) : Signal(time_step, params)
+    Rectangle(double time_step, double on_time, SignalBasicParameters const & params = {}) : Signal(time_step, params)
     {
-        assert(end_time > _params.start_time);
-        _end_time = end_time;
+        assert(on_time > 0.0);
+        _on_time = on_time;
     }
 
     void
     update() override
     {
-        set_value((time() >= _params.start_time && time() <= _end_time) ? _params.scaler : 0.0);
+        set_value(is_on() ? _params.scaler : 0.0);
+        
         update_timer();
+        update_on_timer();
+    }
+protected:
+    void
+    reset_on_time()
+    {
+        _on_time = 0.0;
     }
 private:
-    double _end_time {};
+    double _on_time {};
+    double _on_timer {};
+
+    bool
+    is_on()
+    {
+        return (time() >= _params.start_time && _on_timer <= _on_time);
+    }
+
+    void
+    update_on_timer()
+    {
+        _on_timer += get_time_step();
+    } 
 };
 
 // NOTE: Sine wave - {a * sin(w * t) + b; t > t0
@@ -116,7 +143,7 @@ private:
 class SineWave : public Signal
 {
 public:
-    SineWave(double time_step, double omega, double offset, SignalBasicParameters const & params = {0.0, 1.0}) : Signal(time_step, params), _omega(omega), _offset(offset) {}
+    SineWave(double time_step, double omega, double offset, SignalBasicParameters const & params = {}) : Signal(time_step, params), _omega(omega), _offset(offset) {}
 
     void
     update() override
