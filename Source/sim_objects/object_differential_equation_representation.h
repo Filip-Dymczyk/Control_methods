@@ -1,5 +1,5 @@
 // Author: Filip Dymczyk
-// Description : Multi-order linear objects represented by a single differential equation.
+// Description : Multi-order linear object represented by a single differential equation.
 
 #pragma once
 #include <random>
