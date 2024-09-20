@@ -7,7 +7,7 @@
 #include "sim_objects/derivative.h"
 #include "sim_objects/integrator.h"
 #include "sim_objects/pid.h"
-#include "sim_objects/object.h"
+#include "sim_objects/object_differential_equation_representation.h"
 
 class ComponentsTest :  public testing::Test, public TestWithPlot
 {
@@ -35,7 +35,7 @@ protected:
     void
     test_object()
     {
-        test_component<ObjectStandardRepresentation<2>>(object, &sine_wave);
+        test_component<ObjectDifferentialEquationRepresentation<2>>(object, &sine_wave);
     }
 private:
     double const _time_step = 0.01;
@@ -43,7 +43,7 @@ private:
     Integrator integrator {_time_step};
     Derivative derivative {_time_step};
     PID pid {_time_step, {1.0, 1.0, 1.0}};
-    ObjectStandardRepresentation<2> object {_time_step, {1.0, 1.0, 1.0}, {0.0, 0.0}};
+    ObjectDifferentialEquationRepresentation<2> object {_time_step, {1.0, 1.0, 1.0}, {0.0, 0.0}};
 };
 
 TEST_F(ComponentsTest, IntegratorTest)

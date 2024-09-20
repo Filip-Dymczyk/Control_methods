@@ -5,7 +5,7 @@
 #include "test_with_plot.h"
 #include "signals/signals.h"
 #include "sim_objects/pid.h"
-#include "sim_objects/object.h"
+#include "sim_objects/object_differential_equation_representation.h"
 #include "sim_objects/control_system.h"
 #include "regression/recursive_linear_regression.h"
 #include "pid_tuner/pid_tuner.h"
@@ -14,7 +14,7 @@ static constexpr uint8_t order = 2u;
 class PidTuningTest :  public testing::Test, public TestWithPlot
 {   
     using Base = TestWithPlot;
-    using ObjectT =  ObjectStandardRepresentation<order>;
+    using ObjectT =  ObjectDifferentialEquationRepresentation<order>;
     using ControlSystemT = ControlSystem<ObjectT, PID>;
     using TunerT = PidTuner<order>;
 protected:

@@ -5,13 +5,13 @@
 #include "test_with_plot.h"
 #include "signals/signals.h"
 #include "sim_objects/pid.h"
-#include "sim_objects/object.h"
+#include "sim_objects/object_differential_equation_representation.h"
 
 static constexpr uint8_t order = 2u;
 class ControlSystemWithPidTest :  public testing::Test, public TestWithPlot
 {   
     using Base = TestWithPlot;
-    using ObjectT =  ObjectStandardRepresentation<order>;
+    using ObjectT =  ObjectDifferentialEquationRepresentation<order>;
 protected:
     ControlSystemWithPidTest() : TestWithPlot(15.0) {}
 
