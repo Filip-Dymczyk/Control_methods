@@ -1,5 +1,5 @@
 // Author: Filip Dymczyk
-// Description Multi order object state.
+// Description : Class representing multi-order object state.
 
 #pragma once
 
