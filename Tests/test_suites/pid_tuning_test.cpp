@@ -8,7 +8,7 @@
 #include "sim_objects/object.h"
 #include "sim_objects/control_system.h"
 #include "regression/recursive_linear_regression.h"
-#include "tuner/tuner.h"
+#include "pid_tuner/pid_tuner.h"
 
 static constexpr uint8_t order = 2u;
 class PidTuningTest :  public testing::Test, public TestWithPlot
@@ -16,7 +16,7 @@ class PidTuningTest :  public testing::Test, public TestWithPlot
     using Base = TestWithPlot;
     using ObjectT =  ObjectStandardRepresentation<order>;
     using ControlSystemT = ControlSystem<ObjectT, PID>;
-    using TunerT = Tuner<ControlSystemT, RecursiveLinearRegression<order + 1>>;
+    using TunerT = PidTuner<order>;
 protected:
     PidTuningTest() : TestWithPlot(30.0) {}
 

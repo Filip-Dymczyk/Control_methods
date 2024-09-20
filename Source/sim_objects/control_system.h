@@ -63,10 +63,16 @@ public:
         return _controller.get_x();
     }
     
-    void
-    set_pid_params(std::array<double, 3> const & params)
+    ControllerT &
+    get_controller()
     {
-        _controller.set_pid_params({params.at(0), params.at(1), params.at(2)});
+        return _controller;
+    }
+    
+    ControllerT const &
+    get_controller() const
+    {
+        return _controller;
     }
 private:
     double _set_point {};
