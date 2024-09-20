@@ -1,5 +1,5 @@
 // Author: Filip Dymczyk
-// Description : Algebra operations for RLS implementation.
+// Description : Basic algebra operations.
 
 #pragma once
 #include <assert.h>
