@@ -3,16 +3,15 @@
 
 #pragma once
 #include "signals/signals.h"
-#include "sim_objects/object.h"
+#include "sim_objects/object_differential_equation_representation.h"
 #include "regression/recursive_linear_regression.h"
 #include "sim_objects/control_system.h"
 
-template<std::size_t order>
+template<std::size_t order, typename Object>
 class PidTuner
 {
-    using ObjectT = ObjectStandardRepresentation<order>;
 public:
-    PidTuner(Signal * signal, ControlSystem<ObjectT, PID> & control_system, RecursiveLinearRegression const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
+    PidTuner(Signal * signal, ControlSystem<Object, PID> & control_system, RecursiveLinearRegression const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
 
     void
     update()
@@ -48,6 +47,6 @@ public:
     }
 private:
     Signal * _signal {};
-    ControlSystem<ObjectT, PID> & _control_system {};
+    ControlSystem<Object, PID> & _control_system {};
     RecursiveLinearRegression _regression {};
 };
