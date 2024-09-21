@@ -2,7 +2,7 @@
 // Description : Basic signals.
 
 #pragma once
-#include "sim_objects/integrator.h"
+#include "integrator.h"
 
 // NOTE: Base class for signals.
 class Signal

@@ -3,13 +3,13 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "signals/signals.h"
-#include "sim_objects/pid.h"
-#include "sim_objects/object_differential_equation_representation.h"
-#include "sim_objects/object_state_space_representation.h"
-#include "sim_objects/control_system.h"
-#include "regression/recursive_linear_regression.h"
-#include "pid_tuner/pid_tuner.h"
+#include "include/signals.h"
+#include "include/pid.h"
+#include "include/object_differential_equation_representation.h"
+#include "include/object_state_space_representation.h"
+#include "include/control_system.h"
+#include "include/recursive_linear_regression.h"
+#include "include/pid_tuner.h"
 
 
 class PidTuningTest :  public testing::Test, public TestWithPlot

@@ -3,7 +3,7 @@
 
 #pragma once
 #include <array>
-#include "algebra/algebra.h"
+#include "algebra.h"
 
 class RecursiveLinearRegression
 {

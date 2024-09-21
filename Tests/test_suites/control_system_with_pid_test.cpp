@@ -3,9 +3,9 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "signals/signals.h"
-#include "sim_objects/pid.h"
-#include "sim_objects/object_differential_equation_representation.h"
+#include "include/signals.h"
+#include "include/pid.h"
+#include "include/object_differential_equation_representation.h"
 
 static constexpr uint8_t order = 2u;
 class ControlSystemWithPidTest :  public testing::Test, public TestWithPlot

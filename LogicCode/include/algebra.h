@@ -6,7 +6,7 @@
 
 template<typename MatrixT>
 MatrixT
-create_diagonal_matrix(double scalar = 1.0)
+create_diagonal_matrix(double scalar)
 {   
     MatrixT out_matrix {};
     
@@ -153,22 +153,22 @@ template<typename VectorT, typename MatrixT>
 VectorT
 vector_matrix_multiplication_vector_product(VectorT const & vector_T, MatrixT const & matrix)
 {  
-assert(vector_T.size());
-assert(matrix.size());
-assert(matrix[0].size());
-assert(vector_T.size() == matrix.size());
+    assert(vector_T.size());
+    assert(matrix.size());
+    assert(matrix[0].size());
+    assert(vector_T.size() == matrix.size());
 
-VectorT out_vector {};
+    VectorT out_vector {};
 
-for(std::size_t i = 0; i < vector_T.size(); i++)
-{
-    double column_value {};
-    for(std::size_t j = 0; j < matrix.size(); j++)
+    for(std::size_t i = 0; i < vector_T.size(); i++)
     {
-        column_value += vector_T[j] * matrix[j][i];
+        double column_value {};
+        for(std::size_t j = 0; j < matrix.size(); j++)
+        {
+            column_value += vector_T[j] * matrix[j][i];
+        }
+        out_vector[i] = column_value;
     }
-    out_vector[i] = column_value;
-}
 
-return out_vector;
+    return out_vector;
 }

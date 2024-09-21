@@ -5,7 +5,7 @@
 #include <random>
 #include "sim_object_base.h"
 #include "state.h"
-#include "algebra/algebra.h"
+#include "algebra.h"
 
 // NOTE: SISO object represented via state space:
 //              x' = Ax + Bu
