@@ -7,11 +7,11 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\Source\\main.cpp",
+                "${workspaceFolder}\\main.cpp",
                 "-o",
                 "${workspaceFolder}\\builds\\app_build\\app.exe",
                 "-I",
-                "${workspaceFolder}\\Source",
+                "${workspaceFolder}\\LogicCode\\include",
                 "-I",
                 "${workspaceFolder}\\3rdParty",
                 "-I",
