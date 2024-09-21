@@ -36,7 +36,7 @@ public:
         VectorT const new_state_derivative = add_vectors<VectorT>(A_x, B_u);
         _state.update(new_state_derivative);
         
-        set_value(vectors_multiplication_scalar_product<VectorT>(_C, current_state));
+        set_value(vectors_multiplication_scalar_product<VectorT>(_C, current_state) + measurement_noise());
     }
 
     std::size_t
