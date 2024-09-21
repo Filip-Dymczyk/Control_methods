@@ -7,7 +7,7 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${workspaceFolder}\\main.cpp",
+                "${workspaceFolder}\\MainApp\\main.cpp",
                 "-o",
                 "${workspaceFolder}\\builds\\app_build\\app.exe",
                 "-I",
