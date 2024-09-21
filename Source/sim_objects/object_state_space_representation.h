@@ -5,6 +5,7 @@
 #include <random>
 #include "sim_object_base.h"
 #include "state.h"
+#include "algebra/algebra.h"
 
 // NOTE: SISO object represented via state space:
 //              x' = Ax + Bu
@@ -22,11 +23,20 @@ public:
     using MatrixT = std::array<std::array<double, order>, order>;
     using VectorT = std::array<double, order>;
 
-    ObjectStateSpaceRepresentation(double time_step, MatrixT const & A, VectorT const & B, VectorT const & C, double D = 0.0, initial_state const & init_state) : SimumlationObjectBase(time_step), _state(time_step, init_state), _A(A), _B(B), _C(C), _D(D) {}
+    ObjectStateSpaceRepresentation(double time_step, VectorT const & init_state, MatrixT const & A, VectorT const & B, VectorT const & C, double D = 0.0) : SimumlationObjectBase(time_step), _state(time_step, init_state), _A(A), _B(B), _C(C), _D(D) 
+    {}
 
     void 
     update(double control) override
     {
+        VectorT const current_state = get_current_state();
+        VectorT A_x = matrix_vector_multiplication_vector_product<MatrixT, VectorT>(_A, current_state);
+        VectorT B_u = _B;
+        scale_vector<VectorT>(B_u, control);
+        VectorT const new_state_derivative = add_vectors<VectorT>(A_x, B_u);
+        _state.update(new_state_derivative);
+        
+        set_value(vectors_multiplication_scalar_product<VectorT>(_C, current_state));
     }
 
     std::size_t
@@ -49,5 +59,16 @@ private:
     measurement_noise()
     {
         return distribution(generator);
+    }
+
+    VectorT
+    get_current_state() const
+    {
+        VectorT current_state {};
+        for(std::size_t i = 0; i < order; i++)
+        {
+            current_state[i] = _state.get_value(i);
+        }
+        return current_state;
     }
 };

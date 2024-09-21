@@ -41,6 +41,15 @@ public:
             _integrators[i].update(_integrators[i - 1].get_value());
         }
     }
+
+    void
+    update(std::array<double, order> const & new_state_derivative)
+    {
+        for(std::size_t i = 0; i < order; i++)
+        {
+            _integrators[i].update(new_state_derivative[i]);
+        }
+    }
 private:
     std::array<Integrator, order> _integrators;
 };

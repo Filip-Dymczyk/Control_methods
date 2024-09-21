@@ -8,9 +8,13 @@
 #include "sim_objects/integrator.h"
 #include "sim_objects/pid.h"
 #include "sim_objects/object_differential_equation_representation.h"
+#include "sim_objects/object_state_space_representation.h"
 
 class ComponentsTest :  public testing::Test, public TestWithPlot
 {
+    static constexpr std::uint32_t _order = 2u;
+    static constexpr double _time_step = 0.01;
+    static constexpr std::array<double, _order> init_state {0.0, 0.0};
 protected:
     ComponentsTest() : TestWithPlot(15.0) {}
 
@@ -35,15 +39,21 @@ protected:
     void
     test_object_differential_equation_representation()
     {
-        test_component<ObjectDifferentialEquationRepresentation<2>>(object, &sine_wave);
+        test_component<ObjectDifferentialEquationRepresentation<_order>>(object_differential_equation, &sine_wave);
+    }
+
+    void
+    test_object_state_space_representation()
+    {
+        test_component<ObjectStateSpaceRepresentation<_order>>(object_state_space, &sine_wave);
     }
 private:
-    double const _time_step = 0.01;
     SineWave sine_wave {_time_step, 1.0, 1.0};
     Integrator integrator {_time_step};
     Derivative derivative {_time_step};
     PID pid {_time_step, {1.0, 1.0, 1.0}};
-    ObjectDifferentialEquationRepresentation<2> object {_time_step, {1.0, 1.0, 1.0}, {0.0, 0.0}};
+    ObjectDifferentialEquationRepresentation<_order> object_differential_equation {_time_step, {1.0, 1.0, 1.0}, init_state};
+    ObjectStateSpaceRepresentation<_order> object_state_space {_time_step, init_state, {{{1.0, 1.0}, {1.0, 1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
 };
 
 TEST_F(ComponentsTest, IntegratorTest)
@@ -64,4 +74,9 @@ TEST_F(ComponentsTest, PidTest)
 TEST_F(ComponentsTest, ObjectDifferentialEquationRepresentationTest)
 {
     test_object_differential_equation_representation();
+}
+
+TEST_F(ComponentsTest, ObjectStateSpaceRepresentationTest)
+{
+    test_object_state_space_representation();
 }
