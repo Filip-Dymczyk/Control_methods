@@ -16,8 +16,8 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - PID tuning using RLS.
 - Testing managed via Googletest.
 - Two-position (Bang-Bang) controller.
+- State space representation for linear SISO object.
 
 ### Features to be added:
-- State space model represantation.
 - GUI for easier usage of the app.
 - Other control methods.
