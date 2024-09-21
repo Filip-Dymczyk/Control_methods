@@ -20,7 +20,7 @@ public:
 
         for(std::size_t i = 0; i < order; i++)
         {
-            Integrator I (time_step, init_state[i]);
+            Integrator I {time_step, init_state[i]};
             _integrators[i] = I;
         }
     }
@@ -32,10 +32,10 @@ public:
     }
 
     void
-    update(double input)
+    update(double highest_order_deriavtive)
     {
         // Next integrals of state derivatives:
-        _integrators[0].update(input);
+        _integrators[0].update(highest_order_deriavtive);
         for(std::size_t i = 1; i < order; i++)
         {
             _integrators[i].update(_integrators[i - 1].get_value());
