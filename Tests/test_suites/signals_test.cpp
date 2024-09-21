@@ -2,8 +2,8 @@
 // Description : Unit tests for signals.
 
 #include <gtest/gtest.h>
-#include "signals/signals.h"
 #include "test_with_plot.h"
+#include "include/signals.h"
 
 class SignalsTest : public testing::Test, public TestWithPlot
 {

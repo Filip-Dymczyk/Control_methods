@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include <array>
-#include "algebra/algebra.h"
+#include "include/algebra.h"
 
 class AlgebraTest : public testing::Test
 {

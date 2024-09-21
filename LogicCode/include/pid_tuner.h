@@ -2,10 +2,10 @@
 // Description : Tuner class performing PID tuning using RLS.
 
 #pragma once
-#include "signals/signals.h"
-#include "sim_objects/object_differential_equation_representation.h"
-#include "regression/recursive_linear_regression.h"
-#include "sim_objects/control_system.h"
+#include "signals.h"
+#include "object_differential_equation_representation.h"
+#include "recursive_linear_regression.h"
+#include "control_system.h"
 
 template<std::size_t order, typename Object>
 class PidTuner

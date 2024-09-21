@@ -31,7 +31,7 @@ enable_testing()
 include_directories(
   "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\include"
   "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy\\core\\include"
-  Source
+  LogicCode
   3rdParty
   Tests
 )

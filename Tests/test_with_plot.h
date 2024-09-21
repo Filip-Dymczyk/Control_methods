@@ -5,8 +5,8 @@
 #include <math.h>
 #include <string>
 #include "matplotlibcpp/matplotlibcpp.h"
-#include "signals/signals.h"
-#include "sim_objects/control_system.h"
+#include "include/signals.h"
+#include "include/control_system.h"
 
 namespace plt = matplotlibcpp;
 

@@ -3,12 +3,12 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "signals/signals.h"
-#include "sim_objects/derivative.h"
-#include "sim_objects/integrator.h"
-#include "sim_objects/pid.h"
-#include "sim_objects/object_differential_equation_representation.h"
-#include "sim_objects/object_state_space_representation.h"
+#include "include/signals.h"
+#include "include/derivative.h"
+#include "include/integrator.h"
+#include "include/pid.h"
+#include "include/object_differential_equation_representation.h"
+#include "include/object_state_space_representation.h"
 
 class ComponentsTest :  public testing::Test, public TestWithPlot
 {
