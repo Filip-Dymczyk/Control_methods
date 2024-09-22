@@ -17,7 +17,9 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Testing managed via Googletest.
 - Two-position (Bang-Bang) controller.
 - State space representation for linear SISO object.
+- Introduced GUI using Qt framework.
 
 ### Features to be added:
-- GUI for easier usage of the app.
-- Other control methods.
+- Refactor templated classes using polymorphism and base classes - will be needed for application logic.
+- Create simulator class handling whole application logic.
+- Incorporate simulator into GUI - create widgets connections and operate control systems based on their states.
