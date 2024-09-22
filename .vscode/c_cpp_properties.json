@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}",
                 "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\include",
-                "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy\\core\\include"
+                "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy\\core\\include",
+                "C:\\Qt\\6.7.2\\mingw_64\\include"
             ],
             "defines": [
                 "_DEBUG",

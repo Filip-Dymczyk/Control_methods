@@ -85,6 +85,8 @@
         "span": "cpp",
         "unordered_set": "cpp",
         "variant": "cpp",
+        "qpushbutton": "cpp",
+        "qstring": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
 }
