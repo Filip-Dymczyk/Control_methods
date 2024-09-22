@@ -8,8 +8,8 @@
 
 class MainWindow : public QWidget
 {
-    static constexpr unsigned width = 500;
-    static constexpr unsigned height = 700;
+    static constexpr unsigned width = 400;
+    static constexpr unsigned height = 800;
     const QString window_title = "Dynamical systems control methods.";
 public:
     MainWindow() 
