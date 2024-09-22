@@ -8,6 +8,7 @@
                 "-fdiagnostics-color=always",
                 "-g", "${workspaceFolder}\\MainApp\\main.cpp",
                 "-o", "${workspaceFolder}\\builds\\app_build\\app.exe",
+                "-I", "${workspaceFolder}\\ApplicationCode\\include",
                 "-I", "${workspaceFolder}\\LogicCode\\include",
                 "-I", "C:\\Qt\\6.7.2\\mingw_64\\include",
                 "-L", "C:\\Qt\\6.7.2\\mingw_64\\lib",
