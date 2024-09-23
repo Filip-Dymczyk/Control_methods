@@ -14,46 +14,46 @@ class ComponentsTest :  public testing::Test, public TestWithPlot
 {
     static constexpr std::uint32_t _order = 2u;
     static constexpr double _time_step = 0.01;
-    static constexpr std::array<double, _order> init_state {0.0, 0.0};
+    std::vector<double> const init_state {0.0, 0.0};
 protected:
     ComponentsTest() : TestWithPlot(15.0) {}
 
     void
     test_integrator()
     {
-        test_component<Integrator>(integrator, &sine_wave);
+        test_component(&_integrator, &_sine_wave);
     }
 
     void
     test_derivative()
     {
-        test_component<Derivative>(derivative, &sine_wave);
+        test_component(&_derivative, &_sine_wave);
     }
 
     void
     test_pid()
     {
-        test_component<PID>(pid, &sine_wave);
+        test_component(&_pid, &_sine_wave);
     }
 
     void
     test_object_differential_equation_representation()
     {
-        test_component<ObjectDifferentialEquationRepresentation<_order>>(object_differential_equation, &sine_wave);
+        test_component(&_object_differential_equation, &_sine_wave);
     }
 
     void
     test_object_state_space_representation()
     {
-        test_component<ObjectStateSpaceRepresentation<_order>>(object_state_space, &sine_wave);
+        test_component(&_object_state_space, &_sine_wave);
     }
 private:
-    SineWave sine_wave {_time_step, 1.0, 1.0};
-    Integrator integrator {_time_step};
-    Derivative derivative {_time_step};
-    PID pid {_time_step, {1.0, 1.0, 1.0}};
-    ObjectDifferentialEquationRepresentation<_order> object_differential_equation {_time_step, {1.0, 1.0, 1.0}, init_state};
-    ObjectStateSpaceRepresentation<_order> object_state_space {_time_step, init_state, {{{1.0, 1.0}, {1.0, 1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
+    SineWave _sine_wave {_time_step, 1.0, 1.0};
+    Integrator _integrator {_time_step};
+    Derivative _derivative {_time_step};
+    PID _pid {_time_step, {1.0, 1.0, 1.0}};
+    ObjectDifferentialEquationRepresentation _object_differential_equation {_time_step, _order, init_state, {1.0, 1.0, 1.0}};
+    ObjectStateSpaceRepresentation _object_state_space {_time_step, _order, init_state, {{{1.0, 1.0}, {1.0, 1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
 };
 
 TEST_F(ComponentsTest, IntegratorTest)
