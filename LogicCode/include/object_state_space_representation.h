@@ -20,7 +20,14 @@ class ObjectStateSpaceRepresentation : public ObjectRepresentationBase
     using MatrixT = std::vector<std::vector<double>>;
     using VectorT = std::vector<double>;
 public:
-    ObjectStateSpaceRepresentation(double time_step, std::uint32_t order, VectorT const & init_state, MatrixT const & A, VectorT const & B, VectorT const & C, double D = 0.0) : ObjectRepresentationBase(time_step, order, init_state)
+    ObjectStateSpaceRepresentation(double time_step, 
+                                std::uint32_t order, 
+                                VectorT const & init_state, 
+                                MatrixT const & A, 
+                                VectorT const & B, 
+                                VectorT const & C, 
+                                double D = 0.0) : 
+                                ObjectRepresentationBase(time_step, order, init_state)
     {
         assert(A.size() == order);
         assert(A[0].size() == order);
