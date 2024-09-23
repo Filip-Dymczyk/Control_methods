@@ -2,6 +2,8 @@
 // Description : Basic signals.
 
 #pragma once
+#include <cstdint>
+#include <math.h>
 #include "integrator.h"
 
 // NOTE: Base class for signals.

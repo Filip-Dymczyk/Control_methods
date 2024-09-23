@@ -18,7 +18,8 @@ protected:
     check_diagonal_matrix() const 
     {
         double const scalar = 2.0;
-        MatrixT const out = create_diagonal_matrix<MatrixT>(scalar);
+        MatrixT out {};
+        create_diagonal_matrix<MatrixT>(out, scalar);
 
         float const zero = 0.0f;
         for(std::size_t i = 0; i < out.size(); i++)
@@ -40,7 +41,8 @@ protected:
     void
     check_matrix_vector_multiplication_vector_product() const
     {
-        VectorT const out = matrix_vector_multiplication_vector_product<MatrixT, VectorT>(test_matrixA, test_vectorA);
+        VectorT out {};
+        matrix_vector_multiplication_vector_product<MatrixT, VectorT>(out, test_matrixA, test_vectorA);
         VectorT const expected_out {5.0, 5.0};
         check_vector_values(expected_out, out);
     }
@@ -66,7 +68,8 @@ protected:
     void
     check_vectors_addition() const 
     {
-        VectorT const out = add_vectors<VectorT>(test_vectorA, test_vectorA);
+        VectorT out {};
+        add_vectors<VectorT>(out, test_vectorA, test_vectorA);
         VectorT const expected_out {2.0, 4.0};
         check_vector_values(expected_out, out);
     }
@@ -74,7 +77,8 @@ protected:
     void
     check_vectors_multiplication_matrix_product() const
     {
-        MatrixT const out = vectors_multiplication_matrix_product<MatrixT>(test_vectorA, test_vectorA);
+        MatrixT out {};
+        vectors_multiplication_matrix_product<MatrixT, VectorT>(out, test_vectorA, test_vectorA);
         MatrixT const expected_out {{{1.0, 2.0}, {2.0, 4.0}}};
         check_matrix_values(expected_out, out);
     }
@@ -82,7 +86,8 @@ protected:
     void
     check_matrices_subtraction() const
     {
-        MatrixT const out = subtract_matrices<MatrixT>(test_matrixA, test_matrixB);
+        MatrixT out {};
+        subtract_matrices<MatrixT>(out, test_matrixA, test_matrixB);
         MatrixT const expected_out {{{2.0, -1.0}, {-3.0, 1.0}}};
         check_matrix_values(expected_out, out);
     }
@@ -100,7 +105,8 @@ protected:
     void
     check_vector_matrix_multiplication_vector_product() const
     {
-        VectorT const out = vector_matrix_multiplication_vector_product<VectorT, MatrixT>(test_vectorA, test_matrixA);
+        VectorT out {};
+        vector_matrix_multiplication_vector_product<VectorT, MatrixT>(out, test_vectorA, test_matrixA);
         VectorT const expected_out {3.0, 6.0};
         check_vector_values(expected_out, out);
     }

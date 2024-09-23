@@ -4,9 +4,12 @@
 #pragma once
 #include <math.h>
 #include <string>
-#include "matplotlibcpp/matplotlibcpp.h"
+#include "include/object_representation_base.h"
+#include "include/controller_base.h"
 #include "include/signals.h"
 #include "include/control_system.h"
+#include "include/sim_object_base.h"
+#include "matplotlibcpp/matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
@@ -33,27 +36,24 @@ public:
         plot_test(buffers, ControlMode::NONE, false, signal_plot_title);
     }
 
-    template<typename ObjectT, typename ControllerT>
     void
-    test_closed_loop_control(ObjectT object, ControllerT controller, Signal* input_signal, bool const plot_control = false) const 
+    test_closed_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, Signal* input_signal, bool const plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::CLOSED_LOOP);
 
         plot_test(buffers, ControlMode::CLOSED_LOOP, plot_control);
     }
 
-    template<typename ObjectT, typename ControllerT>
     void
-    test_open_loop_control(ObjectT object, ControllerT controller, Signal * input_signal, bool plot_control = false) const 
+    test_open_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, Signal * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::OPEN_LOOP);
 
         plot_test(buffers, ControlMode::OPEN_LOOP, plot_control);
     }
 
-    template<typename ComponentT>
     void
-    test_component(ComponentT component, Signal * input_signal, bool plot_control = false) const 
+    test_component(SimumlationObjectBase * component, Signal * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_component(component, input_signal);
 
@@ -94,12 +94,11 @@ private:
         return {time, set_point, control, output};
     }
     
-    template<typename ObjectT, typename ControllerT>
     PlottingBuffers const
-    simulate_open_closed_loop(ObjectT object, ControllerT controller, Signal * input_signal, ControlMode const & control_mode) const 
+    simulate_open_closed_loop(ObjectRepresentationBase * object, ControllerBase * controller, Signal * input_signal, ControlMode const & control_mode) const 
     {
         input_signal -> reset();
-        ControlSystem<ObjectT, ControllerT> control_loop {object, controller, control_mode};
+        ControlSystem control_loop {object, controller, control_mode};
         std::vector<double> time {};
         std::vector<double> set_point {};
         std::vector<double> control {};
@@ -117,9 +116,8 @@ private:
         return {time, set_point, control, output};
     }
 
-    template<typename ComponentT>
     PlottingBuffers const
-    simulate_component(ComponentT object, Signal * input_signal) const 
+    simulate_component(SimumlationObjectBase * object, Signal * input_signal) const 
     {
         input_signal -> reset();
         std::vector<double> time {};
@@ -129,9 +127,9 @@ private:
         while(input_signal -> time() < _sim_time)
         {
             time.push_back(input_signal -> time());
-            object.update(input_signal -> get_value());   
+            object -> update(input_signal -> get_value());   
             set_point.push_back(input_signal -> get_value());
-            output.push_back(object.get_value());
+            output.push_back(object -> get_value());
             input_signal -> update();
         }  
         return {time, set_point, {}, output};

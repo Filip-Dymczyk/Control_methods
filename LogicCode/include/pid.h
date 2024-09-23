@@ -2,7 +2,7 @@
 // Description : PID controller class.
 
 #pragma once
-#include "regulator_base.h"
+#include "controller_base.h"
 #include "integrator.h"
 #include "derivative.h"
 
@@ -14,10 +14,10 @@ struct PID_Params
 };
 
 // NOTE: PID output will be computed as - kp * x + ki * int_x + kd * x'.
-class PID : public RegulatorBase<PID_Params>
+class PID : public ControllerBase
 {
 public:
-    PID(double time_step, PID_Params const & params) : RegulatorBase(time_step, params) {}
+    PID(double time_step, PID_Params const & params) : ControllerBase(time_step), _params(params) {}
     
     void
     update(double error) override
@@ -25,15 +25,22 @@ public:
         set_error(error);
         _error_int.update(error);
         _error_der.update(error);
-        set_value(get_params().kp * error + get_params().ki * _error_int.get_value() + get_params().kd * _error_der.get_value());
+        set_value(_params.kp * error + _params.ki * _error_int.get_value() + _params.kd * _error_der.get_value());
     }
 
     std::array<double, 3> const
-    get_x() const 
+    get_x() const override
     {
         return {get_error(), _error_int.get_value(), _error_der.get_value()};
     }
+
+    void
+    set_params(PID_Params const & params) override
+    {
+        _params = params;
+    }
 private:
+    PID_Params _params {};
     Integrator _error_int {get_time_step()};
     Derivative _error_der {get_time_step()};
 };
