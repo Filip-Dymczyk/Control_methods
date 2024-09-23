@@ -55,6 +55,13 @@ public:
     {
         return _coefficients;
     }
+
+    void 
+    reset()
+    {
+        _P = {};
+        _coefficients = {};
+    }
 private:
     double _lambda {};
     MatrixT _P {};

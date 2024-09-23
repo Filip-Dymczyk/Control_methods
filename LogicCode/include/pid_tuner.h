@@ -9,7 +9,12 @@
 class PidTuner
 {
 public:
-    PidTuner(Signal * signal, ControlSystem & control_system, RecursiveLinearRegression const & regression) : _signal(signal), _control_system(control_system), _regression(regression) {}
+    PidTuner(Signal * signal, 
+            ControlSystem & control_system, 
+            RecursiveLinearRegression const & regression) : 
+            _signal(signal), 
+            _control_system(control_system), 
+            _regression(regression) {}
 
     void
     update()
@@ -42,6 +47,14 @@ public:
     get_control() const
     {
         return _control_system.get_control();
+    }
+
+    void
+    reset()
+    {
+        _signal -> reset();
+        _control_system.reset();
+        _regression.reset();
     }
 private:
     Signal * _signal {};

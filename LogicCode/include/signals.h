@@ -51,12 +51,9 @@ public:
         _params = params;
     }
 
-    void
-    reset()
-    {
-        _value = 0.0;
-        _timer.reset();
-    }
+    virtual void
+    reset() = 0;
+
 protected:
     SignalBasicParameters _params {};
 
@@ -64,6 +61,12 @@ protected:
     set_value(double value)
     {
         _value = value;
+    }
+
+    void
+    reset_timer()
+    {
+        _timer.reset();
     }
 private:
     double _value {};
@@ -81,6 +84,13 @@ public:
     {
         set_value((time() >= _params.start_time) ? _params.scaler : 0.0);
         update_timer();
+    }
+
+    void
+    reset() override
+    {
+        set_value(0.0);
+        reset_timer();
     }
 };
 
@@ -116,6 +126,14 @@ public:
         
         update_timer();
         update_on_timer();
+    }
+
+    void
+    reset() override
+    {
+        set_value(0.0);
+        reset_timer();
+        _on_timer = 0.0;
     }
 protected:
     void
@@ -153,6 +171,13 @@ public:
         set_value((time() >= _params.start_time) ? (_params.scaler * sin(_omega * time()) + _offset) : 0.0);
         update_timer();
     }
+
+    void
+    reset() override
+    {
+        set_value(0.0);
+        reset_timer();
+    }
 private:
     double _omega {};
     double _offset {};
@@ -175,6 +200,13 @@ public:
         }
     }
 
+    void
+    reset() override
+    {
+        set_value(0.0);
+        reset_timer();
+        _periods_counter = 1u;
+    }
 private:
     std::uint32_t _periods_counter {1u};
     double _period {};

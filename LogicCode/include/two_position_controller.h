@@ -36,6 +36,13 @@ public:
     {
         _params = params;
     }
+
+    void 
+    reset() override
+    {
+        set_error(0.0);
+        set_value(0.0);
+    }
 private:
     Two_Position_Controller_Params _params {};
 };

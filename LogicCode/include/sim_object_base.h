@@ -29,11 +29,9 @@ public:
         return _value;
     }
 
-    void
-    reset()
-    {
-        _value = 0.0;
-    }
+    virtual void
+    reset() = 0;
+
 protected:
     void
     set_value(double value)

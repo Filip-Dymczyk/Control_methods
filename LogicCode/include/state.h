@@ -18,6 +18,7 @@ public:
         _order = order;
         for(const auto & state : init_state)
         {
+            _init_state.push_back(state);
             Integrator I {time_step, state};
             _integrators.push_back(I);
         }
@@ -28,6 +29,13 @@ public:
     {
         assert(idx < _integrators.size());
         return _integrators.at(idx).get_value();
+    }
+
+    double
+    get_init_state(std::size_t idx) const
+    {
+        assert(idx < _init_state.size());
+        return _init_state.at(idx);
     }
 
     void
@@ -51,7 +59,21 @@ public:
             _integrators.at(i).update(new_state_derivative.at(i));
         }
     }
+
+    void
+    reset()
+    {
+        assert(_order == _init_state.size());
+        assert(_order == _integrators.size());
+        double const time_step = _integrators.at(0).get_time_step();
+        for(std::size_t i = 0; i < _order; i++)
+        {
+            Integrator I {time_step, _init_state.at(i)};
+            _integrators.at(i) = I;
+        }
+    }
 private:
     std::uint32_t _order {};
+    std::vector<double> _init_state {};
     std::vector<Integrator> _integrators;
 };

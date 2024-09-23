@@ -17,6 +17,14 @@ public:
         set_value(derivative);
         _previous_value = input;
     }
+
+    void
+    reset() override
+    {
+        set_value(0.0);
+        _previous_value = 0.0;
+    }
+
 private:
     double _previous_value {};
 };
