@@ -86,7 +86,8 @@
         "unordered_set": "cpp",
         "variant": "cpp",
         "qpushbutton": "cpp",
-        "qstring": "cpp"
+        "qstring": "cpp",
+        "future": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
 }
