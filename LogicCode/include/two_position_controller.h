@@ -2,9 +2,7 @@
 // Description : Two-position controller class.
 
 #pragma once
-#include "regulator_base.h"
-#include "integrator.h"
-#include "derivative.h"
+#include "controller_base.h"
 
 struct Two_Position_Controller_Params
 {
@@ -14,22 +12,30 @@ struct Two_Position_Controller_Params
 };
 
 // NOTE: Two position controller with histeresis.
-class TwoPositionController : public RegulatorBase<Two_Position_Controller_Params>
+class TwoPositionController : public ControllerBase
 {
 public:
-    TwoPositionController(double time_step, Two_Position_Controller_Params const & params = {}) : RegulatorBase(time_step, params) {}
+    TwoPositionController(double time_step, Two_Position_Controller_Params const & params = {}) : ControllerBase(time_step), _params(params) {}
     
     void
     update(double error) override
     {   
         set_error(error);
-        if(error >= (get_params().hist) / 2.0)
+        if(error >= (_params.hist) / 2.0)
         {
-            set_value(get_params().A2);
+            set_value(_params.A2);
         }
-        else if(error <= (-get_params().hist) / 2.0)
+        else if(error <= (-_params.hist) / 2.0)
         {
-            set_value(get_params().A1);
+            set_value(_params.A1);
         }
     }
+
+    void
+    set_params(Two_Position_Controller_Params const & params)
+    {
+        _params = params;
+    }
+private:
+    Two_Position_Controller_Params _params {};
 };
