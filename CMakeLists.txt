@@ -54,4 +54,5 @@ add_test_executable(components_test Tests/test_suites/components_test.cpp)
 add_test_executable(control_system_with_pid_test Tests/test_suites/control_system_with_pid_test.cpp)
 add_test_executable(pid_tuning_test Tests/test_suites/pid_tuning_test.cpp)
 add_test_executable(control_system_with_two_position_controller_test Tests/test_suites/control_system_with_two_position_controller_test.cpp)
+add_test_executable(resetting_test Tests/test_suites/resetting_test.cpp)
 #-------------------------------------------------
