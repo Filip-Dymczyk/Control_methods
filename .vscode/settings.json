@@ -87,7 +87,10 @@
         "variant": "cpp",
         "qpushbutton": "cpp",
         "qstring": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "coroutine": "cpp",
+        "resumable": "cpp",
+        "memory_resource": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
 }
