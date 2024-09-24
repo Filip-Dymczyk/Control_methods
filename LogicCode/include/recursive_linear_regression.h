@@ -60,6 +60,7 @@ public:
     reset()
     {
         _P = {};
+        create_diagonal_matrix<MatrixT>(_P , 1.0);
         _coefficients = {};
     }
 private:
