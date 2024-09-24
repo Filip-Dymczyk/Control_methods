@@ -20,6 +20,5 @@ The aim of this repository is to increase the knowledge about dynamical systems 
 - Introduced GUI using Qt framework.
 
 ### Features to be added:
-- Implementing resetting of objects states.
 - Create simulator class handling whole application logic.
 - Incorporate simulator into GUI - create widgets connections and operate control systems based on their states.
