@@ -22,10 +22,12 @@
 class Simulator
 {
     // Default values needed for initialization.
+    ControlMode _control_mode = ControlMode::OPEN_LOOP;
     std::uint32_t _order {1u}; // Default order value in the app.
     double _time_step {0.01}; // Default time_step
 public:
     Simulator() : 
+            // Components default initialization:
             _diferential_equation_representation_object(_time_step, _order), 
             _state_space_representation_object(_time_step, _order),
             _pid_controller(_time_step),
@@ -35,9 +37,17 @@ public:
             _rect(_time_step),
             _sine_wave(_time_step),
             _pulse_wave(_time_step),
+            //-----------------------------------------------------------
+            // Default selections based on the application initial state:
             _selected_object(&_diferential_equation_representation_object),
             _selected_controller(&_pid_controller),
-            _selected_input_signal(&_heaviside)
+            _selected_input_signal(&_heaviside),
+            //-----------------------------------------------------------
+            // Continous initialization:
+            _regression {},
+            _system(_selected_object, _selected_controller, _control_mode),
+            _tuner(_system, _regression)
+            //-----------------------------------------------------------
             {}
 
 private:
@@ -50,8 +60,12 @@ private:
     Rectangle _rect;
     SineWave _sine_wave;
     PulseWave _pulse_wave;
-
+    
     ObjectRepresentationBase * _selected_object;
     ControllerBase * _selected_controller;
     SignalBase * _selected_input_signal;
+
+    RecursiveLinearRegression _regression;
+    ControlSystem _system;
+    PidTuner _tuner;
 };
