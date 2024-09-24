@@ -2,8 +2,8 @@
 // Description : Control loop system.
 
 #pragma once
-#include "object_representation_base.h"
-#include "controller_base.h"
+#include "base_classes/object_representation_base.h"
+#include "base_classes/controller_base.h"
 
 enum class ControlMode
 {

@@ -2,7 +2,7 @@
 // Description : Multi-order linear object represented by a single differential equation.
 
 #pragma once
-#include "object_representation_base.h"
+#include "base_classes/object_representation_base.h"
 
 // NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by corresponding coefficients + input value.
 // Lower order derivatives are equal to the integral of a higher one - simple relation.

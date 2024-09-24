@@ -4,11 +4,11 @@
 #pragma once
 #include <math.h>
 #include <string>
-#include "include/object_representation_base.h"
-#include "include/controller_base.h"
-#include "include/signals.h"
-#include "include/control_system.h"
-#include "include/sim_object_base.h"
+#include "base_classes/sim_object_base.h"
+#include "base_classes/object_representation_base.h"
+#include "base_classes/controller_base.h"
+#include "signals.h"
+#include "control_system.h"
 #include "matplotlibcpp/matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;

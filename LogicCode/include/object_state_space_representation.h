@@ -4,7 +4,7 @@
 #pragma once
 #include <random>
 #include "algebra.h"
-#include "object_representation_base.h"
+#include "base_classes/object_representation_base.h"
 
 // NOTE: SISO object represented via state space:
 //              x' = Ax + Bu

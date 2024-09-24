@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "include/signals.h"
+#include "signals.h"
 
 class SignalsTest : public testing::Test, public TestWithPlot
 {

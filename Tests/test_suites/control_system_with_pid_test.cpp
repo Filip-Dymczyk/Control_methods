@@ -3,9 +3,9 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "include/signals.h"
-#include "include/pid.h"
-#include "include/object_differential_equation_representation.h"
+#include "signals.h"
+#include "pid.h"
+#include "object_differential_equation_representation.h"
 
 class ControlSystemWithPidTest :  public testing::Test, public TestWithPlot
 {   
