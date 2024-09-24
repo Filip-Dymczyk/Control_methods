@@ -31,9 +31,10 @@ protected:
     void
     test_tuning_with_resets()
     {
-        Base::test_tuner<PidTuner>(_tuner);
+        Base::test_tuner<PidTuner>(&_step, _tuner, true);
         _tuner.reset();
-        Base::test_tuner<PidTuner>(_tuner);
+        _step.reset();
+        Base::test_tuner<PidTuner>(&_step, _tuner, true);
     }
 private:
     Heaviside _step {_time_step, {5.0, 1.0}};
@@ -41,7 +42,7 @@ private:
     ObjectEquationT _object_differential_equation_representation {_time_step, _order, {0.0, -1.0}, {2.0, 0.50, 3.0}};
     ControlSystem _system {&_object_differential_equation_representation, &_pid, ControlMode::CLOSED_LOOP};
     RecursiveLinearRegression _regression {};
-    PidTuner _tuner {&_step, _system, _regression};
+    PidTuner _tuner {_system, _regression};
 };
 
 TEST_F(ResettingTest, ClosedLoopResetsTest)

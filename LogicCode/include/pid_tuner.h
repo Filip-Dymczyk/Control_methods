@@ -9,26 +9,17 @@
 class PidTuner
 {
 public:
-    PidTuner(Signal * signal, 
-            ControlSystem & control_system, 
+    PidTuner(ControlSystem & control_system, 
             RecursiveLinearRegression const & regression) : 
-            _signal(signal), 
             _control_system(control_system), 
             _regression(regression) {}
 
     void
-    update()
+    update(double input)
     {
-        _control_system.update(_signal -> get_value());
-        _signal -> update();
+        _control_system.update(input);
         _regression.update(_control_system.get_x(), _control_system.get_error());
         _control_system.get_controller() -> set_params({_regression.get_coeffs()[0], _regression.get_coeffs()[1], _regression.get_coeffs()[2]});
-    }
-
-    double 
-    get_time() const
-    {
-        return _signal -> time();
     }
 
     double
@@ -52,12 +43,10 @@ public:
     void
     reset()
     {
-        _signal -> reset();
         _control_system.reset();
         _regression.reset();
     }
 private:
-    Signal * _signal {};
     ControlSystem & _control_system;
     RecursiveLinearRegression _regression {};
 };

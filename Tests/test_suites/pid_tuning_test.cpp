@@ -25,13 +25,13 @@ protected:
     void
     test_tuner_object_differential_equation_representation()
     {
-        Base::test_tuner<PidTuner>(_tuner_1);
+        Base::test_tuner<PidTuner>(&_sine_wave_1, _tuner_1);
     }
     
     void
     test_tuner_object_state_space_representation()
     {
-        Base::test_tuner<PidTuner>(_tuner_2);
+        Base::test_tuner<PidTuner>(&_sine_wave_2, _tuner_2);
     }
 
 private:
@@ -39,13 +39,13 @@ private:
     PID _pid_1 {_time_step, {}};
     ObjectEquationT _object_differential_equation_representation {_time_step, _order, {0.0, 0.0}, {2.0, 0.50, 3.0}};
     ControlSystem _system_1 {&_object_differential_equation_representation, &_pid_1, ControlMode::CLOSED_LOOP};
-    PidTuner _tuner_1 {&_sine_wave_1, _system_1, {}};
+    PidTuner _tuner_1 {_system_1, {}};
 
     SineWave _sine_wave_2 {_time_step, 1.0, 1.0};
     PID _pid_2 {_time_step, {}};
     ObjectStateSpaceT _object_state_space_representation {_time_step, _order, {0.0, 0.0}, {{{0.0, 1.0}, {-0.5, -2.0}}}, {0.0, 3.0}, {1.0, 0.0}};
     ControlSystem _system_2 {&_object_state_space_representation, &_pid_2, ControlMode::CLOSED_LOOP};
-    PidTuner _tuner_2 {&_sine_wave_2, _system_2, {}};
+    PidTuner _tuner_2 {_system_2, {}};
 };
 
 TEST_F(PidTuningTest, TunerWithObjectRepresentedByDifferentailEquationTest)
