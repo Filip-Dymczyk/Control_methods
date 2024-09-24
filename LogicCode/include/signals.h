@@ -10,7 +10,9 @@
 class Heaviside : public SignalBase
 {
 public:
-    Heaviside(double time_step, SignalBasicParameters const & params = {}) : SignalBase(time_step, params) {}
+    Heaviside(double time_step, SignalBasicParameters const & params) : SignalBase(time_step, params) {}
+
+    Heaviside(double time_step) : Heaviside(time_step, {}) {}
 
     void
     update() override
@@ -31,7 +33,9 @@ public:
 class Ramp : public Heaviside
 {
 public:
-    Ramp(double time_step, SignalBasicParameters const & params = {}) : Heaviside(time_step, params) {}
+    Ramp(double time_step, SignalBasicParameters const & params) : Heaviside(time_step, params) {}
+    
+    Ramp(double time_step) : Ramp(time_step, {}) {}
 
     void
     update() override
@@ -46,11 +50,13 @@ public:
 class Rectangle : public SignalBase
 {
 public:
-    Rectangle(double time_step, double on_time, SignalBasicParameters const & params = {}) : SignalBase(time_step, params)
+    Rectangle(double time_step, double on_time, SignalBasicParameters const & params): SignalBase(time_step, params)
     {
         assert(on_time > 0.0);
         _on_time = on_time;
     }
+
+    Rectangle(double time_step) : Rectangle(time_step, {}, {}) {}
 
     void
     update() override
@@ -96,7 +102,9 @@ private:
 class SineWave : public SignalBase
 {
 public:
-    SineWave(double time_step, double omega, double offset, SignalBasicParameters const & params = {}) : SignalBase(time_step, params), _omega(omega), _offset(offset) {}
+    SineWave(double time_step, double omega, double offset, SignalBasicParameters const & params) : SignalBase(time_step, params), _omega(omega), _offset(offset) {}
+
+    SineWave(double time_step) : SineWave(time_step, {}, {}, {}) {}
 
     void
     update() override
@@ -120,7 +128,9 @@ private:
 class PulseWave : public Rectangle
 {
 public:
-    PulseWave(double time_step, double duty_cycle, double period, SignalBasicParameters const & params = {}) : Rectangle(time_step, duty_cycle * period, params), _period(period) {}
+    PulseWave(double time_step, double duty_cycle, double period, SignalBasicParameters const & params) : Rectangle(time_step, duty_cycle * period, params), _period(period) {}
+
+    PulseWave(double time_step) : PulseWave(time_step, {}, {}, {}) {}
 
     void
     update() override

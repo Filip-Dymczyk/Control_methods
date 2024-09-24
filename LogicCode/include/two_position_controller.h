@@ -7,7 +7,7 @@
 struct Two_Position_Controller_Params
 {
     double A1 {};
-    double A2 {1.0};
+    double A2 {};
     double hist {};
 };
 
@@ -15,8 +15,10 @@ struct Two_Position_Controller_Params
 class TwoPositionController : public ControllerBase
 {
 public:
-    TwoPositionController(double time_step, Two_Position_Controller_Params const & params = {}) : ControllerBase(time_step), _params(params) {}
+    TwoPositionController(double time_step, Two_Position_Controller_Params const & params) : ControllerBase(time_step), _params(params) {}
     
+    TwoPositionController(double time_step) : TwoPositionController(time_step, {}) {}
+        
     void
     update(double error) override
     {   

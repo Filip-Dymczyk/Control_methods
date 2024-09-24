@@ -22,6 +22,9 @@ public:
         _coefficients = coefficients;
     }
 
+    ObjectDifferentialEquationRepresentation(double time_step, std::uint32_t order)
+    : ObjectDifferentialEquationRepresentation(time_step, order, std::vector<double>(order), std::vector<double>(order + 1)) {}
+
     void 
     update(double control) override
     {

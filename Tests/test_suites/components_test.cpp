@@ -48,7 +48,7 @@ protected:
         test_component(&_object_state_space, &_sine_wave);
     }
 private:
-    SineWave _sine_wave {_time_step, 1.0, 1.0};
+    SineWave _sine_wave {_time_step, 1.0, 1.0, {}};
     Integrator _integrator {_time_step};
     Derivative _derivative {_time_step};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};

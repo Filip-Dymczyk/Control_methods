@@ -29,7 +29,7 @@ protected:
 
 private:
     double const _time_step = 0.01;
-    SineWave _sine_wave {_time_step, 20.0, 5.0};
+    SineWave _sine_wave {_time_step, 20.0, 5.0, {}};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};
     ObjectT _object {_time_step, order, {0.0, 0.0}, {1.0, 1.0, 1.0}};
 };

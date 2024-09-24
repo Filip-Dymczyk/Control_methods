@@ -18,6 +18,8 @@ class PID : public ControllerBase
 {
 public:
     PID(double time_step, PID_Params const & params) : ControllerBase(time_step), _params(params) {}
+
+    PID(double time_step) : PID(time_step, {}) {}
     
     void
     update(double error) override

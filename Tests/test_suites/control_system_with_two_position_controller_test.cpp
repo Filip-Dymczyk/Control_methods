@@ -29,7 +29,7 @@ protected:
 
 private:
     double const _time_step = 0.01;
-    PulseWave _pulse {_time_step, 0.75, 4.0};
+    PulseWave _pulse {_time_step, 0.75, 4.0, {}};
     TwoPositionController _two_position_controller {_time_step, {0.0, 1.0, 1.0}};
     ObjectT _object {_time_step, order, {0.0, 0.0}, {1.0, 1.0, 1.0}};
 };

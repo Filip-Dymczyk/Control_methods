@@ -43,9 +43,9 @@ private:
     double const _time_step = 0.001;
     Heaviside heaviside {_time_step};
     Ramp ramp {_time_step};
-    Rectangle rect {_time_step, 3.0};
-    SineWave sine_wave {_time_step, 1.0, 1.0};
-    PulseWave pulse_wave {_time_step, 0.75, 4.0};
+    Rectangle rect {_time_step, 3.0, {}};
+    SineWave sine_wave {_time_step, 1.0, 1.0, {}};
+    PulseWave pulse_wave {_time_step, 0.75, 4.0, {}};
 };
 
 TEST_F(SignalsTest, HeavisideTest)

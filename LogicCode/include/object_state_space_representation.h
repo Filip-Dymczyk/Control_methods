@@ -39,6 +39,9 @@ public:
         _D = D;
     }
 
+    ObjectStateSpaceRepresentation(double time_step, std::uint32_t order) :
+    ObjectStateSpaceRepresentation(time_step, order, VectorT(order), MatrixT(order, VectorT(order)), VectorT(order), VectorT(order)) {}
+
     void 
     update(double control) override
     {
