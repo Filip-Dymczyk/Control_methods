@@ -7,7 +7,7 @@
 #include "base_classes/sim_object_base.h"
 #include "base_classes/object_representation_base.h"
 #include "base_classes/controller_base.h"
-#include "signals.h"
+#include "base_classes/signal_base.h"
 #include "control_system.h"
 #include "matplotlibcpp/matplotlibcpp.h"
 
@@ -28,7 +28,7 @@ public:
     TestWithPlot(double sim_time) : _sim_time(sim_time) {}
     
     void
-    test_signal(Signal * signal, std::string signal_plot_title)
+    test_signal(SignalBase * signal, std::string signal_plot_title)
     {
         signal -> reset();
         PlottingBuffers const buffers = simulate_signal(signal);
@@ -37,7 +37,7 @@ public:
     }
 
     void
-    test_closed_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, Signal* input_signal, bool const plot_control = false) const 
+    test_closed_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase* input_signal, bool const plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::CLOSED_LOOP);
 
@@ -45,7 +45,7 @@ public:
     }
 
     void
-    test_open_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, Signal * input_signal, bool plot_control = false) const 
+    test_open_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::OPEN_LOOP);
 
@@ -53,7 +53,7 @@ public:
     }
 
     void
-    test_component(SimumlationObjectBase * component, Signal * input_signal, bool plot_control = false) const 
+    test_component(SimumlationObjectBase * component, SignalBase * input_signal, bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_component(component, input_signal);
 
@@ -62,7 +62,7 @@ public:
 
     template<typename TunerT>
     void
-    test_tuner(Signal * input_signal, TunerT tuner,  bool plot_control = false) const 
+    test_tuner(SignalBase * input_signal, TunerT tuner,  bool plot_control = false) const 
     {
         PlottingBuffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
 
@@ -78,7 +78,7 @@ private:
     double _sim_time {};
 
     PlottingBuffers const
-    simulate_signal(Signal * signal)
+    simulate_signal(SignalBase * signal)
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
@@ -95,7 +95,7 @@ private:
     }
     
     PlottingBuffers const
-    simulate_open_closed_loop(ObjectRepresentationBase * object, ControllerBase * controller, Signal * input_signal, ControlMode const & control_mode) const 
+    simulate_open_closed_loop(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase * input_signal, ControlMode const & control_mode) const 
     {
         input_signal -> reset();
         ControlSystem control_loop {object, controller, control_mode};
@@ -117,7 +117,7 @@ private:
     }
 
     PlottingBuffers const
-    simulate_component(SimumlationObjectBase * object, Signal * input_signal) const 
+    simulate_component(SimumlationObjectBase * object, SignalBase * input_signal) const 
     {
         input_signal -> reset();
         std::vector<double> time {};
@@ -137,7 +137,7 @@ private:
 
     template<typename TunerT>
     PlottingBuffers const
-    simulate_tuner(Signal * input_signal, TunerT tuner) const 
+    simulate_tuner(SignalBase * input_signal, TunerT tuner) const 
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
