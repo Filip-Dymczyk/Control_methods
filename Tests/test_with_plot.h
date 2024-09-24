@@ -62,11 +62,11 @@ public:
 
     template<typename TunerT>
     void
-    test_tuner(TunerT tuner) const 
+    test_tuner(Signal * input_signal, TunerT tuner,  bool plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_tuner<TunerT>(tuner);
+        PlottingBuffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
 
-        plot_test(buffers, ControlMode::CLOSED_LOOP, false);
+        plot_test(buffers, ControlMode::CLOSED_LOOP, plot_control);
     }
 
     void
@@ -137,17 +137,19 @@ private:
 
     template<typename TunerT>
     PlottingBuffers const
-    simulate_tuner(TunerT tuner) const 
+    simulate_tuner(Signal * input_signal, TunerT tuner) const 
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
         std::vector<double> control {};
         std::vector<double> output {};
+
         
-        while(tuner.get_time() < _sim_time)
+        while(input_signal -> time() < _sim_time)
         {
-            time.push_back(tuner.get_time());
-            tuner.update();
+            time.push_back(input_signal -> time());
+            tuner.update(input_signal -> get_value());
+            input_signal -> update();
             set_point.push_back(tuner.get_set_point());
             control.push_back(tuner.get_control());
             output.push_back(tuner.get_output());

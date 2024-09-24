@@ -86,7 +86,11 @@
         "unordered_set": "cpp",
         "variant": "cpp",
         "qpushbutton": "cpp",
-        "qstring": "cpp"
+        "qstring": "cpp",
+        "future": "cpp",
+        "coroutine": "cpp",
+        "resumable": "cpp",
+        "memory_resource": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
 }

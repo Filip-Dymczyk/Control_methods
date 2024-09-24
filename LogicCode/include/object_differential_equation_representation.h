@@ -13,7 +13,10 @@
 class ObjectDifferentialEquationRepresentation : public ObjectRepresentationBase
 {   
 public:
-    ObjectDifferentialEquationRepresentation(double time_step, std::uint32_t order,  std::vector<double> const & init_state, std::vector<double> const & coefficients) : ObjectRepresentationBase(time_step, order, init_state)
+    ObjectDifferentialEquationRepresentation(double time_step, std::uint32_t order,  
+                                            std::vector<double> const & init_state, 
+                                            std::vector<double> const & coefficients) : 
+                                            ObjectRepresentationBase(time_step, order, init_state)
     {
         assert(coefficients.size() == order + 1);
         _coefficients = coefficients;

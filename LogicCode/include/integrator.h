@@ -18,5 +18,11 @@ public:
     {
         set_value(get_value() + input * get_time_step());
     }
+
+    void
+    reset() override 
+    {
+        set_value(0.0);
+    }
 };
 

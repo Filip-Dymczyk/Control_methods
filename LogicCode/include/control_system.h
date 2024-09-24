@@ -16,7 +16,12 @@ enum class ControlMode
 class ControlSystem
 {
 public:
-    ControlSystem(ObjectRepresentationBase * object, ControllerBase * controller, ControlMode const & control_mode) : _object(object), _controller(controller), _control_mode(control_mode) {}
+    ControlSystem(ObjectRepresentationBase * object, 
+                ControllerBase * controller, 
+                ControlMode const & control_mode) : 
+                _object(object), 
+                _controller(controller), 
+                _control_mode(control_mode) {}
 
     void
     update(double const set_point)
@@ -74,6 +79,14 @@ public:
     get_controller()
     {
         return _controller;
+    }
+
+    void
+    reset()
+    {
+        _set_point = 0.0;
+        _object -> reset();
+        _controller -> reset();
     }
 private:
     double _set_point {};

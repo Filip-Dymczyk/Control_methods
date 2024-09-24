@@ -39,6 +39,15 @@ public:
     {
         _params = params;
     }
+
+    void
+    reset() override
+    {
+        set_error(0.0);
+        set_value(0.0);
+        _error_int.reset();
+        _error_der.reset();
+    }
 private:
     PID_Params _params {};
     Integrator _error_int {get_time_step()};

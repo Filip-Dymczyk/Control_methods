@@ -55,6 +55,14 @@ public:
     {
         return _coefficients;
     }
+
+    void 
+    reset()
+    {
+        _P = {};
+        create_diagonal_matrix<MatrixT>(_P , 1.0);
+        _coefficients = {};
+    }
 private:
     double _lambda {};
     MatrixT _P {};
