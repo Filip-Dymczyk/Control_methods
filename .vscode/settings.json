@@ -93,7 +93,9 @@
         "memory_resource": "cpp",
         "qobject": "cpp",
         "qvariant": "cpp",
-        "qvboxlayout": "cpp"
+        "qvboxlayout": "cpp",
+        "qt": "cpp",
+        "qcombobox": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
 }
