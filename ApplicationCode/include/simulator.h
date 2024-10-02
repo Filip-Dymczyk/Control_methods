@@ -22,21 +22,21 @@
 class Simulator
 {
     // Default values needed for initialization.
-    ControlMode _control_mode = ControlMode::OPEN_LOOP;
-    std::uint32_t _order {1u}; // Default order value in the app.
-    double _time_step {0.01}; // Default time_step
+    static constexpr ControlMode CONTROL_MODE = ControlMode::OPEN_LOOP;
+    static constexpr std::uint32_t ORDER {1u}; // Default order value in the app.
+     static constexpr double TIME_STEP {0.01}; // Default time_step
 public:
     Simulator() : 
             // Components default initialization:
-            _diferential_equation_representation_object(_time_step, _order), 
-            _state_space_representation_object(_time_step, _order),
-            _pid_controller(_time_step),
-            _two_positon_controller(_time_step),
-            _heaviside(_time_step, {0.0, 0.0}), // Default values - basically no signal.
-            _ramp(_time_step),
-            _rect(_time_step),
-            _sine_wave(_time_step),
-            _pulse_wave(_time_step),
+            _diferential_equation_representation_object(TIME_STEP, ORDER), 
+            _state_space_representation_object(TIME_STEP, ORDER),
+            _pid_controller(TIME_STEP),
+            _two_positon_controller(TIME_STEP),
+            _heaviside(TIME_STEP, {0.0, 0.0}), // Default values - basically no signal.
+            _ramp(TIME_STEP),
+            _rect(TIME_STEP),
+            _sine_wave(TIME_STEP),
+            _pulse_wave(TIME_STEP),
             //-----------------------------------------------------------
             // Default selections based on the application initial state:
             _selected_object(&_diferential_equation_representation_object),
@@ -45,7 +45,7 @@ public:
             //-----------------------------------------------------------
             // Continous initialization:
             _regression {},
-            _system(_selected_object, _selected_controller, _control_mode),
+            _system(_selected_object, _selected_controller, CONTROL_MODE),
             _tuner(_system, _regression)
             //-----------------------------------------------------------
             {}
