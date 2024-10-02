@@ -10,6 +10,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include "dependency_handler.h"
 
 class MainLayout : public QVBoxLayout
 {
@@ -23,6 +24,7 @@ public:
 private:
     QLabel _order_label {};
     QSpinBox _order_spin_box {};
+    QPushButton _order_confirm_button {};
     QLabel _representation_label {};
     QComboBox _object_representation_combo_box {};
     QLabel _parameters_label {};
@@ -44,12 +46,33 @@ private:
     QLineEdit _simulation_step_line_edit {};
     QPushButton _run_button {};
 
+    DependencyHandler * _dependecy_handler = new DependencyHandler();
+
+    void
+    set_button_ids()
+    {
+        _order_confirm_button.setProperty("id", 0);
+        _confirm_object_parameters_button.setProperty("id", 1);
+        _confirm_controller_parameters_button.setProperty("id", 2);
+        _run_button.setProperty("id", 3);
+    }
+
+    void
+    connect_buttons_dependencies()
+    {
+        connect(&_order_confirm_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
+        connect(&_confirm_object_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
+        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
+        connect(&_run_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
+    }
+
     void
     configure_widgets()
     {
         _order_label.setText("Choose the order of dynamical system:");
         _order_spin_box.setRange(1, 10);
         _order_spin_box.setValue(1);
+        _order_confirm_button.setText("Confirm");
         _representation_label.setText("Choose the representaion of the object to be used:");
         _object_representation_combo_box.addItem("Object equation represenation");
         _object_representation_combo_box.addItem("Object state space representation");
@@ -76,6 +99,9 @@ private:
         _operation_combo_box.addItem("Tuning");
         _simulation_parameters_label.setText("Enter simulation parameters:");
         _run_button.setText("Run operation");
+
+        set_button_ids();
+        connect_buttons_dependencies();
     }
 
     void
@@ -83,6 +109,7 @@ private:
     {
         this -> addWidget(&_order_label);
         this -> addWidget(&_order_spin_box);
+        this -> addWidget(&_order_confirm_button);
         this -> addWidget(&_representation_label);
         this -> addWidget(&_object_representation_combo_box);
         this -> addWidget(&_parameters_label);
