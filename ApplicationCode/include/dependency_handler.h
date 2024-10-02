@@ -6,6 +6,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QComboBox>
 
 class DependencyHandler : public QObject
 {
@@ -20,9 +21,9 @@ enum class Button_ID : std::uint32_t
 };
 public slots:
     void
-    connect_confirm_order_button()
+    buttons_clicked_callback()
     {
-        QPushButton* button = qobject_cast<QPushButton*>(sender());
+        QPushButton * button = qobject_cast<QPushButton*>(sender());
         if (button) 
         {
             QVariant button_id_variant = button -> property("id");
@@ -52,5 +53,13 @@ public slots:
                 }
             }
         }
+    }
+
+    void
+    combo_boxes_callback()
+    {
+        QComboBox * combo_box = qobject_cast<QComboBox*>(sender());
+        if (combo_box) 
+        {}
     }
 };

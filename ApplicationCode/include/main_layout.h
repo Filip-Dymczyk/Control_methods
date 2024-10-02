@@ -49,21 +49,33 @@ private:
     DependencyHandler * _dependecy_handler = new DependencyHandler();
 
     void
-    set_button_ids()
+    set_widgets_ids()
     {
         _order_confirm_button.setProperty("id", 0);
         _confirm_object_parameters_button.setProperty("id", 1);
         _confirm_controller_parameters_button.setProperty("id", 2);
         _run_button.setProperty("id", 3);
+
+        _object_representation_combo_box.setProperty("id", 0);
+        _control_mode_combo_box.setProperty("id", 1);
+        _controller_type_combo_box.setProperty("id", 2);
+        _input_signal_combo_box.setProperty("id", 3);
+        _operation_combo_box.setProperty("id", 4);
     }
 
     void
-    connect_buttons_dependencies()
+    connect_widgets_dependencies()
     {
-        connect(&_order_confirm_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
-        connect(&_confirm_object_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
-        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
-        connect(&_run_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::connect_confirm_order_button);
+        connect(&_order_confirm_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_confirm_object_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_run_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
+
+        connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_controller_type_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_input_signal_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_operation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
     }
 
     void
@@ -100,8 +112,8 @@ private:
         _simulation_parameters_label.setText("Enter simulation parameters:");
         _run_button.setText("Run operation");
 
-        set_button_ids();
-        connect_buttons_dependencies();
+        set_widgets_ids();
+        connect_widgets_dependencies();
     }
 
     void
