@@ -28,10 +28,10 @@ class Control
 public:
     Control() : 
             // Components default initialization:
-            _diferential_equation_representation_object(TIME_STEP, ORDER), 
+            _differential_equation_representation_object(TIME_STEP, ORDER), 
             _state_space_representation_object(TIME_STEP, ORDER),
             _pid_controller(TIME_STEP),
-            _two_positon_controller(TIME_STEP),
+            _two_position_controller(TIME_STEP),
             _heaviside(TIME_STEP, {0.0, 0.0}), // Default values - basically no signal.
             _ramp(TIME_STEP),
             _rect(TIME_STEP),
@@ -39,7 +39,7 @@ public:
             _pulse_wave(TIME_STEP),
             //-----------------------------------------------------------
             // Default selections based on the application initial state:
-            _selected_object(&_diferential_equation_representation_object),
+            _selected_object(&_differential_equation_representation_object),
             _selected_controller(&_pid_controller),
             _selected_input_signal(&_heaviside),
             //-----------------------------------------------------------
@@ -51,10 +51,10 @@ public:
             {}
 
 private:
-    ObjectDifferentialEquationRepresentation _diferential_equation_representation_object;
+    ObjectDifferentialEquationRepresentation _differential_equation_representation_object;
     ObjectStateSpaceRepresentation _state_space_representation_object;
     PID _pid_controller;
-    TwoPositionController _two_positon_controller;
+    TwoPositionController _two_position_controller;
     Heaviside _heaviside;
     Ramp _ramp;
     Rectangle _rect;

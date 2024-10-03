@@ -85,8 +85,8 @@ private:
         _order_spin_box.setRange(1, 10);
         _order_spin_box.setValue(1);
         _order_confirm_button.setText("Confirm");
-        _representation_label.setText("Choose the representaion of the object to be used:");
-        _object_representation_combo_box.addItem("Object equation represenation");
+        _representation_label.setText("Choose the representation of the object to be used:");
+        _object_representation_combo_box.addItem("Object equation representation");
         _object_representation_combo_box.addItem("Object state space representation");
         _parameters_label.setText("Enter object parameters divided with semicolons:");
         _confirm_object_parameters_button.setText("Confirm");
