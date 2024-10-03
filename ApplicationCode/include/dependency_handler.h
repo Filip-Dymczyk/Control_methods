@@ -17,10 +17,6 @@ class DependencyHandler : public QObject
 {
     Q_OBJECT
 
-public:
-    DependencyHandler() : QObject() {}
-
-    DependencyHandler(DependencyHandler & other) : QObject(other.parent()) {}
 private:
     InputParameterContainer _inputs {};
 

@@ -2,6 +2,7 @@
 // Description : Main application window layout.
 
 #pragma once
+
 #include <QtCore/Qt>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -10,12 +11,13 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+
 #include "dependency_handler.h"
 
 class MainLayout : public QVBoxLayout
 {
 public:
-    MainLayout(DependencyHandler & dependency_handler) : _dependency_handler(dependency_handler)
+    MainLayout()
     {
         configure_widgets();
         add_widgets();
@@ -46,7 +48,7 @@ private:
     QLineEdit _simulation_step_line_edit {};
     QPushButton _run_button {};
 
-    DependencyHandler & _dependency_handler;
+    DependencyHandler _dependency_handler;
 
     void
     set_widgets_ids()

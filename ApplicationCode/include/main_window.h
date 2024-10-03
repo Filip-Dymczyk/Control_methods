@@ -2,11 +2,12 @@
 // Description : Main application window.
 
 #pragma once
+
 #include <QtWidgets/QWidget>
 #include <QtCore/QString>
-#include "dependency_handler.h"
-#include "simulator.h"
+
 #include "main_layout.h"
+#include "plot_layout.h"
 
 class MainWindow : public QWidget
 {
@@ -21,7 +22,6 @@ public:
         this -> setLayout(&_main_layout);
     }
 private:
-    DependencyHandler _dependency_handler {};
-    Simulator _simulator {};
-    MainLayout _main_layout {_dependency_handler};
+    MainLayout _main_layout {};
+    PlotLayout _plot_layout {};
 };
