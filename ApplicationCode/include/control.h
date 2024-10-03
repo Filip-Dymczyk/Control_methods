@@ -24,7 +24,7 @@ class Control
     // Default values needed for initialization.
     static constexpr ControlMode CONTROL_MODE = ControlMode::OPEN_LOOP;
     static constexpr std::uint32_t ORDER {1u}; // Default order value in the app.
-     static constexpr double TIME_STEP {0.01}; // Default time_step
+    static constexpr double TIME_STEP {0.01}; // Default time_step
 public:
     Control() : 
             // Components default initialization:
