@@ -17,7 +17,7 @@
 class MainLayout : public QVBoxLayout
 {
 public:
-    MainLayout()
+    MainLayout(QWidget * parent) : QVBoxLayout(parent)
     {
         configure_widgets();
         add_widgets();
@@ -48,7 +48,7 @@ private:
     QLineEdit _simulation_step_line_edit {};
     QPushButton _run_button {};
 
-    DependencyHandler _dependency_handler;
+    DependencyHandler _dependency_handler {};
 
     void
     set_widgets_ids()

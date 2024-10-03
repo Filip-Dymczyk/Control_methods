@@ -3,11 +3,15 @@
 
 #pragma once
 
+#include <QtWidgets/QWidget>
+#include <QtWidgets/QVBoxLayout>
+
 #include "simulator.h"
 
-class PlotLayout
+class PlotLayout : public QVBoxLayout
 {
-
+public:
+    PlotLayout(QWidget * parent) : QVBoxLayout(parent) {}
 private:
     Simulator _simulator {};
 };

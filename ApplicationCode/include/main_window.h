@@ -15,13 +15,13 @@ class MainWindow : public QWidget
     static constexpr unsigned height = 800;
     const QString window_title = "Dynamical systems control methods.";
 public:
-    MainWindow() 
+    MainWindow() : _main_layout(this), _plot_layout(this)
     {   
         this -> setWindowTitle(window_title);
         this -> setFixedSize(width, height);
         this -> setLayout(&_main_layout);
     }
 private:
-    MainLayout _main_layout {};
-    PlotLayout _plot_layout {};
+    MainLayout _main_layout;
+    PlotLayout _plot_layout;
 };
