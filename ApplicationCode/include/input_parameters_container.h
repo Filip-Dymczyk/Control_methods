@@ -14,15 +14,6 @@ class InputParameterContainer
         std::uint8_t order {1u};
         std::vector<double> object_parameters;
         std::vector<double> controller_parameters;
-
-        Buttons_Inputs()
-        {
-            // This reserving will allow to avoid unnecessary memory allocations.
-            object_parameters.reserve(11); // max order allowed + 1
-            controller_parameters.reserve(3);  // for now this is the number of parameters of both used controllers
-            object_parameters = {11, 0.0};
-            controller_parameters = {3, 0.0};
-        }
     };
 
     struct Combo_Boxes_Inputs
