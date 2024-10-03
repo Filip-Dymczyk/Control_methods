@@ -79,6 +79,14 @@ private:
     }
 
     void
+    set_widgets_names()
+    {
+        _order_spin_box.setObjectName("order");
+        _object_parameters_line_edit.setObjectName("object_parameters");
+        _controller_parameters_line_edit.setObjectName("controller_parameters");
+    }
+
+    void
     configure_widgets()
     {
         _order_label.setText("Choose the order of dynamical system:");
@@ -114,6 +122,7 @@ private:
 
         set_widgets_ids();
         connect_widgets_dependencies();
+        set_widgets_names();
     }
 
     void
