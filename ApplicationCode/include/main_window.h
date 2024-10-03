@@ -4,9 +4,9 @@
 #pragma once
 #include <QtWidgets/QWidget>
 #include <QtCore/QString>
-#include "main_layout.h"
 #include "dependency_handler.h"
 #include "simulator.h"
+#include "main_layout.h"
 
 class MainWindow : public QWidget
 {
