@@ -3,36 +3,24 @@
 
 #pragma once
 #include <iostream>
+#include <vector>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QComboBox>
 
+#include "input_parameters_container.h"
+
 class DependencyHandler : public QObject
 {
     Q_OBJECT
-
-enum class Button_ID : std::uint32_t
-{
-    ORDER_BUTTON,
-    OBJECT_PARAMETERS_BUTTON,
-    CONTROLLER_PARAMETERS_BUTTON,
-    RUN_BUTTON
-};
-
-enum class Combo_Box_ID : std::uint32_t
-{
-    OBJECT_REPRESENTATION,
-    CONTROL_MODE,
-    CONTROLLER_TYPE,
-    INPUT_SIGNAL,
-    OPERATION_TYPE
-};
 
 public:
     DependencyHandler() : QObject() {}
 
     DependencyHandler(DependencyHandler & other) : QObject(other.parent()) {}
+private:
+    InputParameterContainer _inputs {};
 
 public slots:
     void
