@@ -5,6 +5,8 @@
 #include <QtWidgets/QWidget>
 #include <QtCore/QString>
 #include "main_layout.h"
+#include "dependency_handler.h"
+#include "simulator.h"
 
 class MainWindow : public QWidget
 {
@@ -16,8 +18,10 @@ public:
     {   
         this -> setWindowTitle(window_title);
         this -> setFixedSize(width, height);
-        this -> setLayout(&main_layout);
+        this -> setLayout(&_main_layout);
     }
 private:
-    MainLayout main_layout {};
+    DependencyHandler _dependency_handler {};
+    Simulator _simulator {};
+    MainLayout _main_layout {_dependency_handler};
 };

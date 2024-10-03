@@ -29,6 +29,11 @@ enum class Combo_Box_ID : std::uint32_t
     OPERATION_TYPE
 };
 
+public:
+    DependencyHandler() : QObject() {}
+
+    DependencyHandler(DependencyHandler & other) : QObject(other.parent()) {}
+
 public slots:
     void
     buttons_clicked_callback()

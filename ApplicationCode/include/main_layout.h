@@ -15,7 +15,7 @@
 class MainLayout : public QVBoxLayout
 {
 public:
-    MainLayout()
+    MainLayout(DependencyHandler & dependency_handler) : _dependency_handler(dependency_handler)
     {
         configure_widgets();
         add_widgets();
@@ -46,7 +46,7 @@ private:
     QLineEdit _simulation_step_line_edit {};
     QPushButton _run_button {};
 
-    DependencyHandler * _dependecy_handler = new DependencyHandler();
+    DependencyHandler & _dependency_handler;
 
     void
     set_widgets_ids()
@@ -66,16 +66,16 @@ private:
     void
     connect_widgets_dependencies()
     {
-        connect(&_order_confirm_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_confirm_object_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_run_button, &QPushButton::clicked, _dependecy_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_order_confirm_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_run_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
 
-        connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_controller_type_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_input_signal_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_operation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependecy_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_controller_type_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_input_signal_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_operation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
     }
 
     void
