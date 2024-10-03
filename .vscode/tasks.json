@@ -14,7 +14,22 @@
             "problemMatcher": []
         },
         {
-            "label": "Generate MOC file",
+            "label": "Generate main_layout MOC file",
+            "type": "shell",
+            "command": "C:\\Qt\\6.7.2\\mingw_64\\bin\\moc.exe",
+            "args": [
+                "-o", "${workspaceFolder}\\builds\\moc_builds\\main_layout.moc.cpp", 
+                "${workspaceFolder}\\ApplicationCode\\include\\main_layout.h"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false,
+            },
+            "problemMatcher": [],
+            "dependsOn": "Create MOC Directory",
+        },
+        {
+            "label": "Generate dependency_handler MOC file",
             "type": "shell",
             "command": "C:\\Qt\\6.7.2\\mingw_64\\bin\\moc.exe",
             "args": [
@@ -26,7 +41,7 @@
                 "isDefault": false,
             },
             "problemMatcher": [],
-            "dependsOn": "Create MOC Directory",
+            "dependsOn": "Generate main_layout MOC file",
         },
         {
             "label": "Build Application",
@@ -36,6 +51,7 @@
                 "-fdiagnostics-color=always",
                 "-g", 
                 "${workspaceFolder}\\MainApp\\main.cpp",
+                "${workspaceFolder}\\builds\\moc_builds\\main_layout.moc.cpp",
                 "${workspaceFolder}\\builds\\moc_builds\\dependency_handler.moc.cpp",
                 "-o", "${workspaceFolder}\\builds\\app_build\\app.exe",
                 "-I", "${workspaceFolder}\\ApplicationCode\\include",
@@ -56,7 +72,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "dependsOn": "Generate MOC file",
+            "dependsOn": "Generate dependency_handler MOC file",
             "detail": "Task building the main application."
         },
         {

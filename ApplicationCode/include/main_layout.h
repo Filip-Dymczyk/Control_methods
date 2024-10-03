@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QtCore/Qt>
+#include <QtCore/QObject>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
@@ -16,12 +17,21 @@
 
 class MainLayout : public QVBoxLayout
 {
+    Q_OBJECT
+
 public:
     MainLayout(QWidget * parent) : QVBoxLayout(parent)
     {
+        connect(&_dependency_handler, &DependencyHandler::show_plot_layout, this, &MainLayout::show_plot_layout);
         configure_widgets();
         add_widgets();
         set_alignment_and_spacing();
+    }
+
+    DependencyHandler const &
+    dependency_handler() const
+    {
+        return _dependency_handler;
     }
 private:
     QLabel _order_label {};
@@ -161,4 +171,7 @@ private:
         this -> setAlignment(Qt::AlignmentFlag::AlignTop | Qt::AlignmentFlag::AlignHCenter);
         this -> setSpacing(13);
     }
+signals:
+    void
+    show_plot_layout();
 };

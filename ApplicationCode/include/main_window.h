@@ -17,8 +17,17 @@ class MainWindow : public QWidget
 public:
     MainWindow() : _main_layout(this), _plot_layout(this)
     {   
+        connect(&_main_layout, &MainLayout::show_plot_layout, this, &MainWindow::show_plot_layout);
         this -> setWindowTitle(window_title);
         this -> setFixedSize(width, height);
+        this -> setLayout(&_main_layout);
+    }
+
+    void
+    show_plot_layout()
+    {
+        // Update simulator values before -> get the inputs from dependency handler: _main_layout.dependency_handler().inputs().
+        _main_layout.dependency_handler().inputs();
         this -> setLayout(&_main_layout);
     }
 private:
