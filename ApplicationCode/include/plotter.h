@@ -19,8 +19,6 @@ class Plotter
     };
 
 public:
-    Plotter(double sim_time = 1.0f) : _sim_time(sim_time) {}
-
     void
     update(double time, double set_point, double control, double output)
     {
@@ -73,6 +71,5 @@ public:
     }
 
 private:
-    double _sim_time {};
     Plotting_Buffers _plotting_buffers {};
 };
