@@ -52,7 +52,7 @@ class Rectangle : public SignalBase
 public:
     Rectangle(double time_step, double on_time, SignalBasicParameters const & params): SignalBase(time_step, params)
     {
-        assert(on_time > 0.0);
+        assert(on_time >= 0.0);
         _on_time = on_time;
     }
 

@@ -5,32 +5,31 @@
 
 #include <QtWidgets/QWidget>
 #include <QtCore/QString>
-
 #include "main_layout.h"
-#include "plot_layout.h"
+#include "simulator.h"
 
 class MainWindow : public QWidget
 {
     static constexpr unsigned width = 400;
     static constexpr unsigned height = 800;
-    const QString window_title = "Dynamical systems control methods.";
+    QString const window_title = "Dynamical systems control methods.";
 public:
-    MainWindow() : _main_layout(this), _plot_layout(this)
+    MainWindow() : _main_layout(this), _simulator()
     {   
-        connect(&_main_layout, &MainLayout::show_plot_layout, this, &MainWindow::show_plot_layout);
         this -> setWindowTitle(window_title);
         this -> setFixedSize(width, height);
         this -> setLayout(&_main_layout);
-    }
+        connect(&_main_layout, &MainLayout::show_plot_layout, this, &MainWindow::show_plot_window);
+    }  
 
     void
-    show_plot_layout()
+    show_plot_window()
     {
         // Update simulator values before -> get the inputs from dependency handler: _main_layout.dependency_handler().inputs().
         _main_layout.dependency_handler().inputs();
-        this -> setLayout(&_main_layout);
+        _simulator.show_plot();
     }
 private:
     MainLayout _main_layout;
-    PlotLayout _plot_layout;
+    Simulator _simulator;
 };

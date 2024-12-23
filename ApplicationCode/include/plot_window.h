@@ -4,14 +4,20 @@
 #pragma once
 
 #include <QtWidgets/QWidget>
-#include <QtWidgets/QVBoxLayout>
-
 #include "simulator.h"
+#include "plotter.h"
+#include <iostream>
 
-class PlotLayout : public QVBoxLayout
+class PlotWindow : public QWidget
 {
 public:
-    PlotLayout(QWidget * parent) : QVBoxLayout(parent) {}
+    void
+    show_plot()
+    {
+        _plotter.plot();
+    }
+
 private:
     Simulator _simulator {};
+    Plotter _plotter {1.0};
 };

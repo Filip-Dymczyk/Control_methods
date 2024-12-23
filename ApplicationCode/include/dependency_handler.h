@@ -27,7 +27,7 @@ public:
 private:
     InputParameterContainer _inputs {};
 
-public slots:
+public Q_SLOTS:
     void
     buttons_clicked_callback()
     {
@@ -64,7 +64,7 @@ public slots:
                 case Button_ID::RUN_BUTTON:
                 {
                     _inputs.set_run_flag(true);
-                    emit show_plot_layout();
+                    Q_EMIT show_plot_layout();
                     break;
                 }
                 default:
@@ -155,7 +155,7 @@ public slots:
         // object_parameters_line_edit -> text() // will need parsing
         // _inputs.set_controller_parameters();
     }
-signals:
+Q_SIGNALS:
     void
     show_plot_layout();
 };
