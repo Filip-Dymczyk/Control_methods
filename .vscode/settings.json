@@ -95,7 +95,9 @@
         "qvariant": "cpp",
         "qvboxlayout": "cpp",
         "qt": "cpp",
-        "qcombobox": "cpp"
+        "qcombobox": "cpp",
+        "qspinbox": "cpp",
+        "qlineedit": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
 }

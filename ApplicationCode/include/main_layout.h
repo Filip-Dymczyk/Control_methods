@@ -22,7 +22,7 @@ class MainLayout : public QVBoxLayout
 public:
     MainLayout(QWidget * parent) : QVBoxLayout(parent)
     {
-        connect(&_dependency_handler, &DependencyHandler::show_plot_layout, this, &MainLayout::show_plot_layout);
+        connect(&_dependency_handler, &DependencyHandler::show_plot_window, this, &MainLayout::show_plot_window);
         configure_widgets();
         add_widgets();
         set_alignment_and_spacing();
@@ -173,5 +173,5 @@ private:
     }
 Q_SIGNALS:
     void
-    show_plot_layout();
+    show_plot_window();
 };

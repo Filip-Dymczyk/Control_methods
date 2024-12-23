@@ -19,14 +19,13 @@ public:
         this -> setWindowTitle(window_title);
         this -> setFixedSize(width, height);
         this -> setLayout(&_main_layout);
-        connect(&_main_layout, &MainLayout::show_plot_layout, this, &MainWindow::show_plot_window);
+        connect(&_main_layout, &MainLayout::show_plot_window, this, &MainWindow::show_plot_window);
     }  
 
     void
     show_plot_window()
     {
         // Update simulator values before -> get the inputs from dependency handler: _main_layout.dependency_handler().inputs().
-        _main_layout.dependency_handler().inputs();
         _simulator.show_plot();
     }
 private:
