@@ -37,3 +37,6 @@
 
 # Other
 *.html
+
+# Allow .bat scripts
+!*.bat
