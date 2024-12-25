@@ -37,8 +37,8 @@ public Q_SLOTS:
                 assert(false);
                 return;
             }
-
             bool const is_run = _inputs_parser.parse_button_id(button_id, parent);
+
             if(is_run)
             {
                 Q_EMIT show_plot_window();
