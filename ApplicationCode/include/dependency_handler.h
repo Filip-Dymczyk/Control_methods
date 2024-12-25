@@ -2,9 +2,6 @@
 // Description : Class handling dependencies between application widgets and simulator.
 
 #pragma once
-#include <iostream>
-#include <vector>
-#include <QtCore/QObject>
 #include <QtCore/QVariant>
 #include <QtWidgets/QPushButton>
 

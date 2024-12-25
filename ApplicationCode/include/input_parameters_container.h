@@ -12,7 +12,7 @@ class InputParameterContainer
     struct Buttons_Inputs
     {
         bool run_flag {};
-        std::uint8_t order {1u};
+        int order {1};
         std::vector<double> object_parameters;
         std::vector<double> controller_parameters;
     };
@@ -33,7 +33,7 @@ public:
     }
 
     void
-    set_order(std::uint8_t order)
+    set_order(int order)
     {
         _button_inputs.order = order;
     }
@@ -78,6 +78,18 @@ public:
     set_operation_type(Operation_Type const & operation_type)
     {
         _combo_boxes_inputs.operation_type = operation_type;
+    }
+
+    int
+    get_order() const
+    {
+        return _button_inputs.order;
+    }
+
+    Controller_Type
+    get_controller_type() const
+    {
+        return _combo_boxes_inputs.controller_type;
     }
 private:
     Buttons_Inputs _button_inputs {};

@@ -2,7 +2,9 @@
 // Description : Class handling inputs parsing.
 
 #pragma once
+#include <assert.h>
 #include <QtCore/QObject>
+#include <QtCore/QStringList>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QLineEdit>
@@ -88,37 +90,87 @@ public:
     void
     set_order(QWidget* parent)
     {
-        QSpinBox * order_spin_box = parent -> findChild<QSpinBox *>("order");
+        if(parent == nullptr)
+        {
+            assert(false);
+            return;
+        }
+        QSpinBox const* const order_spin_box = parent -> findChild<QSpinBox*>("order");
+
         if(order_spin_box == nullptr)
         {
             assert(false);
+            return;
         }
-        std::uint8_t const value = static_cast<uint8_t>(order_spin_box -> value());
-        _inputs.set_order(value);
+        _inputs.set_order(order_spin_box->value());
     }
 
     void
     set_object_parameters(QWidget* parent)
     {
-        QLineEdit * object_parameters_line_edit = parent -> findChild<QLineEdit *>("object_parameters");
+        if(parent == nullptr)
+        {
+            assert(false);
+            return;
+        }
+        QLineEdit const* const object_parameters_line_edit = parent -> findChild<QLineEdit*>("object_parameters");
+
         if(object_parameters_line_edit == nullptr)
         {
             assert(false);
+            return;
         }
-        // object_parameters_line_edit -> text() // will need parsing
-        // _inputs.set_object_parameters();
+        QStringList const parameters_string_list = object_parameters_line_edit->text().split(";", Qt::SkipEmptyParts);
+        int const order = _inputs.get_order();
+        std::vector<double> object_parameters {};
+        object_parameters.reserve(order);
+
+        std::size_t idx = 1;
+        for(auto const& parameter : parameters_string_list)
+        {
+            object_parameters.push_back(parameter.toDouble());
+            std::cout << parameter.toDouble() << std::endl;
+            if(idx == order)
+            {
+                break;
+            }
+            idx++;
+        }
+        _inputs.set_object_parameters(object_parameters);
     }
 
     void
     set_controller_parameters(QWidget* parent)
     {
-        QLineEdit * controller_parameters_line_edit = parent -> findChild<QLineEdit *>("controller_parameters");
+        if(parent == nullptr)
+        {
+            assert(false);
+            return;
+        }
+        QLineEdit const* const controller_parameters_line_edit = parent -> findChild<QLineEdit*>("controller_parameters");
+
         if(controller_parameters_line_edit == nullptr)
         {
             assert(false);
+            return;
         }
-        // object_parameters_line_edit -> text() // will need parsing
-        // _inputs.set_controller_parameters();
+        QStringList const parameters_string_list = controller_parameters_line_edit->text().split(";", Qt::SkipEmptyParts);
+        std::size_t const parameters_number = 3u;
+        std::vector<double> controller_parameters {};
+        controller_parameters.reserve(parameters_number);
+
+        std::size_t idx = 1;
+        for(auto const& parameter : parameters_string_list)
+        {
+            controller_parameters.push_back(parameter.toDouble());
+            std::cout << parameter.toDouble() << std::endl;
+            if(idx == parameters_number)
+            {
+                break;
+            }
+            idx++;
+        }
+        _inputs.set_object_parameters(controller_parameters);
     }
 private:
     InputParameterContainer _inputs {};
