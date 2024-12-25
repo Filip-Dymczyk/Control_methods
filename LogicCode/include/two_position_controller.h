@@ -11,7 +11,7 @@ struct Two_Position_Controller_Params
     double hist {};
 };
 
-// NOTE: Two position controller with histeresis.
+// NOTE: Two position controller with hysteresis.
 class TwoPositionController : public ControllerBase
 {
 public:

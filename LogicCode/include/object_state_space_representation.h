@@ -12,7 +12,7 @@
 // where: n - number of state variables,
 // A is [n x n] matrix, B is [n x 1] vector, C is [1 x n] transposed vector D is a scalar (by default set to 0).
 // We allow entering whole matrices / vectors with coefficients.
-// When entering coeficients beware of mistakingly creating unstable objects!
+// When entering coefficients beware of mistakenly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
 class ObjectStateSpaceRepresentation : public ObjectRepresentationBase
