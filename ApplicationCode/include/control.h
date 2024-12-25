@@ -3,13 +3,12 @@
 
 #pragma once
 #include <cstdint>
+#include <vector>
 
-// Base classes managing polymorphic approach in selecting currently used components:
 #include "base_classes/object_representation_base.h"
 #include "base_classes/controller_base.h"
 #include "base_classes/signal_base.h"
 
-// Components to be used:
 #include "object_differential_equation_representation.h"
 #include "object_state_space_representation.h"
 #include "pid.h"
@@ -19,15 +18,15 @@
 #include "recursive_linear_regression.h"
 #include "pid_tuner.h"
 
+#include "enums.h"
+
 class Control
 {
     // Default values needed for initialization.
-    static constexpr ControlMode CONTROL_MODE = ControlMode::OPEN_LOOP;
-    static constexpr std::uint32_t ORDER {1u}; // Default order value in the app.
-    static constexpr double TIME_STEP {0.01}; // Default time_step
+    static constexpr std::uint32_t ORDER {1u};
+    static constexpr double TIME_STEP {0.01};
 public:
     Control() : 
-            // Components default initialization:
             _differential_equation_representation_object(TIME_STEP, ORDER), 
             _state_space_representation_object(TIME_STEP, ORDER),
             _pid_controller(TIME_STEP),
@@ -37,18 +36,45 @@ public:
             _rect(TIME_STEP),
             _sine_wave(TIME_STEP),
             _pulse_wave(TIME_STEP),
-            //-----------------------------------------------------------
-            // Default selections based on the application initial state:
             _selected_object(&_differential_equation_representation_object),
             _selected_controller(&_pid_controller),
             _selected_input_signal(&_heaviside),
-            //-----------------------------------------------------------
-            // Continous initialization:
-            _regression {},
-            _system(_selected_object, _selected_controller, CONTROL_MODE),
-            _tuner(_system, _regression)
-            //-----------------------------------------------------------
+            _control_mode(ControlMode::OPEN_LOOP),
+            _regression{},
+            _system(_selected_object, _selected_controller, _control_mode),
+            _tuner(_system, _regression),
+            _operation_type(Operation_Type::SIMULATION)
             {}
+
+    void
+    set_object(Object_Representation object_representation, std::vector<double> object_parameters)
+    {
+
+    }
+
+    void
+    set_control_mode(Control_Mode control_mode)
+    {
+
+    }
+
+    void
+    set_controller(Controller_Type controller_type, std::vector<double> controller_parameters)
+    {
+
+    }
+
+    void
+    set_signal(Input_Signal input_signal/*, signal parameters missing*/)
+    {
+
+    }
+
+    void
+    set_operation_type(Operation_Type operation_type)
+    {
+        
+    }
 
 private:
     ObjectDifferentialEquationRepresentation _differential_equation_representation_object;
@@ -65,7 +91,9 @@ private:
     ControllerBase * _selected_controller;
     SignalBase * _selected_input_signal;
 
+    ControlMode _control_mode;
     RecursiveLinearRegression _regression;
     ControlSystem _system;
     PidTuner _tuner;
+    Operation_Type _operation_type;
 };

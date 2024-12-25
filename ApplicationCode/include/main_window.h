@@ -25,9 +25,8 @@ public:
     void
     show_plot_window()
     {
-        // Update simulator values before -> get the inputs from dependency handler: _main_layout.dependency_handler().inputs().
         _simulator.update(_main_layout.dependency_handler().get_input_parameters());
-        _simulator.simulate();
+        _simulator.run();
         _simulator.show_plot();
     }
 private:

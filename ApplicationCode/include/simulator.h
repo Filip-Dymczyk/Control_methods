@@ -13,11 +13,13 @@ public:
     void
     update(InputParameterContainer const& input_parameters)
     {
-        
+        _simulation_time = input_parameters.get_simulation_time();
+        _simulation_time_step = input_parameters.get_simulation_time_step();
+        _control.update();
     }
 
     void
-    simulate()
+    run()
     {
 
     }
@@ -28,6 +30,8 @@ public:
         _plotter.plot();
     }
 private:
+    double _simulation_time {};
+    double _simulation_time_step {};
     Control _control;
     Plotter _plotter;
 };

@@ -100,11 +100,60 @@ public:
         return _button_inputs.order;
     }
 
+    std::vector<double> const&
+    get_object_parameters() const
+    {
+        return _button_inputs.object_parameters;
+    }
+
+    std::vector<double> const&
+    get_controller_parameters() const
+    {
+        return _button_inputs.controller_parameters;
+    }
+
+    double
+    get_simulation_time() const
+    {
+        return _button_inputs.simulation_time;
+    }
+
+    double
+    get_simulation_time_step() const 
+    {
+        return _button_inputs.simulation_time_step;
+    }
+
+    Object_Representation
+    get_object_representation() const
+    {
+        return _combo_boxes_inputs.object_representation;
+    }
+
+    Control_Mode
+    get_control_mode() const
+    {
+        return _combo_boxes_inputs.control_mode;
+    }
+
     Controller_Type
     get_controller_type() const
     {
         return _combo_boxes_inputs.controller_type;
     }
+    
+    Input_Signal
+    get_input_signal() const
+    {
+        return _combo_boxes_inputs.input_signal;
+    }
+
+    Operation_Type
+    get_operation_type() const
+    {
+        return _combo_boxes_inputs.operation_type;
+    }
+    
 private:
     Buttons_Inputs _button_inputs {};
     Combo_Boxes_Inputs _combo_boxes_inputs {};
