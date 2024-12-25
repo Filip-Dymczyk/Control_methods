@@ -56,6 +56,7 @@ private:
     QLabel _simulation_parameters_label {};
     QLineEdit _simulation_time_line_edit {};
     QLineEdit _simulation_step_line_edit {};
+    QPushButton _confirm_simulation_parameters_button {};
     QPushButton _run_button {};
 
     DependencyHandler _dependency_handler {};
@@ -66,7 +67,8 @@ private:
         _order_confirm_button.setProperty("id", 0);
         _confirm_object_parameters_button.setProperty("id", 1);
         _confirm_controller_parameters_button.setProperty("id", 2);
-        _run_button.setProperty("id", 3);
+        _confirm_simulation_parameters_button.setProperty("id", 3);
+        _run_button.setProperty("id", 4);
 
         _object_representation_combo_box.setProperty("id", 0);
         _control_mode_combo_box.setProperty("id", 1);
@@ -81,7 +83,8 @@ private:
         connect(&_order_confirm_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
         connect(&_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
         connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_run_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_confirm_simulation_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
 
         connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
         connect(&_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
@@ -96,6 +99,8 @@ private:
         _order_spin_box.setObjectName("order");
         _object_parameters_line_edit.setObjectName("object_parameters");
         _controller_parameters_line_edit.setObjectName("controller_parameters");
+        _simulation_time_line_edit.setObjectName("simulation_time");
+        _simulation_step_line_edit.setObjectName("simulation_step");
     }
 
     void
@@ -130,6 +135,7 @@ private:
         _operation_combo_box.addItem("Simulation");
         _operation_combo_box.addItem("Tuning");
         _simulation_parameters_label.setText("Enter simulation parameters:");
+        _confirm_simulation_parameters_button.setText("Confirm");
         _run_button.setText("Run operation");
 
         set_widgets_ids();
@@ -162,6 +168,7 @@ private:
         this -> addWidget(&_simulation_parameters_label);
         this -> addWidget(&_simulation_time_line_edit);
         this -> addWidget(&_simulation_step_line_edit);
+        this -> addWidget(&_confirm_simulation_parameters_button);
         this -> addWidget(&_run_button);
     }
 

@@ -15,6 +15,8 @@ class InputParameterContainer
         int order {1};
         std::vector<double> object_parameters;
         std::vector<double> controller_parameters;
+        double simulation_time;
+        double simulation_time_step;
     };
 
     struct Combo_Boxes_Inputs
@@ -48,6 +50,18 @@ public:
     set_controller_parameters(std::vector<double> const & controller_parameters)
     {
         _button_inputs.controller_parameters = controller_parameters;
+    }
+
+    void
+    set_simulation_time(double simulation_time)
+    {
+        _button_inputs.simulation_time = simulation_time;
+    }
+
+    void
+    set_simulation_time_step(double simulation_time_step)
+    {
+        _button_inputs.simulation_time_step = simulation_time_step;
     }
 
     void

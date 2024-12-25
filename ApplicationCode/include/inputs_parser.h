@@ -36,6 +36,11 @@ public:
                 set_controller_parameters(parent);
                 break;
             }
+            case Button_ID::SIMULATION_PARAMETERS_BUTTON:
+            {
+                set_simulation_parameters(parent);
+                break;
+            }
             case Button_ID::RUN_BUTTON:
             {
                 _inputs.set_run_flag(true);
@@ -171,6 +176,32 @@ public:
             idx++;
         }
         _inputs.set_object_parameters(controller_parameters);
+    }
+
+    void
+    set_simulation_parameters(QWidget* parent)
+    {
+        if(parent == nullptr)
+        {
+            assert(false);
+            return;
+        }
+        QLineEdit const* const simulation_time_line_edit = parent -> findChild<QLineEdit*>("simulation_time");
+        QLineEdit const* const simulation_timestep_line_edit = parent -> findChild<QLineEdit*>("simulation_step");
+
+        if(simulation_time_line_edit == nullptr || simulation_timestep_line_edit == nullptr)
+        {
+            assert(false);
+            return;
+        }
+        _inputs.set_simulation_time(simulation_time_line_edit->text().toDouble());
+        _inputs.set_simulation_time_step(simulation_timestep_line_edit->text().toDouble());
+    }
+
+    InputParameterContainer const&
+    get_input_parameters() const
+    {
+        return _inputs;
     }
 private:
     InputParameterContainer _inputs {};
