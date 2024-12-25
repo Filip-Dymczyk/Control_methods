@@ -134,7 +134,6 @@ public:
         for(auto const& parameter : parameters_string_list)
         {
             object_parameters.push_back(parameter.toDouble());
-            std::cout << parameter.toDouble() << std::endl;
             if(idx == order)
             {
                 break;
@@ -168,7 +167,6 @@ public:
         for(auto const& parameter : parameters_string_list)
         {
             controller_parameters.push_back(parameter.toDouble());
-            std::cout << parameter.toDouble() << std::endl;
             if(idx == parameters_number)
             {
                 break;
