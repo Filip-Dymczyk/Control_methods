@@ -48,6 +48,13 @@ public:
         // Output (x) - last integrator value;
         set_value(_state.get_value(_order - 1) + measurement_noise());
     }
+
+    void
+    set_parameters(std::vector<double> const& object_parameters)
+    {
+        assert(object_parameters.size() == order());
+        _coefficients = object_parameters;
+    }
     
     std::vector<double> const &
     get_coefss() const

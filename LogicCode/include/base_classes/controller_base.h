@@ -25,7 +25,7 @@ public:
     }
 
     virtual void
-    set_params(PID_Params const &) 
+    set_parameters(PID_Params const &) 
     {
         
     }

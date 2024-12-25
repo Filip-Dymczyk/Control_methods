@@ -47,33 +47,96 @@ public:
             {}
 
     void
-    set_object(Object_Representation object_representation, std::vector<double> object_parameters)
+    set_object(int order, Object_Representation object_representation, std::vector<double> object_parameters)
     {
-
+        switch (object_representation)
+        {
+            case Object_Representation::EQUATION:
+            {
+                _differential_equation_representation_object.set_order(static_cast<std::size_t>(order));
+                _differential_equation_representation_object.set_parameters(object_parameters);
+                _selected_object = &_differential_equation_representation_object;
+                break;
+            }
+            case Object_Representation::STATE_SPACE:
+            {
+                // TODO: when matrix input will be handled
+                // _selected_object = &_state_space_representation_object;
+                break;
+            }
+            default:
+                break;
+        }
     }
 
     void
     set_control_mode(Control_Mode control_mode)
     {
-
+        _control_mode = static_cast<ControlMode>(control_mode);
     }
 
     void
     set_controller(Controller_Type controller_type, std::vector<double> controller_parameters)
     {
-
+        switch (controller_type)
+        {
+            case Controller_Type::BANG_BANG:
+            {
+                _two_position_controller.set_parameters(controller_parameters);
+                _selected_controller = &_two_position_controller;
+                break;
+            }
+            case Controller_Type::PID:
+            {
+                _pid_controller.set_parameters(controller_parameters);
+                _selected_controller = &_pid_controller;
+                break;
+            }
+            // TODO: Handle no controller
+            default:
+                break;
+        }
     }
 
     void
     set_signal(Input_Signal input_signal/*, signal parameters missing*/)
     {
-
+        switch (input_signal)
+        {
+            case Input_Signal::HEAVISIDE:
+            {
+                _selected_input_signal = &_heaviside;
+                break;
+            }
+            case Input_Signal::RAMP:
+            {
+                _selected_input_signal = &_ramp;
+                break;
+            }
+            case Input_Signal::RECTANGLE:
+            {
+                _selected_input_signal = &_rect;
+                break;
+            }
+            case Input_Signal::SINE_WAVE:
+            {
+                _selected_input_signal = &_sine_wave;
+                break;
+            }
+            case Input_Signal::PULSE_WAVE:
+            {
+                _selected_input_signal = &_pulse_wave;
+            }
+            // TODO: Handle no signal.
+            default:
+                break;
+        }
     }
 
     void
     set_operation_type(Operation_Type operation_type)
     {
-        
+        _operation_type = operation_type;
     }
 
 private:

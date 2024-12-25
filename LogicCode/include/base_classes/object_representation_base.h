@@ -18,6 +18,12 @@ public:
                             _order(order)
     {}
 
+    void
+    set_order(std::size_t order)
+    {
+        _order = order;
+    }
+
     std::size_t
     order() const
     {

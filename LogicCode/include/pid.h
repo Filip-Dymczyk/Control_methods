@@ -11,6 +11,24 @@ struct PID_Params
     double kp {};
     double ki {};
     double kd {};
+
+    PID_Params() = default;
+
+    PID_Params(double kp_in, double ki_in, double kd_in)
+    {
+        kp = kp_in;
+        ki = ki_in;
+        kd = kd_in;
+    }
+
+    PID_Params(std::vector<double> const& parameters)
+    {
+        assert(parameters.size() == 3u);
+
+        kp = parameters.at(0u);
+        ki = parameters.at(1u);
+        kd = parameters.at(2u);
+    }
 };
 
 // NOTE: PID output will be computed as - kp * x + ki * int_x + kd * x'.
@@ -37,9 +55,15 @@ public:
     }
 
     void
-    set_params(PID_Params const & params) override
+    set_parameters(PID_Params const& parameters) override
     {
-        _params = params;
+        _params = parameters;
+    }
+
+    void
+    set_parameters(std::vector<double> const& parameters)
+    {
+        _params = {parameters};
     }
 
     void
