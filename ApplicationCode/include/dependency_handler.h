@@ -11,6 +11,13 @@ class DependencyHandler : public QObject
 {
     Q_OBJECT
 
+public:
+    InputParameterContainer const&
+    get_input_parameters() const
+    {
+        return _inputs_parser.get_input_parameters();
+    }
+
 private:
     Inputs_Parser _inputs_parser {};
 
