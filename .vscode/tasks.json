@@ -11,6 +11,16 @@
             "problemMatcher": []
         },
         {
+            "label": "Build Application Debug",
+            "type": "shell",
+            "command": "${workspaceFolder}\\build_app_debug.bat",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Build Tests",
             "type": "shell",
             "command": "${workspaceFolder}\\build_tests.bat",
@@ -21,7 +31,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Run Application.",
+            "label": "Run Application",
             "type": "shell",
             "command": "${workspaceFolder}\\builds\\app_build\\app.exe",
             "group": {
@@ -36,7 +46,22 @@
             },
         },
         {
-            "label": "Run Tests by the test suite name.",
+            "label": "Run Application Debug",
+            "type": "shell",
+            "command": "gdb ${workspaceFolder}\\builds\\debug_build\\app_debug.exe",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+        },
+        {
+            "label": "Run Tests by the test suite name",
             "type": "shell",
             "command": "ctest",
             "args": [
@@ -59,7 +84,7 @@
         {
             "id": "testName",
             "type": "promptString",
-            "description": "Enter the test name or pattern to run",
+            "description": "Enter the test name or pattern to run:",
             "default": ""
         }
     ]

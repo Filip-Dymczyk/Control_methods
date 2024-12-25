@@ -1,6 +1,7 @@
 @echo off
 
-@echo Application build...
+@echo Debug application build...
+
 IF NOT EXIST "%cd%\builds" (
     mkdir "%cd%\builds"
 )
@@ -16,7 +17,7 @@ IF NOT EXIST "%cd%\builds\app_build" (
 C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\main_layout.moc.cpp" "%cd%\ApplicationCode\include\main_layout.h"
 C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\dependency_handler.moc.cpp" "%cd%\ApplicationCode\include\dependency_handler.h"
 
-C:\msys64\mingw64\bin\g++.exe -fdiagnostics-color=always -g -static ^
+C:\msys64\mingw64\bin\g++.exe -fdiagnostics-color=always -g -O0 -static ^
     "%cd%\MainApp\main.cpp" ^
     "%cd%\builds\moc_builds\main_layout.moc.cpp" ^
     "%cd%\builds\moc_builds\dependency_handler.moc.cpp" ^
@@ -38,4 +39,4 @@ IF %ERRORLEVEL% NEQ 0 (
     exit /b %ERRORLEVEL%
 )
 
-echo Build finished successfully!!!
+echo Debug build finished successfully!!!
