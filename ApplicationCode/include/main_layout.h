@@ -83,7 +83,7 @@ private:
         connect(&_order_confirm_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
         connect(&_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
         connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_confirm_simulation_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
         connect(&_run_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
 
         connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);

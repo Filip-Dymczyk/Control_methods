@@ -128,13 +128,13 @@ public:
         QStringList const parameters_string_list = object_parameters_line_edit->text().split(";", Qt::SkipEmptyParts);
         int const order = _inputs.get_order();
         std::vector<double> object_parameters {};
-        object_parameters.reserve(order);
+        object_parameters.reserve(order + 1);
 
         std::size_t idx = 1;
         for(auto const& parameter : parameters_string_list)
         {
             object_parameters.push_back(parameter.toDouble());
-            if(idx == order)
+            if(idx == order + 1)
             {
                 break;
             }
@@ -173,7 +173,7 @@ public:
             }
             idx++;
         }
-        _inputs.set_object_parameters(controller_parameters);
+        _inputs.set_controller_parameters(controller_parameters);
     }
 
     void

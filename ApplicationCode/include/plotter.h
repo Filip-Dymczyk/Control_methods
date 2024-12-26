@@ -61,15 +61,6 @@ public:
         plt::grid();
         plt::show();   
     }
-
-    void
-    plot()
-    {
-        plt::figure();
-        plt::plot({1, 2, 3, 4});
-        plt::show();
-    }
-
 private:
     Plotting_Buffers _plotting_buffers {};
 };
