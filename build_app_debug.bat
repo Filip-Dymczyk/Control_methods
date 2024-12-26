@@ -10,8 +10,8 @@ IF NOT EXIST "%cd%\builds\moc_builds" (
     mkdir "%cd%\builds\moc_builds"
 )
 
-IF NOT EXIST "%cd%\builds\app_build" (
-    mkdir "%cd%\builds\app_build"
+IF NOT EXIST "%cd%\builds\debug_build" (
+    mkdir "%cd%\builds\debug_build"
 )
 
 C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\main_layout.moc.cpp" "%cd%\ApplicationCode\include\main_layout.h"
@@ -21,7 +21,7 @@ C:\msys64\mingw64\bin\g++.exe -fdiagnostics-color=always -g -O0 -static ^
     "%cd%\MainApp\main.cpp" ^
     "%cd%\builds\moc_builds\main_layout.moc.cpp" ^
     "%cd%\builds\moc_builds\dependency_handler.moc.cpp" ^
-    -o "%cd%\builds\app_build\app.exe" ^
+    -o "%cd%\builds\debug_build\app_debug.exe" ^
     -I "%cd%\ApplicationCode\include" ^
     -I "%cd%\LogicCode\include" ^
     -I "%cd%\3rdParty" ^

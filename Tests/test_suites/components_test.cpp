@@ -53,7 +53,7 @@ private:
     Derivative _derivative {_time_step};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};
     ObjectDifferentialEquationRepresentation _object_differential_equation {_time_step, _order, init_state, {1.0, 1.0, 1.0}};
-    ObjectStateSpaceRepresentation _object_state_space {_time_step, _order, init_state, {{{1.0, 1.0}, {1.0, 1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
+    ObjectStateSpaceRepresentation _object_state_space {_time_step, _order, init_state, {{{0.0, 1.0}, {-1.0, -1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
 };
 
 TEST_F(ComponentsTest, IntegratorTest)
