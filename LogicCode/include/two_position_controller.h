@@ -12,20 +12,16 @@ struct Two_Position_Controller_Params
 
     Two_Position_Controller_Params() = default;
 
-    Two_Position_Controller_Params(double A1_in, double A2_in, double hist_in)
-    {
-        A1 = A1_in;
-        A2 = A2_in;
-        hist = hist_in;
-    }
-
     Two_Position_Controller_Params(std::vector<double> const& parameters)
     {
         assert(parameters.size() == 3u);
+
         A1 = parameters.at(0u);
         A2 = parameters.at(1u);
         hist = parameters.at(2u);
     }
+
+    Two_Position_Controller_Params(std::initializer_list<double> const& parameters) : Two_Position_Controller_Params(std::vector<double>(parameters)) {}
 };
 // TODO: Renaming for Bang_Bang_Controller
 // NOTE: Two position controller with hysteresis.
@@ -57,7 +53,7 @@ public:
     }
 
     void
-    set_parameters(std::vector<double> const& parameters)
+    set_parameters(std::vector<double> const& parameters) override
     {
         _params = {parameters};
     }

@@ -14,13 +14,6 @@ struct PID_Params
 
     PID_Params() = default;
 
-    PID_Params(double kp_in, double ki_in, double kd_in)
-    {
-        kp = kp_in;
-        ki = ki_in;
-        kd = kd_in;
-    }
-
     PID_Params(std::vector<double> const& parameters)
     {
         assert(parameters.size() == 3u);
@@ -29,6 +22,8 @@ struct PID_Params
         ki = parameters.at(1u);
         kd = parameters.at(2u);
     }
+
+    PID_Params(std::initializer_list<double> const& parameters) : PID_Params(std::vector<double>(parameters)) {}
 };
 
 // NOTE: PID output will be computed as - kp * x + ki * int_x + kd * x'.
@@ -55,13 +50,7 @@ public:
     }
 
     void
-    set_parameters(PID_Params const& parameters) override
-    {
-        _params = parameters;
-    }
-
-    void
-    set_parameters(std::vector<double> const& parameters)
+    set_parameters(std::vector<double> const& parameters) override
     {
         _params = {parameters};
     }
@@ -74,6 +63,15 @@ public:
         _error_int.reset();
         _error_der.reset();
     }
+
+    void
+    set_time_step(double time_step)
+    {
+        SimumlationObjectBase::set_time_step(time_step);
+        _error_int.set_time_step(get_time_step());
+        _error_der.set_time_step(get_time_step());
+    }
+
 private:
     PID_Params _params {};
     Integrator _error_int {get_time_step()};

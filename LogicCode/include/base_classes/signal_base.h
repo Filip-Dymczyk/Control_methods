@@ -51,6 +51,12 @@ public:
     virtual void
     reset() = 0;
 
+    void
+    set_time_step(double time_step)
+    {
+        _timer.set_time_step(time_step);
+    }
+
 protected:
     SignalBasicParameters _params {};
 

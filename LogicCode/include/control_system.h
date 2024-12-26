@@ -18,7 +18,7 @@ class ControlSystem
 public:
     ControlSystem(ObjectRepresentationBase * object, 
                 ControllerBase * controller, 
-                ControlMode const & control_mode) : 
+                ControlMode const& control_mode) : 
                 _object(object), 
                 _controller(controller), 
                 _control_mode(control_mode) {}
@@ -81,6 +81,12 @@ public:
         return _controller;
     }
 
+    ControlMode
+    get_control_mode() const
+    {
+        return _control_mode;
+    }
+
     void
     reset()
     {
@@ -88,9 +94,16 @@ public:
         _object -> reset();
         _controller -> reset();
     }
+
+    void
+    set_control_mode(ControlMode control_mode)
+    {
+        _control_mode = control_mode;
+    }
+
 private:
     double _set_point {};
     ControlMode _control_mode {};
-    ObjectRepresentationBase * _object {};
-    ControllerBase * _controller {};
+    ObjectRepresentationBase * _object {nullptr};
+    ControllerBase * _controller {nullptr};
 };

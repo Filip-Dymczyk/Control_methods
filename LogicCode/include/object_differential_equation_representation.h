@@ -18,12 +18,13 @@ public:
                                             std::vector<double> const & coefficients) : 
                                             ObjectRepresentationBase(time_step, order, init_state)
     {
-        assert(coefficients.size() == order + 1);
+        assert(coefficients.size() == order + 1u);
+        _coefficients.reserve(order + 1u);
         _coefficients = coefficients;
     }
 
     ObjectDifferentialEquationRepresentation(double time_step, std::uint32_t order)
-    : ObjectDifferentialEquationRepresentation(time_step, order, std::vector<double>(order), std::vector<double>(order + 1)) {}
+    : ObjectDifferentialEquationRepresentation(time_step, order, std::vector<double>(order), std::vector<double>(order + 1u)) {}
 
     void 
     update(double control) override
@@ -52,7 +53,7 @@ public:
     void
     set_parameters(std::vector<double> const& object_parameters)
     {
-        assert(object_parameters.size() == order());
+        assert(object_parameters.size() == (order() + 1u));
         _coefficients = object_parameters;
     }
     
