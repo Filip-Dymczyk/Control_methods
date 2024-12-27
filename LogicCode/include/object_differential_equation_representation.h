@@ -47,7 +47,7 @@ public:
         _state.update(highest_order_derivative_value);
 
         // Output (x) - last integrator value;
-        set_value(_state.get_value(_order - 1) + measurement_noise());
+        set_value(_state.get_value(_order - 1) /*+ measurement_noise()*/);
     }
 
     void
