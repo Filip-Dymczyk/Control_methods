@@ -72,7 +72,7 @@ public:
     {
         set_value(0.0);
         reset_timer();
-        _on_timer = 0.0;
+        reset_on_timer();
     }
 protected:
     void

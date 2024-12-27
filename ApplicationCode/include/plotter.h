@@ -61,6 +61,16 @@ public:
         plt::grid();
         plt::show();   
     }
+
+    void
+    reset()
+    {
+        _plotting_buffers.time.clear();
+        _plotting_buffers.set_point.clear();
+        _plotting_buffers.control.clear();
+        _plotting_buffers.output.clear();
+    }
+
 private:
     Plotting_Buffers _plotting_buffers {};
 };

@@ -25,6 +25,7 @@ public:
     void
     run()
     {
+        reset();
         while(_control.get_time() < _simulation_time)
         {
             _plotter.update(_control.get_time(), _control.get_setpoint(), _control.get_control_value(), _control.get_object_value());
@@ -35,7 +36,6 @@ public:
     void
     show_plot()
     {
-        reset();
         _plotter.plot(_control.get_control_mode());
     }
 
@@ -43,7 +43,8 @@ private:
     void
     reset()
     {
-
+        _control.reset();
+        _plotter.reset();
     }
 
     double _simulation_time {};

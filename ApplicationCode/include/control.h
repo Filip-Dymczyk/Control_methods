@@ -178,6 +178,14 @@ public:
         return _system.get_control_mode();
     }
 
+    void
+    reset()
+    {
+        _selected_object->reset();
+        _selected_controller->reset();
+        _selected_input_signal->reset();
+    }
+
 private:
     ObjectDifferentialEquationRepresentation _differential_equation_representation_object;
     ObjectStateSpaceRepresentation _state_space_representation_object;
