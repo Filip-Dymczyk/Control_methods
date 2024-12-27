@@ -52,7 +52,7 @@ public:
         } 
 
         plt::plot(_plotting_buffers.time, _plotting_buffers.set_point, "r-", {{"label", "set point"}});
-        plt::plot(_plotting_buffers.time, _plotting_buffers.control, "y-", {{"label", "control"}});
+        // plt::plot(_plotting_buffers.time, _plotting_buffers.control, "y-", {{"label", "control"}});
         plt::plot(_plotting_buffers.time, _plotting_buffers.output, "b-", {{"label", "output"}});
 
         plt::xlabel("Time [s]");
