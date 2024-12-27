@@ -104,6 +104,15 @@ private:
     }
 
     void
+    set_default_values()
+    {
+        _object_parameters_line_edit.setText("1.0;1.0");
+        _controller_parameters_line_edit.setText("1.0;1.0;0.0");
+        _simulation_time_line_edit.setText("1.0");
+        _simulation_step_line_edit.setText("0.01");
+    }
+
+    void
     configure_widgets()
     {
         _order_label.setText("Choose the order of dynamical system:");
@@ -141,6 +150,7 @@ private:
         set_widgets_ids();
         connect_widgets_dependencies();
         set_widgets_names();
+        set_default_values();
     }
 
     void
