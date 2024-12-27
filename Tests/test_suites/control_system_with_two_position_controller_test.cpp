@@ -8,23 +8,22 @@
 #include "object_differential_equation_representation.h"
 
 static constexpr uint8_t order = 2u;
-class ControlSystemWithTwoPositionControllerTest :  public testing::Test, public TestWithPlot
+class ControlSystemWithTwoPositionControllerTest :  public testing::Test, public Test_With_Plot
 {   
-    using Base = TestWithPlot;
     using ObjectT =  ObjectDifferentialEquationRepresentation;
 protected:
-    ControlSystemWithTwoPositionControllerTest() : TestWithPlot(15.0) {}
+    ControlSystemWithTwoPositionControllerTest() : Test_With_Plot(15.0) {}
 
     void
     test_open_loop_control()
     {
-        Base::test_open_loop_control(&_object, &_two_position_controller, &_pulse, true);
+        Test_With_Plot::test_open_loop_control(&_object, &_two_position_controller, &_pulse, true);
     }
 
     void
     test_closed_loop_control()
     {
-        Base::test_closed_loop_control(&_object, &_two_position_controller, &_pulse, true);
+        Test_With_Plot::test_closed_loop_control(&_object, &_two_position_controller, &_pulse, true);
     }
 
 private:

@@ -14,9 +14,9 @@
 namespace plt = matplotlibcpp;
 
 // NOTE: Allows to test components and control systems by plotting: set point, output and optionally - control value.
-class TestWithPlot
+class Test_With_Plot
 {
-    struct PlottingBuffers
+    struct Plotting_Buffers
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
@@ -25,13 +25,13 @@ class TestWithPlot
     };
 
 public:
-    TestWithPlot(double sim_time) : _sim_time(sim_time) {}
+    Test_With_Plot(double sim_time) : _sim_time(sim_time) {}
     
     void
     test_signal(SignalBase * signal, std::string signal_plot_title)
     {
         signal -> reset();
-        PlottingBuffers const buffers = simulate_signal(signal);
+        Plotting_Buffers const buffers = simulate_signal(signal);
         
         plot_test(buffers, ControlMode::NONE, false, signal_plot_title);
     }
@@ -39,7 +39,7 @@ public:
     void
     test_closed_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase* input_signal, bool const plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::CLOSED_LOOP);
+        Plotting_Buffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::CLOSED_LOOP);
 
         plot_test(buffers, ControlMode::CLOSED_LOOP, plot_control);
     }
@@ -47,7 +47,7 @@ public:
     void
     test_open_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase * input_signal, bool plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::OPEN_LOOP);
+        Plotting_Buffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::OPEN_LOOP);
 
         plot_test(buffers, ControlMode::OPEN_LOOP, plot_control);
     }
@@ -55,7 +55,7 @@ public:
     void
     test_component(SimumlationObjectBase * component, SignalBase * input_signal, bool plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_component(component, input_signal);
+        Plotting_Buffers const buffers = simulate_component(component, input_signal);
 
         plot_test(buffers, ControlMode::NONE, plot_control);
     }
@@ -64,7 +64,7 @@ public:
     void
     test_tuner(SignalBase * input_signal, TunerT tuner,  bool plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
+        Plotting_Buffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
 
         plot_test(buffers, ControlMode::CLOSED_LOOP, plot_control);
     }
@@ -77,7 +77,7 @@ public:
 private:
     double _sim_time {};
 
-    PlottingBuffers const
+    Plotting_Buffers const
     simulate_signal(SignalBase * signal)
     {
         std::vector<double> time {};
@@ -94,7 +94,7 @@ private:
         return {time, set_point, control, output};
     }
     
-    PlottingBuffers const
+    Plotting_Buffers const
     simulate_open_closed_loop(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase * input_signal, ControlMode const & control_mode) const 
     {
         input_signal -> reset();
@@ -116,7 +116,7 @@ private:
         return {time, set_point, control, output};
     }
 
-    PlottingBuffers const
+    Plotting_Buffers const
     simulate_component(SimumlationObjectBase * object, SignalBase * input_signal) const 
     {
         input_signal -> reset();
@@ -136,7 +136,7 @@ private:
     }
 
     template<typename TunerT>
-    PlottingBuffers const
+    Plotting_Buffers const
     simulate_tuner(SignalBase * input_signal, TunerT tuner) const 
     {
         std::vector<double> time {};
@@ -158,7 +158,7 @@ private:
     }
 
     void
-    plot_test(PlottingBuffers const & buffers, ControlMode const & control_mode, bool plot_control, std::string signal_plot_title = "") const 
+    plot_test(Plotting_Buffers const & buffers, ControlMode const & control_mode, bool plot_control, std::string signal_plot_title = "") const 
     {
         plt::figure();
         if(!signal_plot_title.empty())

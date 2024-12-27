@@ -12,26 +12,25 @@
 #include "pid_tuner.h"
 
 
-class PidTuningTest :  public testing::Test, public TestWithPlot
+class PidTuningTest :  public testing::Test, public Test_With_Plot
 {   
     static constexpr std::uint8_t _order = 2u;
     static constexpr double _time_step = 0.01;
-    using Base = TestWithPlot;
     using ObjectEquationT =  ObjectDifferentialEquationRepresentation;
     using ObjectStateSpaceT =  ObjectStateSpaceRepresentation;
 protected:
-    PidTuningTest() : TestWithPlot(30.0) {}
+    PidTuningTest() : Test_With_Plot(30.0) {}
 
     void
     test_tuner_object_differential_equation_representation()
     {
-        Base::test_tuner<PidTuner>(&_sine_wave_1, _tuner_1);
+        Test_With_Plot::test_tuner<PidTuner>(&_sine_wave_1, _tuner_1);
     }
     
     void
     test_tuner_object_state_space_representation()
     {
-        Base::test_tuner<PidTuner>(&_sine_wave_2, _tuner_2);
+        Test_With_Plot::test_tuner<PidTuner>(&_sine_wave_2, _tuner_2);
     }
 
 private:

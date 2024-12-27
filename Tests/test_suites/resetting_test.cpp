@@ -10,31 +10,30 @@
 #include "recursive_linear_regression.h"
 #include "pid_tuner.h"
 
-class ResettingTest :  public testing::Test, public TestWithPlot
+class ResettingTest :  public testing::Test, public Test_With_Plot
 {   
     static constexpr std::uint8_t _order = 2u;
     static constexpr double _time_step = 0.01;
-    using Base = TestWithPlot;
     using ObjectEquationT =  ObjectDifferentialEquationRepresentation;
 protected:
-    ResettingTest() : TestWithPlot(30.0) {}
+    ResettingTest() : Test_With_Plot(30.0) {}
 
     void
     test_closed_loop_with_resets()
     {
-        Base::test_closed_loop_control(&_object_differential_equation_representation, &_pid, &_step);
+        Test_With_Plot::test_closed_loop_control(&_object_differential_equation_representation, &_pid, &_step);
         _object_differential_equation_representation.reset();
         _pid.reset();
-        Base::test_closed_loop_control(&_object_differential_equation_representation, &_pid, &_step);
+        Test_With_Plot::test_closed_loop_control(&_object_differential_equation_representation, &_pid, &_step);
     }
 
     void
     test_tuning_with_resets()
     {
-        Base::test_tuner<PidTuner>(&_step, _tuner, true);
+        Test_With_Plot::test_tuner<PidTuner>(&_step, _tuner, true);
         _tuner.reset();
         _step.reset();
-        Base::test_tuner<PidTuner>(&_step, _tuner, true);
+        Test_With_Plot::test_tuner<PidTuner>(&_step, _tuner, true);
     }
 private:
     Heaviside _step {_time_step, {5.0, 1.0}};

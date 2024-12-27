@@ -7,24 +7,23 @@
 #include "pid.h"
 #include "object_differential_equation_representation.h"
 
-class ControlSystemWithPidTest :  public testing::Test, public TestWithPlot
+class ControlSystemWithPidTest :  public testing::Test, public Test_With_Plot
 {   
-    using Base = TestWithPlot;
     using ObjectT =  ObjectDifferentialEquationRepresentation;
     static constexpr uint8_t order = 2u;
 protected:
-    ControlSystemWithPidTest() : TestWithPlot(15.0) {}
+    ControlSystemWithPidTest() : Test_With_Plot(15.0) {}
 
     void
     test_open_loop_control()
     {
-        Base::test_open_loop_control(&_object, &_pid, &_sine_wave);
+        Test_With_Plot::test_open_loop_control(&_object, &_pid, &_sine_wave);
     }
 
     void
     test_closed_loop_control()
     {
-        Base::test_closed_loop_control(&_object, &_pid, &_sine_wave);
+        Test_With_Plot::test_closed_loop_control(&_object, &_pid, &_sine_wave);
     }
 
 private:
