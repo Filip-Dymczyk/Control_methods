@@ -11,11 +11,15 @@
 class State
 {
 public:
-    State(double time_step, std::uint32_t order, std::vector<double> const & init_state)
+    State(double time_step, std::size_t order, std::vector<double> const & init_state)
     {
         assert(order > 0u);
         assert(order == init_state.size());
+        
         _order = order;
+        _init_state.reserve(_order);
+        _integrators.reserve(_order);
+
         for(const auto & state : init_state)
         {
             _init_state.push_back(state);
@@ -72,8 +76,34 @@ public:
             _integrators.at(i) = I;
         }
     }
+
+    void
+    set_time_step(double time_step)
+    {
+        for(auto & integrator : _integrators)
+        {
+            integrator.set_time_step(time_step);
+        }
+    }
+
+    void
+    set_order(std::size_t order)
+    {
+        double const time_step = _integrators.at(0).get_time_step();
+        _order = order;
+        _init_state = std::vector<double>(order, 0.0);
+        _integrators = {};
+        _integrators.reserve(_order);
+
+        for(const auto & state : _init_state)
+        {
+            Integrator I {time_step, state};
+            _integrators.push_back(I);
+        }
+    }
+
 private:
-    std::uint32_t _order {};
+    std::size_t _order {};
     std::vector<double> _init_state {};
-    std::vector<Integrator> _integrators;
+    std::vector<Integrator> _integrators {};
 };

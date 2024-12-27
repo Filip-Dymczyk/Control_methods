@@ -32,6 +32,12 @@ public:
     virtual void
     reset() = 0;
 
+    void
+    set_time_step(double time_step)
+    {
+        _time_step = time_step;
+    }
+
 protected:
     void
     set_value(double value)

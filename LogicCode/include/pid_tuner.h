@@ -19,7 +19,7 @@ public:
     {
         _control_system.update(input);
         _regression.update(_control_system.get_x(), _control_system.get_error());
-        _control_system.get_controller() -> set_params({_regression.get_coeffs()[0], _regression.get_coeffs()[1], _regression.get_coeffs()[2]});
+        _control_system.get_controller() -> set_parameters({_regression.get_coeffs()[0], _regression.get_coeffs()[1], _regression.get_coeffs()[2]});
     }
 
     double

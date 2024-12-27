@@ -2,8 +2,10 @@
 // Description : Class running the application GUI.
 
 #pragma once
-#include "main_window.h"
+
 #include <QtWidgets/QApplication>
+
+#include "main_window.h"
 
 class Application
 {

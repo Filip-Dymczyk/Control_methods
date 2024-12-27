@@ -3,13 +3,13 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "include/signals.h"
-#include "include/pid.h"
-#include "include/object_differential_equation_representation.h"
-#include "include/object_state_space_representation.h"
-#include "include/control_system.h"
-#include "include/recursive_linear_regression.h"
-#include "include/pid_tuner.h"
+#include "signals.h"
+#include "pid.h"
+#include "object_differential_equation_representation.h"
+#include "object_state_space_representation.h"
+#include "control_system.h"
+#include "recursive_linear_regression.h"
+#include "pid_tuner.h"
 
 
 class PidTuningTest :  public testing::Test, public TestWithPlot
@@ -35,13 +35,13 @@ protected:
     }
 
 private:
-    SineWave _sine_wave_1 {_time_step, 1.0, 1.0};
+    SineWave _sine_wave_1 {_time_step, 1.0, 1.0, {}};
     PID _pid_1 {_time_step, {}};
     ObjectEquationT _object_differential_equation_representation {_time_step, _order, {0.0, 0.0}, {2.0, 0.50, 3.0}};
     ControlSystem _system_1 {&_object_differential_equation_representation, &_pid_1, ControlMode::CLOSED_LOOP};
     PidTuner _tuner_1 {_system_1, {}};
 
-    SineWave _sine_wave_2 {_time_step, 1.0, 1.0};
+    SineWave _sine_wave_2 {_time_step, 1.0, 1.0, {}};
     PID _pid_2 {_time_step, {}};
     ObjectStateSpaceT _object_state_space_representation {_time_step, _order, {0.0, 0.0}, {{{0.0, 1.0}, {-0.5, -2.0}}}, {0.0, 3.0}, {1.0, 0.0}};
     ControlSystem _system_2 {&_object_state_space_representation, &_pid_2, ControlMode::CLOSED_LOOP};

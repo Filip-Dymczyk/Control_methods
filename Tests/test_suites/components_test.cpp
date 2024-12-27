@@ -3,12 +3,12 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "include/signals.h"
-#include "include/derivative.h"
-#include "include/integrator.h"
-#include "include/pid.h"
-#include "include/object_differential_equation_representation.h"
-#include "include/object_state_space_representation.h"
+#include "signals.h"
+#include "derivative.h"
+#include "integrator.h"
+#include "pid.h"
+#include "object_differential_equation_representation.h"
+#include "object_state_space_representation.h"
 
 class ComponentsTest :  public testing::Test, public TestWithPlot
 {
@@ -48,12 +48,12 @@ protected:
         test_component(&_object_state_space, &_sine_wave);
     }
 private:
-    SineWave _sine_wave {_time_step, 1.0, 1.0};
+    SineWave _sine_wave {_time_step, 1.0, 1.0, {}};
     Integrator _integrator {_time_step};
     Derivative _derivative {_time_step};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};
     ObjectDifferentialEquationRepresentation _object_differential_equation {_time_step, _order, init_state, {1.0, 1.0, 1.0}};
-    ObjectStateSpaceRepresentation _object_state_space {_time_step, _order, init_state, {{{1.0, 1.0}, {1.0, 1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
+    ObjectStateSpaceRepresentation _object_state_space {_time_step, _order, init_state, {{{0.0, 1.0}, {-1.0, -1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
 };
 
 TEST_F(ComponentsTest, IntegratorTest)

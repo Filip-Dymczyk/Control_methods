@@ -2,7 +2,7 @@
 // Description : PID controller class.
 
 #pragma once
-#include "controller_base.h"
+#include "base_classes/controller_base.h"
 #include "integrator.h"
 #include "derivative.h"
 
@@ -11,6 +11,19 @@ struct PID_Params
     double kp {};
     double ki {};
     double kd {};
+
+    PID_Params() = default;
+
+    PID_Params(std::vector<double> const& parameters)
+    {
+        assert(parameters.size() == 3u);
+
+        kp = parameters.at(0u);
+        ki = parameters.at(1u);
+        kd = parameters.at(2u);
+    }
+
+    PID_Params(std::initializer_list<double> const& parameters) : PID_Params(std::vector<double>(parameters)) {}
 };
 
 // NOTE: PID output will be computed as - kp * x + ki * int_x + kd * x'.
@@ -18,6 +31,8 @@ class PID : public ControllerBase
 {
 public:
     PID(double time_step, PID_Params const & params) : ControllerBase(time_step), _params(params) {}
+
+    PID(double time_step) : PID(time_step, {}) {}
     
     void
     update(double error) override
@@ -35,9 +50,9 @@ public:
     }
 
     void
-    set_params(PID_Params const & params) override
+    set_parameters(std::vector<double> const& parameters) override
     {
-        _params = params;
+        _params = {parameters};
     }
 
     void
@@ -48,6 +63,15 @@ public:
         _error_int.reset();
         _error_der.reset();
     }
+
+    void
+    set_time_step(double time_step)
+    {
+        SimumlationObjectBase::set_time_step(time_step);
+        _error_int.set_time_step(get_time_step());
+        _error_der.set_time_step(get_time_step());
+    }
+
 private:
     PID_Params _params {};
     Integrator _error_int {get_time_step()};

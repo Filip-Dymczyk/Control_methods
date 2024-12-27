@@ -3,12 +3,12 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "include/signals.h"
-#include "include/pid.h"
-#include "include/object_differential_equation_representation.h"
-#include "include/control_system.h"
-#include "include/recursive_linear_regression.h"
-#include "include/pid_tuner.h"
+#include "signals.h"
+#include "pid.h"
+#include "object_differential_equation_representation.h"
+#include "control_system.h"
+#include "recursive_linear_regression.h"
+#include "pid_tuner.h"
 
 class ResettingTest :  public testing::Test, public TestWithPlot
 {   

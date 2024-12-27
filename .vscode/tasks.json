@@ -1,35 +1,37 @@
 {
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "Build Application.",
-            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g", "${workspaceFolder}\\MainApp\\main.cpp",
-                "-o", "${workspaceFolder}\\builds\\app_build\\app.exe",
-                "-I", "${workspaceFolder}\\ApplicationCode\\include",
-                "-I", "${workspaceFolder}\\LogicCode\\include",
-                "-I", "C:\\Qt\\6.7.2\\mingw_64\\include",
-                "-L", "C:\\Qt\\6.7.2\\mingw_64\\lib",
-                "-lQt6Widgets",
-                "-lQt6Core",
-                "-lQt6Gui" ,
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
+            "label": "Build Application",
+            "type": "shell",
+            "command": "${workspaceFolder}\\build_app.bat",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "detail": "Task building the main application."
+            "problemMatcher": []
         },
         {
-            "label": "Run Application.",
+            "label": "Build Application Debug",
+            "type": "shell",
+            "command": "${workspaceFolder}\\build_app_debug.bat",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}\\build_tests.bat",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Application",
             "type": "shell",
             "command": "${workspaceFolder}\\builds\\app_build\\app.exe",
             "group": {
@@ -42,70 +44,24 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "detail": "Task running the main application."
         },
         {
-            "label": "CMake: Configure",
+            "label": "Run Application Debug",
             "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-S", ".",
-                "-B", "builds/test_builds"
-                
-            ],
+            "command": "gdb ${workspaceFolder}\\builds\\debug_build\\app_debug.exe",
             "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "CMake: Build",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build", "builds/test_builds",
-                "--config=Release"
-            ],
-            "dependsOn": "CMake: Configure",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "CMake: Build Again", // Forcing the build for the second time to ensure correct python libraries import.
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build", "builds/test_builds",
-                "--config=Release"
-            ],
-            "dependsOn": "CMake: Build",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "Build Tests.",
-            "dependsOn": [
-                "CMake: Configure",
-                "CMake: Build",
-                "CMake: Build Again"
-            ],
-            "dependsOrder": "sequence",
-            "group": {
-                "kind": "build",
+                "kind": "test",
                 "isDefault": true
             },
-            "problemMatcher": [],
-            "detail": "Task buidling all tests defined in the CMakeLists.txt."
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
         },
         {
-            "label": "Run Tests by the test suite name.",
+            "label": "Run Tests by the test suite name",
             "type": "shell",
             "command": "ctest",
             "args": [
@@ -121,7 +77,6 @@
             "options": {
                 "cwd": "${workspaceFolder}/builds/test_builds"
             },
-            "detail": "Task running all tests which have been built."
         }
     ],
     "version": "2.0.0",
@@ -129,7 +84,7 @@
         {
             "id": "testName",
             "type": "promptString",
-            "description": "Enter the test name or pattern to run",
+            "description": "Enter the test name or pattern to run:",
             "default": ""
         }
     ]

@@ -90,7 +90,14 @@
         "future": "cpp",
         "coroutine": "cpp",
         "resumable": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "qobject": "cpp",
+        "qvariant": "cpp",
+        "qvboxlayout": "cpp",
+        "qt": "cpp",
+        "qcombobox": "cpp",
+        "qspinbox": "cpp",
+        "qlineedit": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabled",
 }

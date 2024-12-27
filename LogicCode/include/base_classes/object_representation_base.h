@@ -18,6 +18,13 @@ public:
                             _order(order)
     {}
 
+    void
+    set_order(std::size_t order)
+    {
+        _order = order;
+        _state.set_order(order);
+    }
+
     std::size_t
     order() const
     {
@@ -30,6 +37,19 @@ public:
         set_value(get_initial_output());
         _state.reset();
     }
+
+    void
+    set_time_step(double time_step) 
+    {
+        _state.set_time_step(time_step);
+    }
+
+    virtual void
+    set_parameters(std::vector<double> const&) 
+    {
+
+    }
+
 protected:
     std::size_t _order {};
     State _state;

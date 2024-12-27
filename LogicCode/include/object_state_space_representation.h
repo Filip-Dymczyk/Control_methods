@@ -4,7 +4,7 @@
 #pragma once
 #include <random>
 #include "algebra.h"
-#include "object_representation_base.h"
+#include "base_classes/object_representation_base.h"
 
 // NOTE: SISO object represented via state space:
 //              x' = Ax + Bu
@@ -12,7 +12,7 @@
 // where: n - number of state variables,
 // A is [n x n] matrix, B is [n x 1] vector, C is [1 x n] transposed vector D is a scalar (by default set to 0).
 // We allow entering whole matrices / vectors with coefficients.
-// When entering coeficients beware of mistakingly creating unstable objects!
+// When entering coefficients beware of mistakenly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
 class ObjectStateSpaceRepresentation : public ObjectRepresentationBase
@@ -39,10 +39,15 @@ public:
         _D = D;
     }
 
+    ObjectStateSpaceRepresentation(double time_step, std::uint32_t order) :
+    ObjectStateSpaceRepresentation(time_step, order, VectorT(order), MatrixT(order, VectorT(order)), VectorT(order), VectorT(order)) {}
+
     void 
     update(double control) override
     {
         VectorT const current_state = get_current_state();
+        set_value(vectors_multiplication_scalar_product<VectorT>(_C, current_state) /*+ measurement_noise()*/);
+
         VectorT A_x (order());
         matrix_vector_multiplication_vector_product<MatrixT, VectorT>(A_x, _A, current_state);
         VectorT B_u = _B;
@@ -50,19 +55,19 @@ public:
         VectorT new_state_derivative (order());
         add_vectors<VectorT>(new_state_derivative, A_x, B_u);
         _state.update(new_state_derivative);
-        
-        set_value(vectors_multiplication_scalar_product<VectorT>(_C, current_state) + measurement_noise());
     }
 private:
-    MatrixT _A;
-    VectorT _B;
-    VectorT _C;
+    MatrixT _A {};
+    VectorT _B {};
+    VectorT _C {};
     double _D {};
 
     VectorT
     get_current_state() const
     {
         VectorT current_state {};
+        current_state.reserve(order());
+
         for(std::size_t i = 0; i < order(); i++)
         {
             current_state.push_back(_state.get_value(i));

@@ -2,21 +2,36 @@
 // Description : Two-position controller class.
 
 #pragma once
-#include "controller_base.h"
+#include "base_classes/controller_base.h"
 
 struct Two_Position_Controller_Params
 {
     double A1 {};
-    double A2 {1.0};
+    double A2 {};
     double hist {};
-};
 
-// NOTE: Two position controller with histeresis.
+    Two_Position_Controller_Params() = default;
+
+    Two_Position_Controller_Params(std::vector<double> const& parameters)
+    {
+        assert(parameters.size() == 3u);
+
+        A1 = parameters.at(0u);
+        A2 = parameters.at(1u);
+        hist = parameters.at(2u);
+    }
+
+    Two_Position_Controller_Params(std::initializer_list<double> const& parameters) : Two_Position_Controller_Params(std::vector<double>(parameters)) {}
+};
+// TODO: Renaming for Bang_Bang_Controller
+// NOTE: Two position controller with hysteresis.
 class TwoPositionController : public ControllerBase
 {
 public:
-    TwoPositionController(double time_step, Two_Position_Controller_Params const & params = {}) : ControllerBase(time_step), _params(params) {}
+    TwoPositionController(double time_step, Two_Position_Controller_Params const & params) : ControllerBase(time_step), _params(params) {}
     
+    TwoPositionController(double time_step) : TwoPositionController(time_step, {}) {}
+        
     void
     update(double error) override
     {   
@@ -32,9 +47,15 @@ public:
     }
 
     void
-    set_params(Two_Position_Controller_Params const & params)
+    set_parameters(Two_Position_Controller_Params const& parameters)
     {
-        _params = params;
+        _params = parameters;
+    }
+
+    void
+    set_parameters(std::vector<double> const& parameters) override
+    {
+        _params = {parameters};
     }
 
     void 

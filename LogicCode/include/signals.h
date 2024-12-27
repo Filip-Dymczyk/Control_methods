@@ -4,80 +4,15 @@
 #pragma once
 #include <cstdint>
 #include <math.h>
-#include "integrator.h"
-
-// NOTE: Base class for signals.
-class Signal
-{
-public:
-    struct SignalBasicParameters
-    {
-        double start_time {};
-        double scaler {1.0};
-    };
-
-    Signal(double time_step, SignalBasicParameters const & params) : _timer(time_step), _params(params) {}
-
-    virtual void
-    update() = 0;
-
-    void
-    update_timer()
-    {
-        _timer.update(1.0);
-    }
-
-    double
-    time() const
-    {
-        return _timer.get_value();
-    }
-
-    double
-    get_time_step() const
-    {
-        return _timer.get_time_step();
-    }
-
-    double 
-    get_value() const
-    {
-        return _value;
-    }
-
-    void 
-    set_parmeters(SignalBasicParameters const & params)
-    {
-        _params = params;
-    }
-
-    virtual void
-    reset() = 0;
-
-protected:
-    SignalBasicParameters _params {};
-
-    void
-    set_value(double value)
-    {
-        _value = value;
-    }
-
-    void
-    reset_timer()
-    {
-        _timer.reset();
-    }
-private:
-    double _value {};
-    Integrator _timer {};
-};
+#include "base_classes/signal_base.h"
 
 // NOTE: Heaviside function - a * 1(t - t0).
-class Heaviside : public Signal
+class Heaviside : public SignalBase
 {
 public:
-    Heaviside(double time_step, SignalBasicParameters const & params = {}) : Signal(time_step, params) {}
+    Heaviside(double time_step, SignalBasicParameters const & params) : SignalBase(time_step, params) {}
+
+    Heaviside(double time_step) : Heaviside(time_step, {}) {}
 
     void
     update() override
@@ -98,7 +33,9 @@ public:
 class Ramp : public Heaviside
 {
 public:
-    Ramp(double time_step, SignalBasicParameters const & params = {}) : Heaviside(time_step, params) {}
+    Ramp(double time_step, SignalBasicParameters const & params) : Heaviside(time_step, params) {}
+    
+    Ramp(double time_step) : Ramp(time_step, {}) {}
 
     void
     update() override
@@ -110,14 +47,16 @@ public:
 };
 
 // NOTE: Rectangle - a * (1(t - t0) - 1(t - t1)).
-class Rectangle : public Signal
+class Rectangle : public SignalBase
 {
 public:
-    Rectangle(double time_step, double on_time, SignalBasicParameters const & params = {}) : Signal(time_step, params)
+    Rectangle(double time_step, double on_time, SignalBasicParameters const & params): SignalBase(time_step, params)
     {
-        assert(on_time > 0.0);
+        assert(on_time >= 0.0);
         _on_time = on_time;
     }
+
+    Rectangle(double time_step) : Rectangle(time_step, {}, {}) {}
 
     void
     update() override
@@ -133,7 +72,7 @@ public:
     {
         set_value(0.0);
         reset_timer();
-        _on_timer = 0.0;
+        reset_on_timer();
     }
 protected:
     void
@@ -160,10 +99,12 @@ private:
 
 // NOTE: Sine wave - {a * sin(w * t) + b; t > t0
 //                   {0.0; t <= t0.
-class SineWave : public Signal
+class SineWave : public SignalBase
 {
 public:
-    SineWave(double time_step, double omega, double offset, SignalBasicParameters const & params = {}) : Signal(time_step, params), _omega(omega), _offset(offset) {}
+    SineWave(double time_step, double omega, double offset, SignalBasicParameters const & params) : SignalBase(time_step, params), _omega(omega), _offset(offset) {}
+
+    SineWave(double time_step) : SineWave(time_step, {}, {}, {}) {}
 
     void
     update() override
@@ -187,7 +128,9 @@ private:
 class PulseWave : public Rectangle
 {
 public:
-    PulseWave(double time_step, double duty_cycle, double period, SignalBasicParameters const & params = {}) : Rectangle(time_step, duty_cycle * period, params), _period(period) {}
+    PulseWave(double time_step, double duty_cycle, double period, SignalBasicParameters const & params) : Rectangle(time_step, duty_cycle * period, params), _period(period) {}
+
+    PulseWave(double time_step) : PulseWave(time_step, {}, {}, {}) {}
 
     void
     update() override

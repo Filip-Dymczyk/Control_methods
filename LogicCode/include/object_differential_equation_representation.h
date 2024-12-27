@@ -2,12 +2,12 @@
 // Description : Multi-order linear object represented by a single differential equation.
 
 #pragma once
-#include "object_representation_base.h"
+#include "base_classes/object_representation_base.h"
 
 // NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by corresponding coefficients + input value.
 // Lower order derivatives are equal to the integral of a higher one - simple relation.
-// Object coefficients interpretaion: e.g. x'' = -ax' - bx + cu.
-// When entering coeficients beware of mistakingly creating unstable objects!
+// Object coefficients interpretation: e.g. x'' = -ax' - bx + cu.
+// When entering coefficients beware of mistakenly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
 class ObjectDifferentialEquationRepresentation : public ObjectRepresentationBase
@@ -18,9 +18,13 @@ public:
                                             std::vector<double> const & coefficients) : 
                                             ObjectRepresentationBase(time_step, order, init_state)
     {
-        assert(coefficients.size() == order + 1);
+        assert(coefficients.size() == order + 1u);
+        _coefficients.reserve(order + 1u);
         _coefficients = coefficients;
     }
+
+    ObjectDifferentialEquationRepresentation(double time_step, std::uint32_t order)
+    : ObjectDifferentialEquationRepresentation(time_step, order, std::vector<double>(order), std::vector<double>(order + 1u)) {}
 
     void 
     update(double control) override
@@ -43,7 +47,14 @@ public:
         _state.update(highest_order_derivative_value);
 
         // Output (x) - last integrator value;
-        set_value(_state.get_value(_order - 1) + measurement_noise());
+        set_value(_state.get_value(_order - 1) /*+ measurement_noise()*/);
+    }
+
+    void
+    set_parameters(std::vector<double> const& object_parameters)
+    {
+        assert(object_parameters.size() == (order() + 1u));
+        _coefficients = object_parameters;
     }
     
     std::vector<double> const &

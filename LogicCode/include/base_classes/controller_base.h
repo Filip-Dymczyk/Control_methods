@@ -3,6 +3,7 @@
 
 #pragma once
 #include <array>
+#include <vector>
 #include "sim_object_base.h"
 
 struct PID_Params;
@@ -25,10 +26,7 @@ public:
     }
 
     virtual void
-    set_params(PID_Params const &) 
-    {
-        
-    }
+    set_parameters(std::vector<double> const&) = 0;
 
 protected:
     void

@@ -3,9 +3,9 @@
 
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "include/signals.h"
-#include "include/two_position_controller.h"
-#include "include/object_differential_equation_representation.h"
+#include "signals.h"
+#include "two_position_controller.h"
+#include "object_differential_equation_representation.h"
 
 static constexpr uint8_t order = 2u;
 class ControlSystemWithTwoPositionControllerTest :  public testing::Test, public TestWithPlot
@@ -29,7 +29,7 @@ protected:
 
 private:
     double const _time_step = 0.01;
-    PulseWave _pulse {_time_step, 0.75, 4.0};
+    PulseWave _pulse {_time_step, 0.75, 4.0, {}};
     TwoPositionController _two_position_controller {_time_step, {0.0, 1.0, 1.0}};
     ObjectT _object {_time_step, order, {0.0, 0.0}, {1.0, 1.0, 1.0}};
 };
