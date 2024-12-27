@@ -6,11 +6,11 @@
 #include "recursive_linear_regression.h"
 #include "control_system.h"
 
-class PidTuner
+class Pid_Tuner
 {
 public:
-    PidTuner(ControlSystem & control_system, 
-            RecursiveLinearRegression const & regression) : 
+    Pid_Tuner(Control_System & control_system, 
+            Recursive_Linear_Regression const & regression) : 
             _control_system(control_system), 
             _regression(regression) {}
 
@@ -19,7 +19,7 @@ public:
     {
         _control_system.update(input);
         _regression.update(_control_system.get_x(), _control_system.get_error());
-        _control_system.get_controller() -> set_parameters({_regression.get_coeffs()[0], _regression.get_coeffs()[1], _regression.get_coeffs()[2]});
+        _control_system.get_controller() -> set_parameters({_regression.get_coefficients()[0], _regression.get_coefficients()[1], _regression.get_coefficients()[2]});
     }
 
     double
@@ -47,6 +47,6 @@ public:
         _regression.reset();
     }
 private:
-    ControlSystem & _control_system;
-    RecursiveLinearRegression _regression {};
+    Control_System & _control_system;
+    Recursive_Linear_Regression _regression {};
 };

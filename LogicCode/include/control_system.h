@@ -5,29 +5,30 @@
 #include "base_classes/object_representation_base.h"
 #include "base_classes/controller_base.h"
 
-enum class ControlMode
-{
-    OPEN_LOOP,
-    CLOSED_LOOP,
-    NONE
-};
 
 // NOTE: Open/closed control system comprised of an object model and a controller.
-class ControlSystem
+class Control_System
 {
 public:
-    ControlSystem(ObjectRepresentationBase * object, 
-                ControllerBase * controller, 
-                ControlMode const& control_mode) : 
+    enum class Control_Mode : std::uint8_t
+    {
+        OPEN_LOOP,
+        CLOSED_LOOP,
+        NONE
+    };
+
+    Control_System(Object_Representation_Base * object, 
+                Controller_Base * controller, 
+                Control_Mode const& control_mode) : 
                 _object(object), 
                 _controller(controller), 
                 _control_mode(control_mode) {}
 
     void
-    update(double const set_point)
+    update(double set_point)
     {
         _set_point = set_point;
-        if(_control_mode == ControlMode::OPEN_LOOP)
+        if(_control_mode == Control_Mode::OPEN_LOOP)
         {
             _controller -> update(set_point);
         }
@@ -69,19 +70,19 @@ public:
         return _controller -> get_x();
     }
     
-    ControllerBase const *
+    Controller_Base const *
     get_controller() const
     {
         return _controller;
     }
 
-    ControllerBase *
+    Controller_Base *
     get_controller()
     {
         return _controller;
     }
 
-    ControlMode
+    Control_Mode
     get_control_mode() const
     {
         return _control_mode;
@@ -96,14 +97,14 @@ public:
     }
 
     void
-    set_control_mode(ControlMode control_mode)
+    set_control_mode(Control_Mode control_mode)
     {
         _control_mode = control_mode;
     }
 
 private:
     double _set_point {};
-    ControlMode _control_mode {};
-    ObjectRepresentationBase * _object {nullptr};
-    ControllerBase * _controller {nullptr};
+    Control_Mode _control_mode {};
+    Object_Representation_Base * _object {nullptr};
+    Controller_Base * _controller {nullptr};
 };

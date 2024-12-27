@@ -4,14 +4,14 @@
 #pragma once
 #include <array>
 #include <vector>
-#include "sim_object_base.h"
+#include "simulation_object_base.h"
 
 struct PID_Params;
 
-class ControllerBase : public SimumlationObjectBase
+class Controller_Base : public Simulation_Object_Base
 {
 public:
-    ControllerBase(double time_step) : SimumlationObjectBase(time_step) {}
+    Controller_Base(double time_step) : Simulation_Object_Base(time_step) {}
 
     double
     get_error() const

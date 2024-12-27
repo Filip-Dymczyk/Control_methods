@@ -10,21 +10,21 @@
 // When entering coefficients beware of mistakenly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
-class ObjectDifferentialEquationRepresentation : public ObjectRepresentationBase
+class Object_Differential_Equation_Representation : public Object_Representation_Base
 {   
 public:
-    ObjectDifferentialEquationRepresentation(double time_step, std::uint32_t order,  
+    Object_Differential_Equation_Representation(double time_step, std::size_t order,  
                                             std::vector<double> const & init_state, 
                                             std::vector<double> const & coefficients) : 
-                                            ObjectRepresentationBase(time_step, order, init_state)
+                                            Object_Representation_Base(time_step, order, init_state)
     {
         assert(coefficients.size() == order + 1u);
         _coefficients.reserve(order + 1u);
         _coefficients = coefficients;
     }
 
-    ObjectDifferentialEquationRepresentation(double time_step, std::uint32_t order)
-    : ObjectDifferentialEquationRepresentation(time_step, order, std::vector<double>(order), std::vector<double>(order + 1u)) {}
+    Object_Differential_Equation_Representation(double time_step, std::size_t order)
+    : Object_Differential_Equation_Representation(time_step, order, std::vector<double>(order), std::vector<double>(order + 1u)) {}
 
     void 
     update(double control) override
@@ -58,7 +58,7 @@ public:
     }
     
     std::vector<double> const &
-    get_coefss() const
+    get_coefficients() const
     {
         return _coefficients;
     }

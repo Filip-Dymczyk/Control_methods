@@ -48,12 +48,12 @@ protected:
         Test_With_Plot::test_component(&_object_state_space, &_sine_wave);
     }
 private:
-    SineWave _sine_wave {_time_step, 1.0, 1.0, {}};
+    Sine_Wave _sine_wave {_time_step, 1.0, 1.0, {}};
     Integrator _integrator {_time_step};
     Derivative _derivative {_time_step};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};
-    ObjectDifferentialEquationRepresentation _object_differential_equation {_time_step, _order, init_state, {1.0, 1.0, 1.0}};
-    ObjectStateSpaceRepresentation _object_state_space {_time_step, _order, init_state, {{{0.0, 1.0}, {-1.0, -1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
+    Object_Differential_Equation_Representation _object_differential_equation {_time_step, _order, init_state, {1.0, 1.0, 1.0}};
+    Object_State_Space_Representation _object_state_space {_time_step, _order, init_state, {{{0.0, 1.0}, {-1.0, -1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
 };
 
 TEST_F(ComponentsTest, IntegratorTest)

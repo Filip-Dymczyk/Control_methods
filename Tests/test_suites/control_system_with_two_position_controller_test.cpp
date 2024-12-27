@@ -10,7 +10,7 @@
 static constexpr uint8_t order = 2u;
 class ControlSystemWithTwoPositionControllerTest :  public testing::Test, public Test_With_Plot
 {   
-    using ObjectT =  ObjectDifferentialEquationRepresentation;
+    using ObjectT =  Object_Differential_Equation_Representation;
 protected:
     ControlSystemWithTwoPositionControllerTest() : Test_With_Plot(15.0) {}
 
@@ -28,8 +28,8 @@ protected:
 
 private:
     double const _time_step = 0.01;
-    PulseWave _pulse {_time_step, 0.75, 4.0, {}};
-    TwoPositionController _two_position_controller {_time_step, {0.0, 1.0, 1.0}};
+    Pulse_Wave _pulse {_time_step, 0.75, 4.0, {}};
+    Two_Position_Controller _two_position_controller {_time_step, {0.0, 1.0, 1.0}};
     ObjectT _object {_time_step, order, {0.0, 0.0}, {1.0, 1.0, 1.0}};
 };
 

@@ -4,16 +4,16 @@
 #pragma once
 #include <random>
 #include <vector>
-#include "sim_object_base.h"
+#include "simulation_object_base.h"
 #include "state.h"
 
-class ObjectRepresentationBase : public SimumlationObjectBase
+class Object_Representation_Base : public Simulation_Object_Base
 {   
 public:
-    ObjectRepresentationBase(double time_step, 
+    Object_Representation_Base(double time_step, 
                             std::uint32_t order, 
                             std::vector<double> const & init_state) : 
-                            SimumlationObjectBase(time_step), 
+                            Simulation_Object_Base(time_step), 
                             _state(time_step, order, init_state), 
                             _order(order)
     {}

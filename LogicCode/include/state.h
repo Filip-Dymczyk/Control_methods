@@ -11,18 +11,18 @@
 class State
 {
 public:
-    State(double time_step, std::size_t order, std::vector<double> const & init_state)
+    State(double time_step, std::size_t order, std::vector<double> const & initial_state)
     {
         assert(order > 0u);
-        assert(order == init_state.size());
+        assert(order == initial_state.size());
         
         _order = order;
-        _init_state.reserve(_order);
+        _initial_state.reserve(_order);
         _integrators.reserve(_order);
 
-        for(const auto & state : init_state)
+        for(const auto & state : initial_state)
         {
-            _init_state.push_back(state);
+            _initial_state.push_back(state);
             Integrator I {time_step, state};
             _integrators.push_back(I);
         }
@@ -38,8 +38,8 @@ public:
     double
     get_init_state(std::size_t idx) const
     {
-        assert(idx < _init_state.size());
-        return _init_state.at(idx);
+        assert(idx < _initial_state.size());
+        return _initial_state.at(idx);
     }
 
     void
@@ -67,12 +67,12 @@ public:
     void
     reset()
     {
-        assert(_order == _init_state.size());
+        assert(_order == _initial_state.size());
         assert(_order == _integrators.size());
         double const time_step = _integrators.at(0).get_time_step();
         for(std::size_t i = 0; i < _order; i++)
         {
-            Integrator I {time_step, _init_state.at(i)};
+            Integrator I {time_step, _initial_state.at(i)};
             _integrators.at(i) = I;
         }
     }
@@ -91,11 +91,11 @@ public:
     {
         double const time_step = _integrators.at(0).get_time_step();
         _order = order;
-        _init_state = std::vector<double>(order, 0.0);
+        _initial_state = std::vector<double>(order, 0.0);
         _integrators = {};
         _integrators.reserve(_order);
 
-        for(const auto & state : _init_state)
+        for(const auto & state : _initial_state)
         {
             Integrator I {time_step, state};
             _integrators.push_back(I);
@@ -104,6 +104,6 @@ public:
 
 private:
     std::size_t _order {};
-    std::vector<double> _init_state {};
+    std::vector<double> _initial_state {};
     std::vector<Integrator> _integrators {};
 };

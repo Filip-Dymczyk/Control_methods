@@ -4,16 +4,16 @@
 #pragma once
 #include "integrator.h"
 
-class SignalBase
+class Signal_Base
 {
 public:
-    struct SignalBasicParameters
+    struct Signal_Basic_Parameters
     {
         double start_time {};
         double scaler {1.0};
     };
 
-    SignalBase(double time_step, SignalBasicParameters const & params) : _timer(time_step), _params(params) {}
+    Signal_Base(double time_step, Signal_Basic_Parameters const & parameters) : _timer(time_step), _parameters(parameters) {}
 
     virtual void
     update() = 0;
@@ -43,9 +43,9 @@ public:
     }
 
     void 
-    set_parmeters(SignalBasicParameters const & params)
+    set_parameters(Signal_Basic_Parameters const & parameters)
     {
-        _params = params;
+        _parameters = parameters;
     }
 
     virtual void
@@ -58,7 +58,7 @@ public:
     }
 
 protected:
-    SignalBasicParameters _params {};
+    Signal_Basic_Parameters _parameters {};
 
     void
     set_value(double value)

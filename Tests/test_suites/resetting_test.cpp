@@ -14,7 +14,7 @@ class ResettingTest :  public testing::Test, public Test_With_Plot
 {   
     static constexpr std::uint8_t _order = 2u;
     static constexpr double _time_step = 0.01;
-    using ObjectEquationT =  ObjectDifferentialEquationRepresentation;
+    using ObjectEquationT =  Object_Differential_Equation_Representation;
 protected:
     ResettingTest() : Test_With_Plot(30.0) {}
 
@@ -30,18 +30,18 @@ protected:
     void
     test_tuning_with_resets()
     {
-        Test_With_Plot::test_tuner<PidTuner>(&_step, _tuner, true);
+        Test_With_Plot::test_tuner<Pid_Tuner>(&_step, _tuner, true);
         _tuner.reset();
         _step.reset();
-        Test_With_Plot::test_tuner<PidTuner>(&_step, _tuner, true);
+        Test_With_Plot::test_tuner<Pid_Tuner>(&_step, _tuner, true);
     }
 private:
     Heaviside _step {_time_step, {5.0, 1.0}};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};
     ObjectEquationT _object_differential_equation_representation {_time_step, _order, {0.0, -1.0}, {2.0, 0.50, 3.0}};
-    ControlSystem _system {&_object_differential_equation_representation, &_pid, ControlMode::CLOSED_LOOP};
-    RecursiveLinearRegression _regression {};
-    PidTuner _tuner {_system, _regression};
+    Control_System _system {&_object_differential_equation_representation, &_pid, Control_System::Control_Mode::CLOSED_LOOP};
+    Recursive_Linear_Regression _regression {};
+    Pid_Tuner _tuner {_system, _regression};
 };
 
 TEST_F(ResettingTest, ClosedLoopResetsTest)

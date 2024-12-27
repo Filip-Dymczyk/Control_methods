@@ -5,12 +5,12 @@
 #include <array>
 #include "algebra.h"
 
-class RecursiveLinearRegression
+class Recursive_Linear_Regression
 {
     using VectorT = std::array<double, 3u>;
     using MatrixT = std::array<std::array<double, 3u>, 3u>;
 public:
-    RecursiveLinearRegression(double lambda = 0.99) 
+    Recursive_Linear_Regression(double lambda = 0.99) 
     {
         _lambda = (lambda > 0.0 && lambda <= 1.0) ? lambda : 1.0;
         create_diagonal_matrix<MatrixT>(_P , 1.0);
@@ -51,7 +51,7 @@ public:
     }
 
     VectorT const &
-    get_coeffs() const
+    get_coefficients() const
     {
         return _coefficients;
     }

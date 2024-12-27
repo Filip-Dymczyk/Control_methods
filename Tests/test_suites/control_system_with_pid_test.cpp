@@ -9,7 +9,7 @@
 
 class ControlSystemWithPidTest :  public testing::Test, public Test_With_Plot
 {   
-    using ObjectT =  ObjectDifferentialEquationRepresentation;
+    using ObjectT =  Object_Differential_Equation_Representation;
     static constexpr uint8_t order = 2u;
 protected:
     ControlSystemWithPidTest() : Test_With_Plot(15.0) {}
@@ -28,7 +28,7 @@ protected:
 
 private:
     double const _time_step = 0.01;
-    SineWave _sine_wave {_time_step, 20.0, 5.0, {}};
+    Sine_Wave _sine_wave {_time_step, 20.0, 5.0, {}};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};
     ObjectT _object {_time_step, order, {0.0, 0.0}, {1.0, 1.0, 1.0}};
 };
