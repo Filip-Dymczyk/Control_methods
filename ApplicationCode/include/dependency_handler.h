@@ -7,12 +7,12 @@
 
 #include "inputs_parser.h"
 
-class DependencyHandler : public QObject
+class Dependency_Handler : public QObject
 {
     Q_OBJECT
 
 public:
-    InputParameterContainer const&
+    Input_Parameters_Container const&
     get_input_parameters() const
     {
         return _inputs_parser.get_input_parameters();

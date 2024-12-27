@@ -7,7 +7,7 @@
 
 #include "enums.h"
 
-class InputParameterContainer
+class Input_Parameters_Container
 {
     struct Buttons_Inputs
     {

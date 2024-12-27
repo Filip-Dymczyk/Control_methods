@@ -11,7 +11,7 @@ class Simulator
 {
 public:
     void
-    update(InputParameterContainer const& input_parameters)
+    update(Input_Parameters_Container const& input_parameters)
     {
         _simulation_time = input_parameters.get_simulation_time();
         _simulation_time_step = input_parameters.get_simulation_time_step();

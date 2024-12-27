@@ -196,11 +196,11 @@ public:
         _inputs.set_simulation_time_step(simulation_timestep_line_edit->text().toDouble());
     }
 
-    InputParameterContainer const&
+    Input_Parameters_Container const&
     get_input_parameters() const
     {
         return _inputs;
     }
 private:
-    InputParameterContainer _inputs {};
+    Input_Parameters_Container _inputs {};
 };
