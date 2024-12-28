@@ -4,15 +4,15 @@
 #pragma once
 #include "base_classes/controller_base.h"
 
-struct Two_Position_Controller_Parameters
+struct Bang_Bang_Controller_Parameters
 {
     double A1 {};
     double A2 {};
     double hist {};
 
-    Two_Position_Controller_Parameters() = default;
+    Bang_Bang_Controller_Parameters() = default;
 
-    Two_Position_Controller_Parameters(std::vector<double> const& parameters)
+    Bang_Bang_Controller_Parameters(std::vector<double> const& parameters)
     {
         assert(parameters.size() == 3u);
 
@@ -21,16 +21,16 @@ struct Two_Position_Controller_Parameters
         hist = parameters.at(2u);
     }
 
-    Two_Position_Controller_Parameters(std::initializer_list<double> const& parameters) : Two_Position_Controller_Parameters(std::vector<double>(parameters)) {}
+    Bang_Bang_Controller_Parameters(std::initializer_list<double> const& parameters) : Bang_Bang_Controller_Parameters(std::vector<double>(parameters)) {}
 };
-// TODO: Renaming for Bang_Bang_Controller
-// NOTE: Two position controller with hysteresis.
-class Two_Position_Controller : public Controller_Base
+
+// NOTE: Bang Bang controller with hysteresis.
+class Bang_Bang_Controller : public Controller_Base
 {
 public:
-    Two_Position_Controller(double time_step, Two_Position_Controller_Parameters const & parameters) : Controller_Base(time_step), _parameters(parameters) {}
+    Bang_Bang_Controller(double time_step, Bang_Bang_Controller_Parameters const & parameters) : Controller_Base(time_step), _parameters(parameters) {}
     
-    Two_Position_Controller(double time_step) : Two_Position_Controller(time_step, {}) {}
+    Bang_Bang_Controller(double time_step) : Bang_Bang_Controller(time_step, {}) {}
         
     void
     update(double error) override
@@ -47,7 +47,7 @@ public:
     }
 
     void
-    set_parameters(Two_Position_Controller_Parameters const& parameters)
+    set_parameters(Bang_Bang_Controller_Parameters const& parameters)
     {
         _parameters = parameters;
     }
@@ -65,5 +65,5 @@ public:
         set_value(0.0);
     }
 private:
-    Two_Position_Controller_Parameters _parameters {};
+    Bang_Bang_Controller_Parameters _parameters {};
 };

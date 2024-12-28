@@ -11,7 +11,7 @@ class Object_Representation_Base : public Simulation_Object_Base
 {   
 public:
     Object_Representation_Base(double time_step, 
-                            std::uint32_t order, 
+                            std::size_t order, 
                             std::vector<double> const & init_state) : 
                             Simulation_Object_Base(time_step), 
                             _state(time_step, order, init_state), 
@@ -57,11 +57,11 @@ protected:
     double
     measurement_noise()
     {
-        return distribution(generator);
+        return _distribution(_generator);
     }
 private:
-    std::mt19937 generator;
-    std::normal_distribution<double> distribution {0.0, 0.1};
+    std::mt19937 _generator;
+    std::normal_distribution<double> _distribution {0.0, 0.1};
 
     double
     get_initial_output() const

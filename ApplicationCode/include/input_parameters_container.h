@@ -13,10 +13,10 @@ class Input_Parameters_Container
     {
         bool run_flag {};
         int order {1};
-        std::vector<double> object_parameters;
-        std::vector<double> controller_parameters;
-        double simulation_time;
-        double simulation_time_step;
+        std::vector<double> object_parameters {};
+        std::vector<double> controller_parameters {};
+        double simulation_time {};
+        double simulation_time_step {};
     };
 
     struct Combo_Boxes_Inputs

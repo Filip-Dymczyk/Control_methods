@@ -29,7 +29,7 @@ public:
     }
 
     void
-    plot(Control_System::Control_Mode const& control_mode)
+    plot(Control_System::Control_Mode control_mode)
     {
         plt::figure();
         switch(control_mode) 

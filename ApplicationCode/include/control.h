@@ -12,7 +12,7 @@
 #include "object_differential_equation_representation.h"
 #include "object_state_space_representation.h"
 #include "pid.h"
-#include "two_position_controller.h"
+#include "bang_bang_controller.h"
 #include "signals.h"
 #include "control_system.h"
 #include "recursive_linear_regression.h"
@@ -23,15 +23,15 @@
 class Control
 {
     // Default values needed for initialization.
-    static constexpr std::uint32_t ORDER {1u};
+    static constexpr std::size_t ORDER {1u};
     static constexpr double TIME_STEP {0.01};
 public:
     Control() : 
             _differential_equation_representation_object(TIME_STEP, ORDER), 
             _state_space_representation_object(TIME_STEP, ORDER),
             _pid_controller(TIME_STEP),
-            _two_position_controller(TIME_STEP),
-            _heaviside(TIME_STEP), // Default values - basically no signal.
+            _bang_bang_controller(TIME_STEP),
+            _heaviside(TIME_STEP),
             _ramp(TIME_STEP),
             _rect(TIME_STEP),
             _sine_wave(TIME_STEP),
@@ -39,7 +39,7 @@ public:
             _selected_object(&_differential_equation_representation_object),
             _selected_controller(&_pid_controller),
             _selected_input_signal(&_heaviside),
-            _regression{},
+            _regression(), 
             _system(_selected_object, _selected_controller, Control_System::Control_Mode::OPEN_LOOP),
             _tuner(_system, _regression),
             _operation_type(Operation_Type::SIMULATION)
@@ -83,7 +83,7 @@ public:
         {
             case Controller_Type::BANG_BANG:
             {
-                _selected_controller = &_two_position_controller;
+                _selected_controller = &_bang_bang_controller;
                 break;
             }
             case Controller_Type::PID:
@@ -190,7 +190,7 @@ private:
     Object_Differential_Equation_Representation _differential_equation_representation_object;
     Object_State_Space_Representation _state_space_representation_object;
     PID _pid_controller;
-    Two_Position_Controller _two_position_controller;
+    Bang_Bang_Controller _bang_bang_controller;
     Heaviside _heaviside;
     Ramp _ramp;
     Rectangle _rect;
