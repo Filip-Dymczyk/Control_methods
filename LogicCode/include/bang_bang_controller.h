@@ -1,5 +1,5 @@
 // Author: Filip Dymczyk
-// Description : Two-position controller class.
+// Description : Bang-Bang controller class.
 
 #pragma once
 #include "base_classes/controller_base.h"
@@ -24,7 +24,7 @@ struct Bang_Bang_Controller_Parameters
     Bang_Bang_Controller_Parameters(std::initializer_list<double> const& parameters) : Bang_Bang_Controller_Parameters(std::vector<double>(parameters)) {}
 };
 
-// NOTE: Bang Bang controller with hysteresis.
+// NOTE: Bang-Bang controller with hysteresis.
 class Bang_Bang_Controller : public Controller_Base
 {
 public:
