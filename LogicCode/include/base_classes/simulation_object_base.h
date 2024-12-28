@@ -5,11 +5,11 @@
 #include <iostream>
 #include <assert.h>
 
-class SimumlationObjectBase
+class Simulation_Object_Base
 {
 public:
-    SimumlationObjectBase() : _time_step(0.0) {}
-    SimumlationObjectBase(double time_step) : _time_step(time_step) 
+    Simulation_Object_Base() : _time_step(0.0) {}
+    Simulation_Object_Base(double time_step) : _time_step(time_step) 
     {
         assert(_time_step > 0.0);
     }

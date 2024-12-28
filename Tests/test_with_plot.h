@@ -4,7 +4,7 @@
 #pragma once
 #include <math.h>
 #include <string>
-#include "base_classes/sim_object_base.h"
+#include "base_classes/simulation_object_base.h"
 #include "base_classes/object_representation_base.h"
 #include "base_classes/controller_base.h"
 #include "base_classes/signal_base.h"
@@ -14,9 +14,9 @@
 namespace plt = matplotlibcpp;
 
 // NOTE: Allows to test components and control systems by plotting: set point, output and optionally - control value.
-class TestWithPlot
+class Test_With_Plot
 {
-    struct PlottingBuffers
+    struct Plotting_Buffers
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
@@ -25,48 +25,48 @@ class TestWithPlot
     };
 
 public:
-    TestWithPlot(double sim_time) : _sim_time(sim_time) {}
+    Test_With_Plot(double sim_time) : _sim_time(sim_time) {}
     
     void
-    test_signal(SignalBase * signal, std::string signal_plot_title)
+    test_signal(Signal_Base * signal, std::string signal_plot_title)
     {
         signal -> reset();
-        PlottingBuffers const buffers = simulate_signal(signal);
+        Plotting_Buffers const buffers = simulate_signal(signal);
         
-        plot_test(buffers, ControlMode::NONE, false, signal_plot_title);
+        plot_test(buffers, Control_System::Control_Mode::NONE, false, signal_plot_title);
     }
 
     void
-    test_closed_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase* input_signal, bool const plot_control = false) const 
+    test_closed_loop_control(Object_Representation_Base * object, Controller_Base * controller, Signal_Base* input_signal, bool const plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::CLOSED_LOOP);
+        Plotting_Buffers const buffers = simulate_open_closed_loop(object, controller, input_signal, Control_System::Control_Mode::CLOSED_LOOP);
 
-        plot_test(buffers, ControlMode::CLOSED_LOOP, plot_control);
+        plot_test(buffers, Control_System::Control_Mode::CLOSED_LOOP, plot_control);
     }
 
     void
-    test_open_loop_control(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase * input_signal, bool plot_control = false) const 
+    test_open_loop_control(Object_Representation_Base * object, Controller_Base * controller, Signal_Base * input_signal, bool plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_open_closed_loop(object, controller, input_signal, ControlMode::OPEN_LOOP);
+        Plotting_Buffers const buffers = simulate_open_closed_loop(object, controller, input_signal, Control_System::Control_Mode::OPEN_LOOP);
 
-        plot_test(buffers, ControlMode::OPEN_LOOP, plot_control);
+        plot_test(buffers, Control_System::Control_Mode::OPEN_LOOP, plot_control);
     }
 
     void
-    test_component(SimumlationObjectBase * component, SignalBase * input_signal, bool plot_control = false) const 
+    test_component(Simulation_Object_Base * component, Signal_Base * input_signal, bool plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_component(component, input_signal);
+        Plotting_Buffers const buffers = simulate_component(component, input_signal);
 
-        plot_test(buffers, ControlMode::NONE, plot_control);
+        plot_test(buffers, Control_System::Control_Mode::NONE, plot_control);
     }
 
     template<typename TunerT>
     void
-    test_tuner(SignalBase * input_signal, TunerT tuner,  bool plot_control = false) const 
+    test_tuner(Signal_Base * input_signal, TunerT tuner,  bool plot_control = false) const 
     {
-        PlottingBuffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
+        Plotting_Buffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
 
-        plot_test(buffers, ControlMode::CLOSED_LOOP, plot_control);
+        plot_test(buffers, Control_System::Control_Mode::CLOSED_LOOP, plot_control);
     }
 
     void
@@ -77,8 +77,8 @@ public:
 private:
     double _sim_time {};
 
-    PlottingBuffers const
-    simulate_signal(SignalBase * signal)
+    Plotting_Buffers const
+    simulate_signal(Signal_Base * signal)
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
@@ -94,11 +94,11 @@ private:
         return {time, set_point, control, output};
     }
     
-    PlottingBuffers const
-    simulate_open_closed_loop(ObjectRepresentationBase * object, ControllerBase * controller, SignalBase * input_signal, ControlMode const & control_mode) const 
+    Plotting_Buffers const
+    simulate_open_closed_loop(Object_Representation_Base * object, Controller_Base * controller, Signal_Base * input_signal, Control_System::Control_Mode const & control_mode) const 
     {
         input_signal -> reset();
-        ControlSystem control_loop {object, controller, control_mode};
+        Control_System control_loop {object, controller, control_mode};
         std::vector<double> time {};
         std::vector<double> set_point {};
         std::vector<double> control {};
@@ -116,8 +116,8 @@ private:
         return {time, set_point, control, output};
     }
 
-    PlottingBuffers const
-    simulate_component(SimumlationObjectBase * object, SignalBase * input_signal) const 
+    Plotting_Buffers const
+    simulate_component(Simulation_Object_Base * object, Signal_Base * input_signal) const 
     {
         input_signal -> reset();
         std::vector<double> time {};
@@ -136,8 +136,8 @@ private:
     }
 
     template<typename TunerT>
-    PlottingBuffers const
-    simulate_tuner(SignalBase * input_signal, TunerT tuner) const 
+    Plotting_Buffers const
+    simulate_tuner(Signal_Base * input_signal, TunerT tuner) const 
     {
         std::vector<double> time {};
         std::vector<double> set_point {};
@@ -158,7 +158,7 @@ private:
     }
 
     void
-    plot_test(PlottingBuffers const & buffers, ControlMode const & control_mode, bool plot_control, std::string signal_plot_title = "") const 
+    plot_test(Plotting_Buffers const & buffers, Control_System::Control_Mode const & control_mode, bool plot_control, std::string signal_plot_title = "") const 
     {
         plt::figure();
         if(!signal_plot_title.empty())
@@ -169,12 +169,12 @@ private:
         {
             switch(control_mode) 
             {
-                case ControlMode::CLOSED_LOOP:
+                case Control_System::Control_Mode::CLOSED_LOOP:
                 {
                     plt::title("Closed loop control system response");
                     break;
                 }
-                case ControlMode::OPEN_LOOP:
+                case Control_System::Control_Mode::OPEN_LOOP:
                 {
                     plt::title("Open loop control system response");
                     break;

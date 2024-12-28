@@ -12,7 +12,7 @@
 #include "object_differential_equation_representation.h"
 #include "object_state_space_representation.h"
 #include "pid.h"
-#include "two_position_controller.h"
+#include "bang_bang_controller.h"
 #include "signals.h"
 #include "control_system.h"
 #include "recursive_linear_regression.h"
@@ -23,15 +23,15 @@
 class Control
 {
     // Default values needed for initialization.
-    static constexpr std::uint32_t ORDER {1u};
+    static constexpr std::size_t ORDER {1u};
     static constexpr double TIME_STEP {0.01};
 public:
     Control() : 
             _differential_equation_representation_object(TIME_STEP, ORDER), 
             _state_space_representation_object(TIME_STEP, ORDER),
             _pid_controller(TIME_STEP),
-            _two_position_controller(TIME_STEP),
-            _heaviside(TIME_STEP), // Default values - basically no signal.
+            _bang_bang_controller(TIME_STEP),
+            _heaviside(TIME_STEP),
             _ramp(TIME_STEP),
             _rect(TIME_STEP),
             _sine_wave(TIME_STEP),
@@ -39,8 +39,8 @@ public:
             _selected_object(&_differential_equation_representation_object),
             _selected_controller(&_pid_controller),
             _selected_input_signal(&_heaviside),
-            _regression{},
-            _system(_selected_object, _selected_controller, ControlMode::OPEN_LOOP),
+            _regression(), 
+            _system(_selected_object, _selected_controller, Control_System::Control_Mode::OPEN_LOOP),
             _tuner(_system, _regression),
             _operation_type(Operation_Type::SIMULATION)
             {}
@@ -73,7 +73,7 @@ public:
     void
     set_control_mode(Control_Mode control_mode)
     {
-        _system.set_control_mode(static_cast<ControlMode>(control_mode));
+        _system.set_control_mode(static_cast<Control_System::Control_Mode>(control_mode));
     }
 
     void
@@ -83,7 +83,7 @@ public:
         {
             case Controller_Type::BANG_BANG:
             {
-                _selected_controller = &_two_position_controller;
+                _selected_controller = &_bang_bang_controller;
                 break;
             }
             case Controller_Type::PID:
@@ -172,7 +172,7 @@ public:
         _system.update(_selected_input_signal->get_value());
     }
 
-    ControlMode
+    Control_System::Control_Mode
     get_control_mode() const
     {
         return _system.get_control_mode();
@@ -187,22 +187,22 @@ public:
     }
 
 private:
-    ObjectDifferentialEquationRepresentation _differential_equation_representation_object;
-    ObjectStateSpaceRepresentation _state_space_representation_object;
+    Object_Differential_Equation_Representation _differential_equation_representation_object;
+    Object_State_Space_Representation _state_space_representation_object;
     PID _pid_controller;
-    TwoPositionController _two_position_controller;
+    Bang_Bang_Controller _bang_bang_controller;
     Heaviside _heaviside;
     Ramp _ramp;
     Rectangle _rect;
-    SineWave _sine_wave;
-    PulseWave _pulse_wave;
+    Sine_Wave _sine_wave;
+    Pulse_Wave _pulse_wave;
     
-    ObjectRepresentationBase * _selected_object;
-    ControllerBase * _selected_controller;
-    SignalBase * _selected_input_signal;
+    Object_Representation_Base * _selected_object;
+    Controller_Base * _selected_controller;
+    Signal_Base * _selected_input_signal;
 
-    RecursiveLinearRegression _regression;
-    ControlSystem _system;
-    PidTuner _tuner;
+    Recursive_Linear_Regression _regression;
+    Control_System _system;
+    Pid_Tuner _tuner;
     Operation_Type _operation_type;
 };

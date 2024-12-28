@@ -8,18 +8,18 @@
 #include "main_layout.h"
 #include "simulator.h"
 
-class MainWindow : public QWidget
+class Main_Window : public QWidget
 {
     static constexpr unsigned width = 400;
     static constexpr unsigned height = 800;
     QString const window_title = "Dynamical systems control methods.";
 public:
-    MainWindow() : _main_layout(this), _simulator()
+    Main_Window() : _main_layout(this), _simulator()
     {   
         this -> setWindowTitle(window_title);
         this -> setFixedSize(width, height);
         this -> setLayout(&_main_layout);
-        connect(&_main_layout, &MainLayout::show_plot_window, this, &MainWindow::show_plot_window);
+        connect(&_main_layout, &Main_Layout::show_plot_window, this, &Main_Window::show_plot_window);
     }  
 
     void
@@ -30,6 +30,6 @@ public:
         _simulator.show_plot();
     }
 private:
-    MainLayout _main_layout;
+    Main_Layout _main_layout;
     Simulator _simulator;
 };

@@ -16,7 +16,7 @@ class Inputs_Parser
 {
 public:
     bool
-    parse_button_id(Button_ID const& button_id, QWidget* parent)
+    parse_button_id(Button_ID button_id, QWidget* parent)
     {
         bool is_run = false;
         switch (button_id)
@@ -56,7 +56,7 @@ public:
     }
 
     void
-    parse_combo_box_id(Combo_Box_ID const& combo_box_id, int current_index)
+    parse_combo_box_id(Combo_Box_ID combo_box_id, int current_index)
     {
         switch (combo_box_id)
         {
@@ -196,11 +196,11 @@ public:
         _inputs.set_simulation_time_step(simulation_timestep_line_edit->text().toDouble());
     }
 
-    InputParameterContainer const&
+    Input_Parameters_Container const&
     get_input_parameters() const
     {
         return _inputs;
     }
 private:
-    InputParameterContainer _inputs {};
+    Input_Parameters_Container _inputs {};
 };

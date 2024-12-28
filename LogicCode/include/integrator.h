@@ -2,13 +2,13 @@
 // Description : Integrator class.
 
 #pragma once
-#include "base_classes/sim_object_base.h"
+#include "base_classes/simulation_object_base.h"
 
-class Integrator : public SimumlationObjectBase
+class Integrator : public Simulation_Object_Base
 {
 public:
-    Integrator() : SimumlationObjectBase() {}
-    Integrator(double time_step, double initial_state = 0.0) : SimumlationObjectBase(time_step) 
+    Integrator() : Simulation_Object_Base() {}
+    Integrator(double time_step, double initial_state = 0.0) : Simulation_Object_Base(time_step) 
     {
         set_value(initial_state);
     }

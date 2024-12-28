@@ -2,12 +2,12 @@
 // Description : Derivative class.
 
 #pragma once
-#include "base_classes/sim_object_base.h"
+#include "base_classes/simulation_object_base.h"
 
-class Derivative : public SimumlationObjectBase
+class Derivative : public Simulation_Object_Base
 {
 public:
-    Derivative(double time_step) : SimumlationObjectBase(time_step) {}
+    Derivative(double time_step) : Simulation_Object_Base(time_step) {}
 
     void
     update(double input) override

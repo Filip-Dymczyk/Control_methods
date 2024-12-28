@@ -15,20 +15,20 @@
 
 #include "dependency_handler.h"
 
-class MainLayout : public QVBoxLayout
+class Main_Layout : public QVBoxLayout
 {
     Q_OBJECT
 
 public:
-    MainLayout(QWidget * parent) : QVBoxLayout(parent)
+    Main_Layout(QWidget * parent) : QVBoxLayout(parent)
     {
-        connect(&_dependency_handler, &DependencyHandler::show_plot_window, this, &MainLayout::show_plot_window);
+        connect(&_dependency_handler, &Dependency_Handler::show_plot_window, this, &Main_Layout::show_plot_window);
         configure_widgets();
         add_widgets();
         set_alignment_and_spacing();
     }
 
-    DependencyHandler const &
+    Dependency_Handler const &
     dependency_handler() const
     {
         return _dependency_handler;
@@ -59,7 +59,7 @@ private:
     QPushButton _confirm_simulation_parameters_button {};
     QPushButton _run_button {};
 
-    DependencyHandler _dependency_handler {};
+    Dependency_Handler _dependency_handler {};
 
     void
     set_widgets_ids()
@@ -80,17 +80,17 @@ private:
     void
     connect_widgets_dependencies()
     {
-        connect(&_order_confirm_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_confirm_simulation_parameters_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
-        connect(&_run_button, &QPushButton::clicked, &_dependency_handler, &DependencyHandler::buttons_clicked_callback);
+        connect(&_order_confirm_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
+        connect(&_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
+        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
+        connect(&_confirm_simulation_parameters_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
+        connect(&_run_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
 
-        connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_controller_type_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_input_signal_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
-        connect(&_operation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &DependencyHandler::combo_boxes_callback);
+        connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
+        connect(&_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
+        connect(&_controller_type_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
+        connect(&_input_signal_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
+        connect(&_operation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
     }
 
     void

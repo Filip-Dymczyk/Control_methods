@@ -29,17 +29,17 @@ public:
     }
 
     void
-    plot(ControlMode const& control_mode)
+    plot(Control_System::Control_Mode control_mode)
     {
         plt::figure();
         switch(control_mode) 
         {
-            case ControlMode::CLOSED_LOOP:
+            case Control_System::Control_Mode::CLOSED_LOOP:
             {
                 plt::title("Closed loop control system response");
                 break;
             }
-            case ControlMode::OPEN_LOOP:
+            case Control_System::Control_Mode::OPEN_LOOP:
             {
                 plt::title("Open loop control system response");
                 break;

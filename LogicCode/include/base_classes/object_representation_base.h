@@ -4,16 +4,16 @@
 #pragma once
 #include <random>
 #include <vector>
-#include "sim_object_base.h"
+#include "simulation_object_base.h"
 #include "state.h"
 
-class ObjectRepresentationBase : public SimumlationObjectBase
+class Object_Representation_Base : public Simulation_Object_Base
 {   
 public:
-    ObjectRepresentationBase(double time_step, 
-                            std::uint32_t order, 
+    Object_Representation_Base(double time_step, 
+                            std::size_t order, 
                             std::vector<double> const & init_state) : 
-                            SimumlationObjectBase(time_step), 
+                            Simulation_Object_Base(time_step), 
                             _state(time_step, order, init_state), 
                             _order(order)
     {}
@@ -57,11 +57,11 @@ protected:
     double
     measurement_noise()
     {
-        return distribution(generator);
+        return _distribution(_generator);
     }
 private:
-    std::mt19937 generator;
-    std::normal_distribution<double> distribution {0.0, 0.1};
+    std::mt19937 _generator;
+    std::normal_distribution<double> _distribution {0.0, 0.1};
 
     double
     get_initial_output() const

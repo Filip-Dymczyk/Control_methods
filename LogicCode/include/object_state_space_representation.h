@@ -15,19 +15,19 @@
 // When entering coefficients beware of mistakenly creating unstable objects!
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
-class ObjectStateSpaceRepresentation : public ObjectRepresentationBase
+class Object_State_Space_Representation : public Object_Representation_Base
 {   
     using MatrixT = std::vector<std::vector<double>>;
     using VectorT = std::vector<double>;
 public:
-    ObjectStateSpaceRepresentation(double time_step, 
-                                std::uint32_t order, 
+    Object_State_Space_Representation(double time_step, 
+                                std::size_t order, 
                                 VectorT const & init_state, 
                                 MatrixT const & A, 
                                 VectorT const & B, 
                                 VectorT const & C, 
                                 double D = 0.0) : 
-                                ObjectRepresentationBase(time_step, order, init_state)
+                                Object_Representation_Base(time_step, order, init_state)
     {
         assert(A.size() == order);
         assert(A[0].size() == order);
@@ -39,8 +39,8 @@ public:
         _D = D;
     }
 
-    ObjectStateSpaceRepresentation(double time_step, std::uint32_t order) :
-    ObjectStateSpaceRepresentation(time_step, order, VectorT(order), MatrixT(order, VectorT(order)), VectorT(order), VectorT(order)) {}
+    Object_State_Space_Representation(double time_step, std::size_t order) :
+    Object_State_Space_Representation(time_step, order, VectorT(order), MatrixT(order, VectorT(order)), VectorT(order), VectorT(order)) {}
 
     void 
     update(double control) override
