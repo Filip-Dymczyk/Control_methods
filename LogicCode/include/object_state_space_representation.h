@@ -16,18 +16,15 @@
 // We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
 class Object_State_Space_Representation : public Object_Representation_Base
-{   
+{
     using MatrixT = std::vector<std::vector<double>>;
     using VectorT = std::vector<double>;
+
 public:
-    Object_State_Space_Representation(double time_step, 
-                                std::size_t order, 
-                                VectorT const & init_state, 
-                                MatrixT const & A, 
-                                VectorT const & B, 
-                                VectorT const & C, 
-                                double D = 0.0) : 
-                                Object_Representation_Base(time_step, order, init_state)
+    Object_State_Space_Representation(
+        double time_step, std::size_t order, VectorT const& init_state, MatrixT const& A, VectorT const& B,
+        VectorT const& C, double D = 0.0)
+        : Object_Representation_Base(time_step, order, init_state)
     {
         assert(A.size() == order);
         assert(A[0].size() == order);
@@ -39,23 +36,27 @@ public:
         _D = D;
     }
 
-    Object_State_Space_Representation(double time_step, std::size_t order) :
-    Object_State_Space_Representation(time_step, order, VectorT(order), MatrixT(order, VectorT(order)), VectorT(order), VectorT(order)) {}
+    Object_State_Space_Representation(double time_step, std::size_t order)
+        : Object_State_Space_Representation(
+              time_step, order, VectorT(order), MatrixT(order, VectorT(order)), VectorT(order), VectorT(order))
+    {
+    }
 
-    void 
+    void
     update(double control) override
     {
         VectorT const current_state = get_current_state();
         set_value(vectors_multiplication_scalar_product<VectorT>(_C, current_state) /*+ measurement_noise()*/);
 
-        VectorT A_x (order());
+        VectorT A_x(order());
         matrix_vector_multiplication_vector_product<MatrixT, VectorT>(A_x, _A, current_state);
         VectorT B_u = _B;
         scale_vector<VectorT>(B_u, control);
-        VectorT new_state_derivative (order());
+        VectorT new_state_derivative(order());
         add_vectors<VectorT>(new_state_derivative, A_x, B_u);
         _state.update(new_state_derivative);
     }
+
 private:
     MatrixT _A {};
     VectorT _B {};

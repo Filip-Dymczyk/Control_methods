@@ -3,8 +3,8 @@
 
 #pragma once
 #include <vector>
-#include "matplotlibcpp/matplotlibcpp.h"
 #include "control_system.h"
+#include "matplotlibcpp/matplotlibcpp.h"
 
 namespace plt = matplotlibcpp;
 
@@ -32,7 +32,7 @@ public:
     plot(Control_System::Control_Mode control_mode)
     {
         plt::figure();
-        switch(control_mode) 
+        switch(control_mode)
         {
             case Control_System::Control_Mode::CLOSED_LOOP:
             {
@@ -49,7 +49,7 @@ public:
                 plt::title("Component response");
                 break;
             }
-        } 
+        }
 
         plt::plot(_plotting_buffers.time, _plotting_buffers.set_point, "r-", {{"label", "set point"}});
         // plt::plot(_plotting_buffers.time, _plotting_buffers.control, "y-", {{"label", "control"}});
@@ -59,7 +59,7 @@ public:
         plt::ylabel("y");
         plt::legend("best");
         plt::grid();
-        plt::show();   
+        plt::show();
     }
 
     void

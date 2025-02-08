@@ -4,51 +4,52 @@
 #pragma once
 #include <cstdint>
 #include <vector>
-
-#include "base_classes/object_representation_base.h"
+#include "bang_bang_controller.h"
 #include "base_classes/controller_base.h"
+#include "base_classes/object_representation_base.h"
 #include "base_classes/signal_base.h"
-
+#include "control_system.h"
+#include "enums.h"
 #include "object_differential_equation_representation.h"
 #include "object_state_space_representation.h"
 #include "pid.h"
-#include "bang_bang_controller.h"
-#include "signals.h"
-#include "control_system.h"
-#include "recursive_linear_regression.h"
 #include "pid_tuner.h"
-
-#include "enums.h"
+#include "recursive_linear_regression.h"
+#include "signals.h"
 
 class Control
 {
     // Default values needed for initialization.
     static constexpr std::size_t ORDER {1u};
     static constexpr double TIME_STEP {0.01};
+
 public:
-    Control() : 
-            _differential_equation_representation_object(TIME_STEP, ORDER), 
-            _state_space_representation_object(TIME_STEP, ORDER),
-            _pid_controller(TIME_STEP),
-            _bang_bang_controller(TIME_STEP),
-            _heaviside(TIME_STEP),
-            _ramp(TIME_STEP),
-            _rect(TIME_STEP),
-            _sine_wave(TIME_STEP),
-            _pulse_wave(TIME_STEP),
-            _selected_object(&_differential_equation_representation_object),
-            _selected_controller(&_pid_controller),
-            _selected_input_signal(&_heaviside),
-            _regression(), 
-            _system(_selected_object, _selected_controller, Control_System::Control_Mode::OPEN_LOOP),
-            _tuner(_system, _regression),
-            _operation_type(Operation_Type::SIMULATION)
-            {}
+    Control()
+        : _differential_equation_representation_object(TIME_STEP, ORDER),
+          _state_space_representation_object(TIME_STEP, ORDER),
+          _pid_controller(TIME_STEP),
+          _bang_bang_controller(TIME_STEP),
+          _heaviside(TIME_STEP),
+          _ramp(TIME_STEP),
+          _rect(TIME_STEP),
+          _sine_wave(TIME_STEP),
+          _pulse_wave(TIME_STEP),
+          _selected_object(&_differential_equation_representation_object),
+          _selected_controller(&_pid_controller),
+          _selected_input_signal(&_heaviside),
+          _regression(),
+          _system(_selected_object, _selected_controller, Control_System::Control_Mode::OPEN_LOOP),
+          _tuner(_system, _regression),
+          _operation_type(Operation_Type::SIMULATION)
+    {
+    }
 
     void
-    set_object(int order, double time_step, Object_Representation object_representation, std::vector<double> const& object_parameters)
+    set_object(
+        int order, double time_step, Object_Representation object_representation,
+        std::vector<double> const& object_parameters)
     {
-        switch (object_representation)
+        switch(object_representation)
         {
             case Object_Representation::EQUATION:
             {
@@ -64,7 +65,8 @@ public:
             default:
                 break;
         }
-        // If it will be handled like that then input to function will have to take matrices into account and base class as well will have to overload.
+        // If it will be handled like that then input to function will have to take matrices into account and base class
+        // as well will have to overload.
         _selected_object->set_order(static_cast<std::size_t>(order));
         _selected_object->set_parameters(object_parameters);
         _selected_object->set_time_step(time_step);
@@ -79,7 +81,7 @@ public:
     void
     set_controller(double time_step, Controller_Type controller_type, std::vector<double> const& controller_parameters)
     {
-        switch (controller_type)
+        switch(controller_type)
         {
             case Controller_Type::BANG_BANG:
             {
@@ -100,9 +102,9 @@ public:
     }
 
     void
-    set_signal(double time_step, Input_Signal input_signal/*, signal parameters missing*/)
+    set_signal(double time_step, Input_Signal input_signal /*, signal parameters missing*/)
     {
-        switch (input_signal)
+        switch(input_signal)
         {
             case Input_Signal::HEAVISIDE:
             {
@@ -141,7 +143,7 @@ public:
         _operation_type = operation_type;
     }
 
-    double 
+    double
     get_time() const
     {
         return _selected_input_signal->time();
@@ -196,10 +198,10 @@ private:
     Rectangle _rect;
     Sine_Wave _sine_wave;
     Pulse_Wave _pulse_wave;
-    
-    Object_Representation_Base * _selected_object;
-    Controller_Base * _selected_controller;
-    Signal_Base * _selected_input_signal;
+
+    Object_Representation_Base* _selected_object;
+    Controller_Base* _selected_controller;
+    Signal_Base* _selected_input_signal;
 
     Recursive_Linear_Regression _regression;
     Control_System _system;

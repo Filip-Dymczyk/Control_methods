@@ -19,8 +19,8 @@ public:
         return _error;
     }
 
-    virtual std::array<double, 3> const 
-    get_x() const 
+    virtual std::array<double, 3> const
+    get_x() const
     {
         return {};
     }
@@ -34,6 +34,7 @@ protected:
     {
         _error = error;
     }
+
 private:
     double _error {};
 };

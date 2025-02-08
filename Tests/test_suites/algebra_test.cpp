@@ -1,9 +1,9 @@
 // Author: Filip Dymczyk
 // Description : Unit tests for algebra operations.
 
+#include "algebra.h"
 #include <gtest/gtest.h>
 #include <array>
-#include "algebra.h"
 
 class AlgebraTest : public testing::Test
 {
@@ -13,9 +13,10 @@ class AlgebraTest : public testing::Test
     VectorT const test_vectorA {1.0, 2.0};
     MatrixT const test_matrixA {{{1.0, 2.0}, {1.0, 2.0}}};
     MatrixT const test_matrixB {{{-1.0, 3.0}, {4.0, 1.0}}};
+
 protected:
     void
-    check_diagonal_matrix() const 
+    check_diagonal_matrix() const
     {
         double const scalar = 2.0;
         MatrixT out {};
@@ -33,7 +34,7 @@ protected:
                 else
                 {
                     EXPECT_FLOAT_EQ(zero, cast_to_float(out[i][j]));
-                } 
+                }
             }
         }
     }
@@ -50,23 +51,23 @@ protected:
     void
     check_vectors_multiplication_scalar_product() const
     {
-        double const out = vectors_multiplication_scalar_product<VectorT>(test_vectorA, test_vectorA);
+        double const out         = vectors_multiplication_scalar_product<VectorT>(test_vectorA, test_vectorA);
         float const expected_out = 5.0f;
         EXPECT_FLOAT_EQ(expected_out, cast_to_float(out));
     }
 
     void
-    check_vector_scaling() const 
+    check_vector_scaling() const
     {
         double const scaler = 2.0;
-        VectorT out = test_vectorA;
+        VectorT out         = test_vectorA;
         scale_vector<VectorT>(out, scaler);
         VectorT const expected_out {2.0, 4.0};
         check_vector_values(expected_out, out);
     }
 
     void
-    check_vectors_addition() const 
+    check_vectors_addition() const
     {
         VectorT out {};
         add_vectors<VectorT>(out, test_vectorA, test_vectorA);
@@ -93,10 +94,10 @@ protected:
     }
 
     void
-    check_matrix_scaling() const 
+    check_matrix_scaling() const
     {
         double const scaler = 2.0;
-        MatrixT out = test_matrixA;
+        MatrixT out         = test_matrixA;
         scale_matrix<MatrixT>(out, scaler);
         MatrixT const expected_out {{{2.0, 4.0}, {2.0, 4.0}}};
         check_matrix_values(expected_out, out);
@@ -113,13 +114,13 @@ protected:
 
 private:
     float
-    cast_to_float(double scalar) const 
+    cast_to_float(double scalar) const
     {
         return static_cast<float>(scalar);
     }
 
     void
-    check_vector_values(VectorT const & expected_out, VectorT const & out) const 
+    check_vector_values(VectorT const& expected_out, VectorT const& out) const
     {
         for(std::size_t i = 0; i < out.size(); i++)
         {
@@ -128,7 +129,7 @@ private:
     }
 
     void
-    check_matrix_values(MatrixT const & expected_out, MatrixT const & out) const 
+    check_matrix_values(MatrixT const& expected_out, MatrixT const& out) const
     {
         for(std::size_t i = 0; i < out.size(); i++)
         {
@@ -138,47 +139,26 @@ private:
             }
         }
     }
-};      
+};
 
-TEST_F(AlgebraTest, CreateDiagonalMatrixTest) 
-{
-    check_diagonal_matrix();
-}  
+TEST_F(AlgebraTest, CreateDiagonalMatrixTest) { check_diagonal_matrix(); }
 
 TEST_F(AlgebraTest, MatrixVectorMultiplicationVectorProductTest)
 {
     check_matrix_vector_multiplication_vector_product();
 }
 
-TEST_F(AlgebraTest, VectorsMultiplicationScalarProductTest)
-{
-    check_vectors_multiplication_scalar_product();
-}
+TEST_F(AlgebraTest, VectorsMultiplicationScalarProductTest) { check_vectors_multiplication_scalar_product(); }
 
-TEST_F(AlgebraTest, VectorScalingTest)
-{
-    check_vector_scaling();
-}
+TEST_F(AlgebraTest, VectorScalingTest) { check_vector_scaling(); }
 
-TEST_F(AlgebraTest, VectorsAdditionTest)
-{
-    check_vectors_addition();
-}
+TEST_F(AlgebraTest, VectorsAdditionTest) { check_vectors_addition(); }
 
-TEST_F(AlgebraTest, VectorsMultiplicationMatrixProductTest)
-{
-    check_vectors_multiplication_matrix_product();
-}
+TEST_F(AlgebraTest, VectorsMultiplicationMatrixProductTest) { check_vectors_multiplication_matrix_product(); }
 
-TEST_F(AlgebraTest, MatricesSubtractionTest)
-{
-    check_matrices_subtraction();
-}
+TEST_F(AlgebraTest, MatricesSubtractionTest) { check_matrices_subtraction(); }
 
-TEST_F(AlgebraTest, MatrixScalingTest)
-{
-    check_matrix_scaling();
-}
+TEST_F(AlgebraTest, MatrixScalingTest) { check_matrix_scaling(); }
 
 TEST_F(AlgebraTest, VectorMatrixMultiplicationVectorProductTest)
 {

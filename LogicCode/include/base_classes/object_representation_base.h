@@ -8,15 +8,12 @@
 #include "state.h"
 
 class Object_Representation_Base : public Simulation_Object_Base
-{   
+{
 public:
-    Object_Representation_Base(double time_step, 
-                            std::size_t order, 
-                            std::vector<double> const & init_state) : 
-                            Simulation_Object_Base(time_step), 
-                            _state(time_step, order, init_state), 
-                            _order(order)
-    {}
+    Object_Representation_Base(double time_step, std::size_t order, std::vector<double> const& init_state)
+        : Simulation_Object_Base(time_step), _state(time_step, order, init_state), _order(order)
+    {
+    }
 
     void
     set_order(std::size_t order)
@@ -39,15 +36,14 @@ public:
     }
 
     void
-    set_time_step(double time_step) 
+    set_time_step(double time_step)
     {
         _state.set_time_step(time_step);
     }
 
     virtual void
-    set_parameters(std::vector<double> const&) 
+    set_parameters(std::vector<double> const&)
     {
-
     }
 
 protected:
@@ -59,6 +55,7 @@ protected:
     {
         return _distribution(_generator);
     }
+
 private:
     std::mt19937 _generator;
     std::normal_distribution<double> _distribution {0.0, 0.1};

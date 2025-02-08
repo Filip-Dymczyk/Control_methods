@@ -6,9 +6,8 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 #include <QtWidgets/QComboBox>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QLineEdit>
-
+#include <QtWidgets/QSpinBox>
 #include "enums.h"
 #include "input_parameters_container.h"
 
@@ -19,7 +18,7 @@ public:
     parse_button_id(Button_ID button_id, QWidget* parent)
     {
         bool is_run = false;
-        switch (button_id)
+        switch(button_id)
         {
             case Button_ID::ORDER_BUTTON:
             {
@@ -58,7 +57,7 @@ public:
     void
     parse_combo_box_id(Combo_Box_ID combo_box_id, int current_index)
     {
-        switch (combo_box_id)
+        switch(combo_box_id)
         {
             case Combo_Box_ID::OBJECT_REPRESENTATION:
             {
@@ -100,7 +99,7 @@ public:
             assert(false);
             return;
         }
-        QSpinBox const* const order_spin_box = parent -> findChild<QSpinBox*>("order");
+        QSpinBox const* const order_spin_box = parent->findChild<QSpinBox*>("order");
 
         if(order_spin_box == nullptr)
         {
@@ -118,7 +117,7 @@ public:
             assert(false);
             return;
         }
-        QLineEdit const* const object_parameters_line_edit = parent -> findChild<QLineEdit*>("object_parameters");
+        QLineEdit const* const object_parameters_line_edit = parent->findChild<QLineEdit*>("object_parameters");
 
         if(object_parameters_line_edit == nullptr)
         {
@@ -126,12 +125,12 @@ public:
             return;
         }
         QStringList const parameters_string_list = object_parameters_line_edit->text().split(";", Qt::SkipEmptyParts);
-        int const order = _inputs.get_order();
+        int const order                          = _inputs.get_order();
         std::vector<double> object_parameters {};
         object_parameters.reserve(order + 1);
 
         std::size_t idx = 1;
-        for(auto const& parameter : parameters_string_list)
+        for(auto const& parameter: parameters_string_list)
         {
             object_parameters.push_back(parameter.toDouble());
             if(idx == order + 1)
@@ -151,20 +150,21 @@ public:
             assert(false);
             return;
         }
-        QLineEdit const* const controller_parameters_line_edit = parent -> findChild<QLineEdit*>("controller_parameters");
+        QLineEdit const* const controller_parameters_line_edit = parent->findChild<QLineEdit*>("controller_parameters");
 
         if(controller_parameters_line_edit == nullptr)
         {
             assert(false);
             return;
         }
-        QStringList const parameters_string_list = controller_parameters_line_edit->text().split(";", Qt::SkipEmptyParts);
+        QStringList const parameters_string_list =
+            controller_parameters_line_edit->text().split(";", Qt::SkipEmptyParts);
         std::size_t const parameters_number = 3u;
         std::vector<double> controller_parameters {};
         controller_parameters.reserve(parameters_number);
 
         std::size_t idx = 1;
-        for(auto const& parameter : parameters_string_list)
+        for(auto const& parameter: parameters_string_list)
         {
             controller_parameters.push_back(parameter.toDouble());
             if(idx == parameters_number)
@@ -184,8 +184,8 @@ public:
             assert(false);
             return;
         }
-        QLineEdit const* const simulation_time_line_edit = parent -> findChild<QLineEdit*>("simulation_time");
-        QLineEdit const* const simulation_timestep_line_edit = parent -> findChild<QLineEdit*>("simulation_step");
+        QLineEdit const* const simulation_time_line_edit     = parent->findChild<QLineEdit*>("simulation_time");
+        QLineEdit const* const simulation_timestep_line_edit = parent->findChild<QLineEdit*>("simulation_step");
 
         if(simulation_time_line_edit == nullptr || simulation_timestep_line_edit == nullptr)
         {
@@ -201,6 +201,7 @@ public:
     {
         return _inputs;
     }
+
 private:
     Input_Parameters_Container _inputs {};
 };

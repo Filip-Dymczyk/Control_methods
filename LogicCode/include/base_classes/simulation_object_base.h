@@ -2,18 +2,15 @@
 // Description : Base simulation object.
 
 #pragma once
-#include <iostream>
 #include <assert.h>
+#include <iostream>
 
 class Simulation_Object_Base
 {
 public:
     Simulation_Object_Base() : _time_step(0.0) {}
-    Simulation_Object_Base(double time_step) : _time_step(time_step) 
-    {
-        assert(_time_step > 0.0);
-    }
-    
+    Simulation_Object_Base(double time_step) : _time_step(time_step) { assert(_time_step > 0.0); }
+
     virtual void
     update(double /*some input*/) = 0;
 
@@ -44,6 +41,7 @@ protected:
     {
         _value = value;
     }
+
 private:
     double _value {};
     double _time_step {};

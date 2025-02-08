@@ -8,7 +8,7 @@ class Integrator : public Simulation_Object_Base
 {
 public:
     Integrator() : Simulation_Object_Base() {}
-    Integrator(double time_step, double initial_state = 0.0) : Simulation_Object_Base(time_step) 
+    Integrator(double time_step, double initial_state = 0.0) : Simulation_Object_Base(time_step)
     {
         set_value(initial_state);
     }
@@ -20,9 +20,8 @@ public:
     }
 
     void
-    reset() override 
+    reset() override
     {
         set_value(0.0);
     }
 };
-

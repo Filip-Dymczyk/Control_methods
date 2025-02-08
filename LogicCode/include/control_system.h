@@ -2,9 +2,8 @@
 // Description : Control loop system.
 
 #pragma once
-#include "base_classes/object_representation_base.h"
 #include "base_classes/controller_base.h"
-
+#include "base_classes/object_representation_base.h"
 
 // NOTE: Open/closed control system comprised of an object model and a controller.
 class Control_System
@@ -17,12 +16,10 @@ public:
         NONE
     };
 
-    Control_System(Object_Representation_Base * object, 
-                Controller_Base * controller, 
-                Control_Mode const& control_mode) : 
-                _object(object), 
-                _controller(controller), 
-                _control_mode(control_mode) {}
+    Control_System(Object_Representation_Base* object, Controller_Base* controller, Control_Mode const& control_mode)
+        : _object(object), _controller(controller), _control_mode(control_mode)
+    {
+    }
 
     void
     update(double set_point)
@@ -30,14 +27,14 @@ public:
         _set_point = set_point;
         if(_control_mode == Control_Mode::OPEN_LOOP)
         {
-            _controller -> update(set_point);
+            _controller->update(set_point);
         }
         else
         {
-            double const error = set_point - _object -> get_value();
-            _controller -> update(error);
+            double const error = set_point - _object->get_value();
+            _controller->update(error);
         }
-        _object -> update(_controller -> get_value());
+        _object->update(_controller->get_value());
     }
 
     double
@@ -45,38 +42,38 @@ public:
     {
         return _set_point;
     }
-    
+
     double
     get_control() const
     {
-        return _controller -> get_value();
+        return _controller->get_value();
     }
 
     double
     get_output() const
     {
-        return _object -> get_value();
+        return _object->get_value();
     }
 
     double
     get_error() const
     {
-        return _controller -> get_error();
+        return _controller->get_error();
     }
 
-    std::array<double, 3> const 
-    get_x() const 
+    std::array<double, 3> const
+    get_x() const
     {
-        return _controller -> get_x();
+        return _controller->get_x();
     }
-    
-    Controller_Base const *
+
+    Controller_Base const*
     get_controller() const
     {
         return _controller;
     }
 
-    Controller_Base *
+    Controller_Base*
     get_controller()
     {
         return _controller;
@@ -92,8 +89,8 @@ public:
     reset()
     {
         _set_point = 0.0;
-        _object -> reset();
-        _controller -> reset();
+        _object->reset();
+        _controller->reset();
     }
 
     void
@@ -105,6 +102,6 @@ public:
 private:
     double _set_point {};
     Control_Mode _control_mode {};
-    Object_Representation_Base * _object {nullptr};
-    Controller_Base * _controller {nullptr};
+    Object_Representation_Base* _object {nullptr};
+    Controller_Base* _controller {nullptr};
 };

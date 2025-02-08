@@ -4,7 +4,6 @@
 #pragma once
 #include <QtCore/QVariant>
 #include <QtWidgets/QPushButton>
-
 #include "inputs_parser.h"
 
 class Dependency_Handler : public QObject
@@ -25,12 +24,12 @@ public Q_SLOTS:
     void
     buttons_clicked_callback()
     {
-        QPushButton * button = qobject_cast<QPushButton*>(sender());
-        if(button) 
+        QPushButton* button = qobject_cast<QPushButton*>(sender());
+        if(button)
         {
-            QVariant button_id_variant = button -> property("id");
-            Button_ID const button_id = button_id_variant.value<Button_ID>();
-            QWidget * parent = button -> parentWidget();
+            QVariant button_id_variant = button->property("id");
+            Button_ID const button_id  = button_id_variant.value<Button_ID>();
+            QWidget* parent            = button->parentWidget();
 
             if(parent == nullptr)
             {
@@ -49,12 +48,12 @@ public Q_SLOTS:
     void
     combo_boxes_callback()
     {
-        QComboBox * combo_box = qobject_cast<QComboBox*>(sender());
-        if(combo_box) 
+        QComboBox* combo_box = qobject_cast<QComboBox*>(sender());
+        if(combo_box)
         {
-            QVariant combo_box_id_variant = combo_box -> property("id");
+            QVariant combo_box_id_variant   = combo_box->property("id");
             Combo_Box_ID const combo_box_id = combo_box_id_variant.value<Combo_Box_ID>();
-            int const current_index = combo_box -> currentIndex();
+            int const current_index         = combo_box->currentIndex();
 
             _inputs_parser.parse_combo_box_id(combo_box_id, current_index);
         }

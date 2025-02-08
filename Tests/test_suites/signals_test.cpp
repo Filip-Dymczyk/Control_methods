@@ -1,9 +1,9 @@
 // Author: Filip Dymczyk
 // Description : Unit tests for signals.
 
+#include "signals.h"
 #include <gtest/gtest.h>
 #include "test_with_plot.h"
-#include "signals.h"
 
 class SignalsTest : public testing::Test, public Test_With_Plot
 {
@@ -39,6 +39,7 @@ protected:
     {
         Test_With_Plot::test_signal(&pulse_wave, signal_plot_title);
     }
+
 private:
     double const _time_step = 0.001;
     Heaviside heaviside {_time_step};
@@ -48,27 +49,12 @@ private:
     Pulse_Wave pulse_wave {_time_step, 0.75, 4.0, {}};
 };
 
-TEST_F(SignalsTest, HeavisideTest)
-{
-    test_heaviside("Heaviside signal");
-}
+TEST_F(SignalsTest, HeavisideTest) { test_heaviside("Heaviside signal"); }
 
-TEST_F(SignalsTest, RampTest)
-{
-    test_ramp("Ramp signal");
-}
+TEST_F(SignalsTest, RampTest) { test_ramp("Ramp signal"); }
 
-TEST_F(SignalsTest, RectangleTest)
-{
-    test_rect("Rectangle signal");
-}
+TEST_F(SignalsTest, RectangleTest) { test_rect("Rectangle signal"); }
 
-TEST_F(SignalsTest, SineWaveTest)
-{
-    test_sine_wave("Sinusoidal signal");
-}
+TEST_F(SignalsTest, SineWaveTest) { test_sine_wave("Sinusoidal signal"); }
 
-TEST_F(SignalsTest, PulseWaveTest)
-{
-    test_pulse_wave("Pulse signal");
-}
+TEST_F(SignalsTest, PulseWaveTest) { test_pulse_wave("Pulse signal"); }

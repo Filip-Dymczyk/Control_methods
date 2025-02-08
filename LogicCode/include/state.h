@@ -3,24 +3,24 @@
 
 #pragma once
 
+#include <assert.h>
 #include <cstdint>
 #include <vector>
-#include <assert.h>
 #include "integrator.h"
 
 class State
 {
 public:
-    State(double time_step, std::size_t order, std::vector<double> const & initial_state)
+    State(double time_step, std::size_t order, std::vector<double> const& initial_state)
     {
         assert(order > 0u);
         assert(order == initial_state.size());
-        
+
         _order = order;
         _initial_state.reserve(_order);
         _integrators.reserve(_order);
 
-        for(const auto & state : initial_state)
+        for(const auto& state: initial_state)
         {
             _initial_state.push_back(state);
             Integrator I {time_step, state};
@@ -55,7 +55,7 @@ public:
     }
 
     void
-    update(std::vector<double> const & new_state_derivative)
+    update(std::vector<double> const& new_state_derivative)
     {
         assert(_order == new_state_derivative.size());
         for(std::size_t i = 0; i < _order; i++)
@@ -80,7 +80,7 @@ public:
     void
     set_time_step(double time_step)
     {
-        for(auto & integrator : _integrators)
+        for(auto& integrator: _integrators)
         {
             integrator.set_time_step(time_step);
         }
@@ -90,12 +90,12 @@ public:
     set_order(std::size_t order)
     {
         double const time_step = _integrators.at(0).get_time_step();
-        _order = order;
-        _initial_state = std::vector<double>(order, 0.0);
-        _integrators = {};
+        _order                 = order;
+        _initial_state         = std::vector<double>(order, 0.0);
+        _integrators           = {};
         _integrators.reserve(_order);
 
-        for(const auto & state : _initial_state)
+        for(const auto& state: _initial_state)
         {
             Integrator I {time_step, state};
             _integrators.push_back(I);

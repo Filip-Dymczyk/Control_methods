@@ -1,26 +1,27 @@
-// Author : Filip Dymczyk 
+// Author : Filip Dymczyk
 // Description : Main application window.
 
 #pragma once
 
-#include <QtWidgets/QWidget>
 #include <QtCore/QString>
+#include <QtWidgets/QWidget>
 #include "main_layout.h"
 #include "simulator.h"
 
 class Main_Window : public QWidget
 {
-    static constexpr unsigned width = 400;
+    static constexpr unsigned width  = 400;
     static constexpr unsigned height = 800;
-    QString const window_title = "Dynamical systems control methods.";
+    QString const window_title       = "Dynamical systems control methods.";
+
 public:
     Main_Window() : _main_layout(this), _simulator()
-    {   
-        this -> setWindowTitle(window_title);
-        this -> setFixedSize(width, height);
-        this -> setLayout(&_main_layout);
+    {
+        this->setWindowTitle(window_title);
+        this->setFixedSize(width, height);
+        this->setLayout(&_main_layout);
         connect(&_main_layout, &Main_Layout::show_plot_window, this, &Main_Window::show_plot_window);
-    }  
+    }
 
     void
     show_plot_window()
@@ -29,6 +30,7 @@ public:
         _simulator.run();
         _simulator.show_plot();
     }
+
 private:
     Main_Layout _main_layout;
     Simulator _simulator;

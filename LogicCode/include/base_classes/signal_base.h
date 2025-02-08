@@ -13,7 +13,10 @@ public:
         double scaler {1.0};
     };
 
-    Signal_Base(double time_step, Signal_Basic_Parameters const & parameters) : _timer(time_step), _parameters(parameters) {}
+    Signal_Base(double time_step, Signal_Basic_Parameters const& parameters)
+        : _timer(time_step), _parameters(parameters)
+    {
+    }
 
     virtual void
     update() = 0;
@@ -36,14 +39,14 @@ public:
         return _timer.get_time_step();
     }
 
-    double 
+    double
     get_value() const
     {
         return _value;
     }
 
-    void 
-    set_parameters(Signal_Basic_Parameters const & parameters)
+    void
+    set_parameters(Signal_Basic_Parameters const& parameters)
     {
         _parameters = parameters;
     }
@@ -71,6 +74,7 @@ protected:
     {
         _timer.reset();
     }
+
 private:
     double _value {};
     Integrator _timer {};

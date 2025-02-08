@@ -28,4 +28,3 @@ public:
 private:
     double _previous_value {};
 };
-

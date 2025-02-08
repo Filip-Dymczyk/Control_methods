@@ -2,15 +2,16 @@
 // Description : Unit tests for control system - open/closed loop.
 
 #include <gtest/gtest.h>
-#include "test_with_plot.h"
-#include "signals.h"
-#include "pid.h"
 #include "object_differential_equation_representation.h"
+#include "pid.h"
+#include "signals.h"
+#include "test_with_plot.h"
 
-class ControlSystemWithPidTest :  public testing::Test, public Test_With_Plot
-{   
-    using ObjectT =  Object_Differential_Equation_Representation;
+class ControlSystemWithPidTest : public testing::Test, public Test_With_Plot
+{
+    using ObjectT                  = Object_Differential_Equation_Representation;
     static constexpr uint8_t order = 2u;
+
 protected:
     ControlSystemWithPidTest() : Test_With_Plot(15.0) {}
 
@@ -33,12 +34,6 @@ private:
     ObjectT _object {_time_step, order, {0.0, 0.0}, {1.0, 1.0, 1.0}};
 };
 
-TEST_F(ControlSystemWithPidTest, OpenLoopControlTest)
-{
-    test_open_loop_control();
-}
+TEST_F(ControlSystemWithPidTest, OpenLoopControlTest) { test_open_loop_control(); }
 
-TEST_F(ControlSystemWithPidTest, ClosedLoopControlTest)
-{
-    test_closed_loop_control();
-}
+TEST_F(ControlSystemWithPidTest, ClosedLoopControlTest) { test_closed_loop_control(); }
