@@ -1,6 +1,6 @@
 @echo off
 
-:: Format all files
+:: Format changed files
 call code_format 
 
 echo Configuring CMake...

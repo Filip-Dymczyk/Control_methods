@@ -1,7 +1,7 @@
 @echo off
-echo Formatting all .cpp and .h files in the project directory...
+echo Formatting changed .cpp and .h files...
 
-for /r %%f in (*.cpp *.h) do (
+for /f "delims=" %%f in ('git diff --name-only -- "*.cpp" "*.h"') do (
     set "relative_path=%%~f"
     setlocal enabledelayedexpansion
     set "relative_path=!relative_path:%cd%\=!"
@@ -10,7 +10,7 @@ for /r %%f in (*.cpp *.h) do (
     if errorlevel 1 (
         echo !relative_path! | findstr /I "builds" >nul
         if errorlevel 1 (
-            echo %%~nxf
+            echo Formatting: %%~nxf
             clang-format -i "%%f"
         )
     )
