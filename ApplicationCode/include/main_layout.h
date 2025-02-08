@@ -1,18 +1,17 @@
-// Author : Filip Dymczyk 
+// Author : Filip Dymczyk
 // Description : Main application window layout.
 
 #pragma once
 
-#include <QtCore/Qt>
 #include <QtCore/QObject>
-#include <QtWidgets/QWidget>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QSpinBox>
+#include <QtCore/Qt>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
-
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 #include "dependency_handler.h"
 
 class Main_Layout : public QVBoxLayout
@@ -20,7 +19,7 @@ class Main_Layout : public QVBoxLayout
     Q_OBJECT
 
 public:
-    Main_Layout(QWidget * parent) : QVBoxLayout(parent)
+    Main_Layout(QWidget* parent) : QVBoxLayout(parent)
     {
         connect(&_dependency_handler, &Dependency_Handler::show_plot_window, this, &Main_Layout::show_plot_window);
         configure_widgets();
@@ -28,11 +27,12 @@ public:
         set_alignment_and_spacing();
     }
 
-    Dependency_Handler const &
+    Dependency_Handler const&
     dependency_handler() const
     {
         return _dependency_handler;
     }
+
 private:
     QLabel _order_label {};
     QSpinBox _order_spin_box {};
@@ -80,17 +80,36 @@ private:
     void
     connect_widgets_dependencies()
     {
-        connect(&_order_confirm_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
-        connect(&_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
-        connect(&_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
-        connect(&_confirm_simulation_parameters_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
-        connect(&_run_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
+        connect(
+            &_order_confirm_button, &QPushButton::clicked, &_dependency_handler,
+            &Dependency_Handler::buttons_clicked_callback);
+        connect(
+            &_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler,
+            &Dependency_Handler::buttons_clicked_callback);
+        connect(
+            &_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler,
+            &Dependency_Handler::buttons_clicked_callback);
+        connect(
+            &_confirm_simulation_parameters_button, &QPushButton::clicked, &_dependency_handler,
+            &Dependency_Handler::buttons_clicked_callback);
+        connect(
+            &_run_button, &QPushButton::clicked, &_dependency_handler, &Dependency_Handler::buttons_clicked_callback);
 
-        connect(&_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
-        connect(&_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
-        connect(&_controller_type_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
-        connect(&_input_signal_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
-        connect(&_operation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
+        connect(
+            &_object_representation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            &_dependency_handler, &Dependency_Handler::combo_boxes_callback);
+        connect(
+            &_control_mode_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler,
+            &Dependency_Handler::combo_boxes_callback);
+        connect(
+            &_controller_type_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler,
+            &Dependency_Handler::combo_boxes_callback);
+        connect(
+            &_input_signal_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler,
+            &Dependency_Handler::combo_boxes_callback);
+        connect(
+            &_operation_combo_box, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler,
+            &Dependency_Handler::combo_boxes_callback);
     }
 
     void
@@ -156,37 +175,37 @@ private:
     void
     add_widgets()
     {
-        this -> addWidget(&_order_label);
-        this -> addWidget(&_order_spin_box);
-        this -> addWidget(&_order_confirm_button);
-        this -> addWidget(&_representation_label);
-        this -> addWidget(&_object_representation_combo_box);
-        this -> addWidget(&_parameters_label);
-        this -> addWidget(&_object_parameters_line_edit);
-        this -> addWidget(&_confirm_object_parameters_button);
-        this -> addWidget(&_control_mode_label);
-        this -> addWidget(&_control_mode_combo_box);
-        this -> addWidget(&_controller_type_label);
-        this -> addWidget(&_controller_type_combo_box);
-        this -> addWidget(&_controller_parameters_label);
-        this -> addWidget(&_controller_parameters_line_edit);
-        this -> addWidget(&_confirm_controller_parameters_button);
-        this -> addWidget(&_input_signal_label);
-        this -> addWidget(&_input_signal_combo_box);
-        this -> addWidget(&_operation_label);
-        this -> addWidget(&_operation_combo_box);
-        this -> addWidget(&_simulation_parameters_label);
-        this -> addWidget(&_simulation_time_line_edit);
-        this -> addWidget(&_simulation_step_line_edit);
-        this -> addWidget(&_confirm_simulation_parameters_button);
-        this -> addWidget(&_run_button);
+        this->addWidget(&_order_label);
+        this->addWidget(&_order_spin_box);
+        this->addWidget(&_order_confirm_button);
+        this->addWidget(&_representation_label);
+        this->addWidget(&_object_representation_combo_box);
+        this->addWidget(&_parameters_label);
+        this->addWidget(&_object_parameters_line_edit);
+        this->addWidget(&_confirm_object_parameters_button);
+        this->addWidget(&_control_mode_label);
+        this->addWidget(&_control_mode_combo_box);
+        this->addWidget(&_controller_type_label);
+        this->addWidget(&_controller_type_combo_box);
+        this->addWidget(&_controller_parameters_label);
+        this->addWidget(&_controller_parameters_line_edit);
+        this->addWidget(&_confirm_controller_parameters_button);
+        this->addWidget(&_input_signal_label);
+        this->addWidget(&_input_signal_combo_box);
+        this->addWidget(&_operation_label);
+        this->addWidget(&_operation_combo_box);
+        this->addWidget(&_simulation_parameters_label);
+        this->addWidget(&_simulation_time_line_edit);
+        this->addWidget(&_simulation_step_line_edit);
+        this->addWidget(&_confirm_simulation_parameters_button);
+        this->addWidget(&_run_button);
     }
 
     void
     set_alignment_and_spacing()
     {
-        this -> setAlignment(Qt::AlignmentFlag::AlignTop | Qt::AlignmentFlag::AlignHCenter);
-        this -> setSpacing(13);
+        this->setAlignment(Qt::AlignmentFlag::AlignTop | Qt::AlignmentFlag::AlignHCenter);
+        this->setSpacing(13);
     }
 Q_SIGNALS:
     void

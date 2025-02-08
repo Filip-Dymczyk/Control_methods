@@ -1,5 +1,8 @@
 @echo off
 
+:: Format all files
+call code_format 
+
 @echo Application build...
 IF NOT EXIST "%cd%\builds" (
     mkdir "%cd%\builds"

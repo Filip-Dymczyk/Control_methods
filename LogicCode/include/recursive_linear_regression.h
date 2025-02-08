@@ -9,15 +9,16 @@ class Recursive_Linear_Regression
 {
     using VectorT = std::array<double, 3u>;
     using MatrixT = std::array<std::array<double, 3u>, 3u>;
+
 public:
-    Recursive_Linear_Regression(double lambda = 0.99) 
+    Recursive_Linear_Regression(double lambda = 0.99)
     {
         _lambda = (lambda > 0.0 && lambda <= 1.0) ? lambda : 1.0;
-        create_diagonal_matrix<MatrixT>(_P , 1.0);
+        create_diagonal_matrix<MatrixT>(_P, 1.0);
     }
 
     void
-    update(VectorT const & x, double epsilon)
+    update(VectorT const& x, double epsilon)
     {
         double const e = 10e-6;
 
@@ -26,13 +27,13 @@ public:
         VectorT P_x {};
         matrix_vector_multiplication_vector_product<MatrixT, VectorT>(P_x, _P, x);
         double const scalar = vectors_multiplication_scalar_product<VectorT>(x, P_x);
-        
+
         double const denominator = std::max(scalar + _lambda, e);
         scale_vector<VectorT>(K, 1.0 / denominator);
-        
+
         VectorT K_epsilon_scaled = K;
         scale_vector<VectorT>(K_epsilon_scaled, epsilon);
-        
+
         VectorT new_coefficients {};
         add_vectors<VectorT>(new_coefficients, _coefficients, K_epsilon_scaled);
         _coefficients = new_coefficients;
@@ -50,19 +51,20 @@ public:
         scale_matrix<MatrixT>(_P, _lambda);
     }
 
-    VectorT const &
+    VectorT const&
     get_coefficients() const
     {
         return _coefficients;
     }
 
-    void 
+    void
     reset()
     {
         _P = {};
-        create_diagonal_matrix<MatrixT>(_P , 1.0);
+        create_diagonal_matrix<MatrixT>(_P, 1.0);
         _coefficients = {};
     }
+
 private:
     double _lambda {};
     MatrixT _P {};

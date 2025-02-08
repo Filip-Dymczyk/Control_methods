@@ -3,8 +3,8 @@
 
 #pragma once
 #include "base_classes/controller_base.h"
-#include "integrator.h"
 #include "derivative.h"
+#include "integrator.h"
 
 struct PID_Parameters
 {
@@ -30,17 +30,18 @@ struct PID_Parameters
 class PID : public Controller_Base
 {
 public:
-    PID(double time_step, PID_Parameters const & parameters) : Controller_Base(time_step), _parameters(parameters) {}
+    PID(double time_step, PID_Parameters const& parameters) : Controller_Base(time_step), _parameters(parameters) {}
 
     PID(double time_step) : PID(time_step, {}) {}
-    
+
     void
     update(double error) override
-    {   
+    {
         set_error(error);
         _error_int.update(error);
         _error_der.update(error);
-        set_value(_parameters.kp * error + _parameters.ki * _error_int.get_value() + _parameters.kd * _error_der.get_value());
+        set_value(
+            _parameters.kp * error + _parameters.ki * _error_int.get_value() + _parameters.kd * _error_der.get_value());
     }
 
     std::array<double, 3> const

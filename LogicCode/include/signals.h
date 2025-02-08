@@ -2,15 +2,15 @@
 // Description : Basic signals.
 
 #pragma once
-#include <cstdint>
 #include <math.h>
+#include <cstdint>
 #include "base_classes/signal_base.h"
 
 // NOTE: Heaviside function - a * 1(t - t0).
 class Heaviside : public Signal_Base
 {
 public:
-    Heaviside(double time_step, Signal_Basic_Parameters const & parameters) : Signal_Base(time_step, parameters) {}
+    Heaviside(double time_step, Signal_Basic_Parameters const& parameters) : Signal_Base(time_step, parameters) {}
 
     Heaviside(double time_step) : Heaviside(time_step, {}) {}
 
@@ -33,8 +33,8 @@ public:
 class Ramp : public Heaviside
 {
 public:
-    Ramp(double time_step, Signal_Basic_Parameters const & parameters) : Heaviside(time_step, parameters) {}
-    
+    Ramp(double time_step, Signal_Basic_Parameters const& parameters) : Heaviside(time_step, parameters) {}
+
     Ramp(double time_step) : Ramp(time_step, {}) {}
 
     void
@@ -50,7 +50,8 @@ public:
 class Rectangle : public Signal_Base
 {
 public:
-    Rectangle(double time_step, double on_time, Signal_Basic_Parameters const & parameters): Signal_Base(time_step, parameters)
+    Rectangle(double time_step, double on_time, Signal_Basic_Parameters const& parameters)
+        : Signal_Base(time_step, parameters)
     {
         assert(on_time >= 0.0);
         _on_time = on_time;
@@ -62,7 +63,7 @@ public:
     update() override
     {
         set_value(is_on() ? _parameters.scaler : 0.0);
-        
+
         update_timer();
         update_on_timer();
     }
@@ -74,12 +75,14 @@ public:
         reset_timer();
         reset_on_timer();
     }
+
 protected:
     void
     reset_on_timer()
     {
         _on_timer = 0.0;
     }
+
 private:
     double _on_time {};
     double _on_timer {};
@@ -94,7 +97,7 @@ private:
     update_on_timer()
     {
         _on_timer += get_time_step();
-    } 
+    }
 };
 
 // NOTE: Sine wave - {a * sin(w * t) + b; t > t0
@@ -102,7 +105,10 @@ private:
 class Sine_Wave : public Signal_Base
 {
 public:
-    Sine_Wave(double time_step, double omega, double offset, Signal_Basic_Parameters const & parameters) : Signal_Base(time_step, parameters), _omega(omega), _offset(offset) {}
+    Sine_Wave(double time_step, double omega, double offset, Signal_Basic_Parameters const& parameters)
+        : Signal_Base(time_step, parameters), _omega(omega), _offset(offset)
+    {
+    }
 
     Sine_Wave(double time_step) : Sine_Wave(time_step, {}, {}, {}) {}
 
@@ -119,6 +125,7 @@ public:
         set_value(0.0);
         reset_timer();
     }
+
 private:
     double _omega {};
     double _offset {};
@@ -128,7 +135,10 @@ private:
 class Pulse_Wave : public Rectangle
 {
 public:
-    Pulse_Wave(double time_step, double duty_cycle, double period, Signal_Basic_Parameters const & parameters) : Rectangle(time_step, duty_cycle * period, parameters), _period(period) {}
+    Pulse_Wave(double time_step, double duty_cycle, double period, Signal_Basic_Parameters const& parameters)
+        : Rectangle(time_step, duty_cycle * period, parameters), _period(period)
+    {
+    }
 
     Pulse_Wave(double time_step) : Pulse_Wave(time_step, {}, {}, {}) {}
 
@@ -150,6 +160,7 @@ public:
         reset_timer();
         _periods_counter = 1u;
     }
+
 private:
     std::uint32_t _periods_counter {1u};
     double _period {};

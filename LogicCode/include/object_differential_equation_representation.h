@@ -4,19 +4,18 @@
 #pragma once
 #include "base_classes/object_representation_base.h"
 
-// NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by corresponding coefficients + input value.
-// Lower order derivatives are equal to the integral of a higher one - simple relation.
-// Object coefficients interpretation: e.g. x'' = -ax' - bx + cu.
-// When entering coefficients beware of mistakenly creating unstable objects!
-// We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
+// NOTE: Object equation is taken as a highest order derivative which equals all the lower order ones multiplied by
+// corresponding coefficients + input value. Lower order derivatives are equal to the integral of a higher one - simple
+// relation. Object coefficients interpretation: e.g. x'' = -ax' - bx + cu. When entering coefficients beware of
+// mistakenly creating unstable objects! We allow to set up desired initial conditions in a manner: {x'(0), x(0)}.
 // Object already simulates measurement white noises (output).
 class Object_Differential_Equation_Representation : public Object_Representation_Base
-{   
+{
 public:
-    Object_Differential_Equation_Representation(double time_step, std::size_t order,  
-                                            std::vector<double> const & init_state, 
-                                            std::vector<double> const & coefficients) : 
-                                            Object_Representation_Base(time_step, order, init_state)
+    Object_Differential_Equation_Representation(
+        double time_step, std::size_t order, std::vector<double> const& init_state,
+        std::vector<double> const& coefficients)
+        : Object_Representation_Base(time_step, order, init_state)
     {
         assert(coefficients.size() == order + 1u);
         _coefficients.reserve(order + 1u);
@@ -24,13 +23,16 @@ public:
     }
 
     Object_Differential_Equation_Representation(double time_step, std::size_t order)
-    : Object_Differential_Equation_Representation(time_step, order, std::vector<double>(order), std::vector<double>(order + 1u)) {}
+        : Object_Differential_Equation_Representation(
+              time_step, order, std::vector<double>(order), std::vector<double>(order + 1u))
+    {
+    }
 
-    void 
+    void
     update(double control) override
     {
         double highest_order_derivative_value = 0;
-        
+
         // Calculating the highest derivative order:
         for(std::size_t i = 0; i < _coefficients.size(); i++)
         {
@@ -56,12 +58,13 @@ public:
         assert(object_parameters.size() == (order() + 1u));
         _coefficients = object_parameters;
     }
-    
-    std::vector<double> const &
+
+    std::vector<double> const&
     get_coefficients() const
     {
         return _coefficients;
     }
+
 private:
     std::vector<double> _coefficients {};
 };

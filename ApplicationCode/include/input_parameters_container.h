@@ -4,7 +4,6 @@
 #pragma once
 #include <cstdint>
 #include <vector>
-
 #include "enums.h"
 
 class Input_Parameters_Container
@@ -22,11 +21,12 @@ class Input_Parameters_Container
     struct Combo_Boxes_Inputs
     {
         Object_Representation object_representation = Object_Representation::EQUATION;
-        Control_Mode control_mode = Control_Mode::OPEN_LOOP;
-        Controller_Type controller_type = Controller_Type::NONE;
-        Input_Signal input_signal = Input_Signal::NONE;
-        Operation_Type operation_type = Operation_Type::SIMULATION;
+        Control_Mode control_mode                   = Control_Mode::OPEN_LOOP;
+        Controller_Type controller_type             = Controller_Type::NONE;
+        Input_Signal input_signal                   = Input_Signal::NONE;
+        Operation_Type operation_type               = Operation_Type::SIMULATION;
     };
+
 public:
     void
     set_run_flag(bool run_flag)
@@ -41,13 +41,13 @@ public:
     }
 
     void
-    set_object_parameters(std::vector<double> const & object_parameters)
+    set_object_parameters(std::vector<double> const& object_parameters)
     {
         _button_inputs.object_parameters = object_parameters;
     }
 
     void
-    set_controller_parameters(std::vector<double> const & controller_parameters)
+    set_controller_parameters(std::vector<double> const& controller_parameters)
     {
         _button_inputs.controller_parameters = controller_parameters;
     }
@@ -65,31 +65,31 @@ public:
     }
 
     void
-    set_object_representation(Object_Representation const & object_representation)
+    set_object_representation(Object_Representation const& object_representation)
     {
         _combo_boxes_inputs.object_representation = object_representation;
     }
-    
+
     void
-    set_control_mode(Control_Mode const & control_mode)
+    set_control_mode(Control_Mode const& control_mode)
     {
         _combo_boxes_inputs.control_mode = control_mode;
     }
 
-    void 
-    set_controller_type(Controller_Type const & controller_type)
+    void
+    set_controller_type(Controller_Type const& controller_type)
     {
         _combo_boxes_inputs.controller_type = controller_type;
     }
 
     void
-    set_input_signal(Input_Signal const & input_signal)
+    set_input_signal(Input_Signal const& input_signal)
     {
         _combo_boxes_inputs.input_signal = input_signal;
     }
 
     void
-    set_operation_type(Operation_Type const & operation_type)
+    set_operation_type(Operation_Type const& operation_type)
     {
         _combo_boxes_inputs.operation_type = operation_type;
     }
@@ -119,7 +119,7 @@ public:
     }
 
     double
-    get_simulation_time_step() const 
+    get_simulation_time_step() const
     {
         return _button_inputs.simulation_time_step;
     }
@@ -141,7 +141,7 @@ public:
     {
         return _combo_boxes_inputs.controller_type;
     }
-    
+
     Input_Signal
     get_input_signal() const
     {
@@ -153,7 +153,7 @@ public:
     {
         return _combo_boxes_inputs.operation_type;
     }
-    
+
 private:
     Buttons_Inputs _button_inputs {};
     Combo_Boxes_Inputs _combo_boxes_inputs {};

@@ -1,5 +1,8 @@
 @echo off
 
+:: Format all files
+call code_format 
+
 @echo Debug application build...
 
 IF NOT EXIST "%cd%\builds" (
