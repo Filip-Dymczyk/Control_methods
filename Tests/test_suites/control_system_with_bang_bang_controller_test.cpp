@@ -8,6 +8,7 @@
 #include "test_with_plot.h"
 
 static constexpr uint8_t order = 2u;
+
 class ControlSystemWithBangBangControllerTest : public testing::Test, public Test_With_Plot
 {
     using ObjectT = Object_Differential_Equation_Representation;

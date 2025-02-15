@@ -170,8 +170,8 @@ public:
     void
     update()
     {
-        _selected_input_signal->update();
         _system.update(_selected_input_signal->get_value());
+        _selected_input_signal->update();
     }
 
     Control_System::Control_Mode

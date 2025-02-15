@@ -207,6 +207,7 @@ private:
         this->setAlignment(Qt::AlignmentFlag::AlignTop | Qt::AlignmentFlag::AlignHCenter);
         this->setSpacing(13);
     }
+
 Q_SIGNALS:
     void
     show_plot_window();
