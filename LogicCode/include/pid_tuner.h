@@ -24,12 +24,6 @@ public:
     }
 
     double
-    get_set_point() const
-    {
-        return _control_system.get_set_point();
-    }
-
-    double
     get_output() const
     {
         return _control_system.get_output();

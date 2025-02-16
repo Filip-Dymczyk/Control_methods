@@ -152,7 +152,7 @@ public:
     double
     get_setpoint() const
     {
-        return _system.get_set_point();
+        return _selected_input_signal->get_value();
     }
 
     double

@@ -156,7 +156,7 @@ private:
         while(input_signal->time() < _sim_time)
         {
             time.push_back(input_signal->time());
-            set_point.push_back(tuner.get_set_point());
+            set_point.push_back(input_signal->get_value());
             control.push_back(tuner.get_control());
             output.push_back(tuner.get_output());
             tuner.update(input_signal->get_value());
