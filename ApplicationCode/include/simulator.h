@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <iostream>
 #include "control.h"
 #include "input_parameters_container.h"
 #include "plotter.h"
@@ -31,22 +30,12 @@ public:
     run()
     {
         reset();
-        int i = 0;
         while(_control.get_time() < _simulation_time)
         {
             _plotter.update(
                 _control.get_time(), _control.get_setpoint(), _control.get_control_value(),
                 _control.get_object_value());
-            if(i == 0)
-            {
-                std::cout << _control.get_setpoint() << std::endl;
-            }
             _control.update();
-            if(i == 0)
-            {
-                std::cout << _control.get_setpoint() << std::endl;
-            }
-            i++;
         }
     }
 
