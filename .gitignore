@@ -40,3 +40,6 @@
 
 # Allow .bat scripts
 !*.bat
+
+# Notes:
+*.txt

@@ -21,6 +21,7 @@ private:
     Inputs_Parser _inputs_parser {};
 
 public Q_SLOTS:
+
     void
     buttons_clicked_callback()
     {
@@ -58,6 +59,7 @@ public Q_SLOTS:
             _inputs_parser.parse_combo_box_id(combo_box_id, current_index);
         }
     }
+
 Q_SIGNALS:
     void
     show_plot_window();

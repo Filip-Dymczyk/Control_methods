@@ -1,7 +1,7 @@
 @echo off
 
 :: Format changed files
-call code_format 
+call code_format_changed 
 
 @echo Application build...
 IF NOT EXIST "%cd%\builds" (

@@ -24,7 +24,6 @@ public:
     void
     update(double set_point)
     {
-        _set_point = set_point;
         if(_control_mode == Control_Mode::OPEN_LOOP)
         {
             _controller->update(set_point);
@@ -35,12 +34,6 @@ public:
             _controller->update(error);
         }
         _object->update(_controller->get_value());
-    }
-
-    double
-    get_set_point() const
-    {
-        return _set_point;
     }
 
     double
@@ -88,7 +81,6 @@ public:
     void
     reset()
     {
-        _set_point = 0.0;
         _object->reset();
         _controller->reset();
     }
@@ -100,7 +92,6 @@ public:
     }
 
 private:
-    double _set_point {};
     Control_Mode _control_mode {};
     Object_Representation_Base* _object {nullptr};
     Controller_Base* _controller {nullptr};

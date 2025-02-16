@@ -29,6 +29,7 @@ IndentCaseLabels: true
 IndentWidth: 4
 Language: Cpp
 PointerAlignment: Left
+SeparateDefinitionBlocks: Always
 SortIncludes: true
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false

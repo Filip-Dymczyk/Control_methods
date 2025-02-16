@@ -116,10 +116,10 @@ private:
         while(input_signal->time() < _sim_time)
         {
             time.push_back(input_signal->time());
-            control_loop.update(input_signal->get_value());
             set_point.push_back(input_signal->get_value());
             control.push_back(control_loop.get_control());
             output.push_back(control_loop.get_output());
+            control_loop.update(input_signal->get_value());
             input_signal->update();
         }
         return {time, set_point, control, output};
@@ -136,9 +136,9 @@ private:
         while(input_signal->time() < _sim_time)
         {
             time.push_back(input_signal->time());
-            object->update(input_signal->get_value());
             set_point.push_back(input_signal->get_value());
             output.push_back(object->get_value());
+            object->update(input_signal->get_value());
             input_signal->update();
         }
         return {time, set_point, {}, output};
@@ -156,11 +156,11 @@ private:
         while(input_signal->time() < _sim_time)
         {
             time.push_back(input_signal->time());
-            tuner.update(input_signal->get_value());
-            input_signal->update();
-            set_point.push_back(tuner.get_set_point());
+            set_point.push_back(input_signal->get_value());
             control.push_back(tuner.get_control());
             output.push_back(tuner.get_output());
+            tuner.update(input_signal->get_value());
+            input_signal->update();
         }
         return {time, set_point, control, output};
     }
