@@ -14,72 +14,67 @@
 class Inputs_Parser
 {
 public:
-    bool
+    void
     parse_button_id(Button_ID button_id, QWidget* parent)
     {
-        bool is_run = false;
-        switch(button_id)
+        if(parent != nullptr)
         {
-            case Button_ID::ORDER_BUTTON:
+            switch(button_id)
             {
-                set_order(parent);
-                break;
-            }
-            case Button_ID::OBJECT_PARAMETERS_BUTTON:
-            {
-                set_object_parameters(parent);
-                break;
-            }
-            case Button_ID::CONTROLLER_PARAMETERS_BUTTON:
-            {
-                set_controller_parameters(parent);
-                break;
-            }
-            case Button_ID::SIMULATION_PARAMETERS_BUTTON:
-            {
-                set_simulation_parameters(parent);
-                break;
-            }
-            case Button_ID::RUN_BUTTON:
-            {
-                _inputs.set_run_flag(true);
-                is_run = true;
-                break;
-            }
-            default:
-            {
-                break;
+                case Button_ID::OBJECT_PARAMETERS_BUTTON:
+                {
+                    set_object_parameters(parent);
+                    break;
+                }
+                case Button_ID::CONTROLLER_PARAMETERS_BUTTON:
+                {
+                    set_controller_parameters(parent);
+                    break;
+                }
+                case Button_ID::SIMULATION_TIME_BUTTON:
+                {
+                    set_simulation_time(parent);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
             }
         }
-        return is_run;
+        else
+        {
+            assert(false);
+            return;
+        }
     }
 
     void
-    parse_combo_box_id(Combo_Box_ID combo_box_id, int current_index)
+    parse_combobox_id(ComboBox_ID combo_box_id, int current_index)
     {
         switch(combo_box_id)
         {
-            case Combo_Box_ID::OBJECT_REPRESENTATION:
+            case ComboBox_ID::OBJECT_REPRESENTATION:
             {
                 _inputs.set_object_representation(static_cast<Object_Representation>(current_index));
                 break;
             }
-            case Combo_Box_ID::CONTROL_MODE:
+            case ComboBox_ID::CONTROL_MODE:
             {
                 _inputs.set_control_mode(static_cast<Control_Mode>(current_index));
                 break;
             }
-            case Combo_Box_ID::CONTROLLER_TYPE:
+            case ComboBox_ID::CONTROLLER_TYPE:
             {
                 _inputs.set_controller_type(static_cast<Controller_Type>(current_index));
                 break;
             }
-            case Combo_Box_ID::INPUT_SIGNAL:
+            case ComboBox_ID::INPUT_SIGNAL:
             {
                 _inputs.set_input_signal(static_cast<Input_Signal>(current_index));
                 break;
             }
-            case Combo_Box_ID::OPERATION_TYPE:
+            case ComboBox_ID::OPERATION_TYPE:
             {
                 _inputs.set_operation_type(static_cast<Operation_Type>(current_index));
                 break;
@@ -92,31 +87,14 @@ public:
     }
 
     void
-    set_order(QWidget* parent)
+    set_order(int order)
     {
-        if(parent == nullptr)
-        {
-            assert(false);
-            return;
-        }
-        QSpinBox const* const order_spin_box = parent->findChild<QSpinBox*>("order");
-
-        if(order_spin_box == nullptr)
-        {
-            assert(false);
-            return;
-        }
-        _inputs.set_order(order_spin_box->value());
+        _inputs.set_order(order);
     }
 
     void
     set_object_parameters(QWidget* parent)
     {
-        if(parent == nullptr)
-        {
-            assert(false);
-            return;
-        }
         QLineEdit const* const object_parameters_line_edit = parent->findChild<QLineEdit*>("object_parameters");
 
         if(object_parameters_line_edit == nullptr)
@@ -145,11 +123,6 @@ public:
     void
     set_controller_parameters(QWidget* parent)
     {
-        if(parent == nullptr)
-        {
-            assert(false);
-            return;
-        }
         QLineEdit const* const controller_parameters_line_edit = parent->findChild<QLineEdit*>("controller_parameters");
 
         if(controller_parameters_line_edit == nullptr)
@@ -177,23 +150,22 @@ public:
     }
 
     void
-    set_simulation_parameters(QWidget* parent)
+    set_simulation_time(QWidget* parent)
     {
-        if(parent == nullptr)
-        {
-            assert(false);
-            return;
-        }
-        QLineEdit const* const simulation_time_line_edit     = parent->findChild<QLineEdit*>("simulation_time");
-        QLineEdit const* const simulation_timestep_line_edit = parent->findChild<QLineEdit*>("simulation_step");
+        QLineEdit const* const simulation_time_line_edit = parent->findChild<QLineEdit*>("simulation_time");
 
-        if(simulation_time_line_edit == nullptr || simulation_timestep_line_edit == nullptr)
+        if(simulation_time_line_edit == nullptr)
         {
             assert(false);
             return;
         }
         _inputs.set_simulation_time(simulation_time_line_edit->text().toDouble());
-        _inputs.set_simulation_time_step(simulation_timestep_line_edit->text().toDouble());
+    }
+
+    void
+    set_simulation_time_step(double simulation_time_step)
+    {
+        _inputs.set_simulation_time_step(simulation_time_step);
     }
 
     Input_Parameters_Container const&

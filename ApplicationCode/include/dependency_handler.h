@@ -23,10 +23,16 @@ private:
 public Q_SLOTS:
 
     void
+    order_spinbox_callback(int order)
+    {
+        _inputs_parser.set_order(order);
+    }
+
+    void
     buttons_clicked_callback()
     {
         QPushButton* button = qobject_cast<QPushButton*>(sender());
-        if(button)
+        if(button != nullptr)
         {
             QVariant button_id_variant = button->property("id");
             Button_ID const button_id  = button_id_variant.value<Button_ID>();
@@ -37,26 +43,32 @@ public Q_SLOTS:
                 assert(false);
                 return;
             }
-            bool const is_run = _inputs_parser.parse_button_id(button_id, parent);
-
-            if(is_run)
-            {
-                Q_EMIT show_plot_window();
-            }
+            _inputs_parser.parse_button_id(button_id, parent);
         }
     }
 
     void
-    combo_boxes_callback()
+    comboboxes_callback()
     {
-        QComboBox* combo_box = qobject_cast<QComboBox*>(sender());
-        if(combo_box)
+        QComboBox* combobox = qobject_cast<QComboBox*>(sender());
+        if(combobox != nullptr)
         {
-            QVariant combo_box_id_variant   = combo_box->property("id");
-            Combo_Box_ID const combo_box_id = combo_box_id_variant.value<Combo_Box_ID>();
-            int const current_index         = combo_box->currentIndex();
+            QVariant combobox_id_variant  = combobox->property("id");
+            ComboBox_ID const combobox_id = combobox_id_variant.value<ComboBox_ID>();
+            int const current_index       = combobox->currentIndex();
 
-            _inputs_parser.parse_combo_box_id(combo_box_id, current_index);
+            _inputs_parser.parse_combobox_id(combobox_id, current_index);
+        }
+    }
+
+    void
+    simulation_time_step_callback()
+    {
+        QComboBox* combobox = qobject_cast<QComboBox*>(sender());
+        if(combobox != nullptr)
+        {
+            QVariant const simulation_time_step = combobox->currentData();
+            _inputs_parser.set_simulation_time_step(simulation_time_step.toDouble());
         }
     }
 

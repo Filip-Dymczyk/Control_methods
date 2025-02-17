@@ -6,14 +6,12 @@
 
 enum class Button_ID : std::uint8_t
 {
-    ORDER_BUTTON,
     OBJECT_PARAMETERS_BUTTON,
     CONTROLLER_PARAMETERS_BUTTON,
-    SIMULATION_PARAMETERS_BUTTON,
-    RUN_BUTTON
+    SIMULATION_TIME_BUTTON
 };
 
-enum class Combo_Box_ID : std::uint8_t
+enum class ComboBox_ID : std::uint8_t
 {
     OBJECT_REPRESENTATION,
     CONTROL_MODE,
