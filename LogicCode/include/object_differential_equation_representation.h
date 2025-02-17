@@ -53,7 +53,7 @@ public:
     }
 
     void
-    set_parameters(std::vector<double> const& object_parameters)
+    set_parameters(std::vector<double> const& object_parameters) override
     {
         assert(object_parameters.size() == (order() + 1u));
         _coefficients = object_parameters;
