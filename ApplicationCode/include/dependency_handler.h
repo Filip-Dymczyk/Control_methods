@@ -23,40 +23,36 @@ private:
 public Q_SLOTS:
 
     void
-    buttons_clicked_callback()
+    order_spinbox_callback(int order)
     {
-        QPushButton* button = qobject_cast<QPushButton*>(sender());
-        if(button)
+        _inputs_parser.set_order(order);
+    }
+
+    void
+    line_edits_callback()
+    {
+        QLineEdit* line_edit = qobject_cast<QLineEdit*>(sender());
+        if(line_edit != nullptr)
         {
-            QVariant button_id_variant = button->property("id");
-            Button_ID const button_id  = button_id_variant.value<Button_ID>();
-            QWidget* parent            = button->parentWidget();
+            line_edit->clearFocus();
 
-            if(parent == nullptr)
-            {
-                assert(false);
-                return;
-            }
-            bool const is_run = _inputs_parser.parse_button_id(button_id, parent);
+            QVariant line_edit_id_variant  = line_edit->property("id");
+            LineEdit_ID const line_edit_id = line_edit_id_variant.value<LineEdit_ID>();
 
-            if(is_run)
-            {
-                Q_EMIT show_plot_window();
-            }
+            _inputs_parser.parse_line_edit_id(line_edit, line_edit_id);
         }
     }
 
     void
-    combo_boxes_callback()
+    comboboxes_callback()
     {
-        QComboBox* combo_box = qobject_cast<QComboBox*>(sender());
-        if(combo_box)
+        QComboBox* combobox = qobject_cast<QComboBox*>(sender());
+        if(combobox != nullptr)
         {
-            QVariant combo_box_id_variant   = combo_box->property("id");
-            Combo_Box_ID const combo_box_id = combo_box_id_variant.value<Combo_Box_ID>();
-            int const current_index         = combo_box->currentIndex();
+            QVariant combobox_id_variant  = combobox->property("id");
+            ComboBox_ID const combobox_id = combobox_id_variant.value<ComboBox_ID>();
 
-            _inputs_parser.parse_combo_box_id(combo_box_id, current_index);
+            _inputs_parser.parse_combobox_id(combobox, combobox_id);
         }
     }
 
