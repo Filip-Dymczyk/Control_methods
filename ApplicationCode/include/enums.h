@@ -4,11 +4,11 @@
 #pragma once
 #include <cstdint>
 
-enum class Button_ID : std::uint8_t
+enum class LineEdit_ID : std::uint8_t
 {
-    OBJECT_PARAMETERS_BUTTON,
-    CONTROLLER_PARAMETERS_BUTTON,
-    SIMULATION_TIME_BUTTON
+    OBJECT_PARAMETERS_LINE_EDIT,
+    CONTROLLER_PARAMETERS_LINE_EDIT,
+    SIMULATION_TIME_LINE_EDIT
 };
 
 enum class ComboBox_ID : std::uint8_t
@@ -17,8 +17,10 @@ enum class ComboBox_ID : std::uint8_t
     CONTROL_MODE,
     CONTROLLER_TYPE,
     INPUT_SIGNAL,
-    OPERATION_TYPE
+    OPERATION_TYPE,
+    SIMULATION_TIME_STEP
 };
+
 enum class Object_Representation : std::uint8_t
 {
     EQUATION,

@@ -8,7 +8,7 @@
 
 class Input_Parameters_Container
 {
-    struct Buttons_Inputs
+    struct LineEdit_Inputs
     {
         std::vector<double> object_parameters {1.0, 1.0};
         std::vector<double> controller_parameters {1.0, 1.0, 0.0};
@@ -35,19 +35,19 @@ public:
     void
     set_object_parameters(std::vector<double> const& object_parameters)
     {
-        _button_inputs.object_parameters = object_parameters;
+        _line_edit_inputs.object_parameters = object_parameters;
     }
 
     void
     set_controller_parameters(std::vector<double> const& controller_parameters)
     {
-        _button_inputs.controller_parameters = controller_parameters;
+        _line_edit_inputs.controller_parameters = controller_parameters;
     }
 
     void
     set_simulation_time(double simulation_time)
     {
-        _button_inputs.simulation_time = simulation_time;
+        _line_edit_inputs.simulation_time = simulation_time;
     }
 
     void
@@ -95,19 +95,19 @@ public:
     std::vector<double> const&
     get_object_parameters() const
     {
-        return _button_inputs.object_parameters;
+        return _line_edit_inputs.object_parameters;
     }
 
     std::vector<double> const&
     get_controller_parameters() const
     {
-        return _button_inputs.controller_parameters;
+        return _line_edit_inputs.controller_parameters;
     }
 
     double
     get_simulation_time() const
     {
-        return _button_inputs.simulation_time;
+        return _line_edit_inputs.simulation_time;
     }
 
     double
@@ -148,6 +148,6 @@ public:
 
 private:
     int _order {1};
-    Buttons_Inputs _button_inputs {};
+    LineEdit_Inputs _line_edit_inputs {};
     ComboBoxes_Inputs _comboboxes_inputs {};
 };

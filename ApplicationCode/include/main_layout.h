@@ -12,6 +12,7 @@
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "clickable_line_edit.h"
 #include "dependency_handler.h"
 
 class Main_Layout : public QVBoxLayout
@@ -39,22 +40,19 @@ private:
     QLabel _representation_label {};
     QComboBox _object_representation_combobox {};
     QLabel _parameters_label {};
-    QLineEdit _object_parameters_line_edit {};
-    QPushButton _confirm_object_parameters_button {};
+    ClickableLineEdit _object_parameters_line_edit {};
     QLabel _control_mode_label {};
     QComboBox _control_mode_combobox {};
     QLabel _controller_type_label {};
     QComboBox _controller_type_combobox {};
     QLabel _controller_parameters_label {};
-    QLineEdit _controller_parameters_line_edit {};
-    QPushButton _confirm_controller_parameters_button {};
+    ClickableLineEdit _controller_parameters_line_edit {};
     QLabel _input_signal_label {};
     QComboBox _input_signal_combobox {};
     QLabel _operation_label {};
     QComboBox _operation_combobox {};
     QLabel _simulation_time_label {};
-    QLineEdit _simulation_time_line_edit {};
-    QPushButton _confirm_simulation_time_button {};
+    ClickableLineEdit _simulation_time_line_edit {};
     QComboBox _simulation_step_combobox {};
     QPushButton _run_button {};
 
@@ -75,14 +73,6 @@ private:
     }
 
     void
-    configure_buttons()
-    {
-        _confirm_controller_parameters_button.setText("Confirm");
-        _confirm_simulation_time_button.setText("Confirm");
-        _run_button.setText("Run operation");
-    }
-
-    void
     configure_comboboxes()
     {
         _object_representation_combobox.addItem("Object equation representation");
@@ -92,7 +82,6 @@ private:
         _controller_type_combobox.addItem("No controller");
         _controller_type_combobox.addItem("Bang-Bang controller");
         _controller_type_combobox.addItem("PID");
-        _confirm_object_parameters_button.setText("Confirm");
         _input_signal_combobox.addItem("No signal");
         _input_signal_combobox.addItem("Heaviside");
         _input_signal_combobox.addItem("Ramp");
@@ -112,30 +101,40 @@ private:
     void
     set_widgets_ids()
     {
-        _confirm_object_parameters_button.setProperty("id", 0);
-        _confirm_controller_parameters_button.setProperty("id", 1);
-        _confirm_simulation_time_button.setProperty("id", 2);
+        _object_parameters_line_edit.setProperty("id", 0);
+        _controller_parameters_line_edit.setProperty("id", 1);
+        _simulation_time_line_edit.setProperty("id", 2);
 
         _object_representation_combobox.setProperty("id", 0);
         _control_mode_combobox.setProperty("id", 1);
         _controller_type_combobox.setProperty("id", 2);
         _input_signal_combobox.setProperty("id", 3);
         _operation_combobox.setProperty("id", 4);
+        _simulation_step_combobox.setProperty("id", 5);
     }
 
     void
-    connect_buttons_dependencies()
+    connect_line_edits_dependencies()
     {
-        connect(&_run_button, QPushButton::clicked, &_dependency_handler, &Dependency_Handler::show_plot_window);
+        connect(&_object_parameters_line_edit, &ClickableLineEdit::clicked, [this]() {
+            _object_parameters_line_edit.setFocus();
+        });
+        connect(&_controller_parameters_line_edit, &ClickableLineEdit::clicked, [this]() {
+            _controller_parameters_line_edit.setFocus();
+        });
+        connect(&_simulation_time_line_edit, &ClickableLineEdit::clicked, [this]() {
+            _simulation_time_line_edit.setFocus();
+        });
+
         connect(
-            &_confirm_object_parameters_button, &QPushButton::clicked, &_dependency_handler,
-            &Dependency_Handler::buttons_clicked_callback);
+            &_object_parameters_line_edit, &QLineEdit::editingFinished, &_dependency_handler,
+            &Dependency_Handler::line_edits_callback);
         connect(
-            &_confirm_controller_parameters_button, &QPushButton::clicked, &_dependency_handler,
-            &Dependency_Handler::buttons_clicked_callback);
+            &_controller_parameters_line_edit, &QLineEdit::editingFinished, &_dependency_handler,
+            &Dependency_Handler::line_edits_callback);
         connect(
-            &_confirm_simulation_time_button, &QPushButton::clicked, &_dependency_handler,
-            &Dependency_Handler::buttons_clicked_callback);
+            &_simulation_time_line_edit, &QLineEdit::editingFinished, &_dependency_handler,
+            &Dependency_Handler::line_edits_callback);
     }
 
     void
@@ -158,7 +157,7 @@ private:
             &Dependency_Handler::comboboxes_callback);
         connect(
             &_simulation_step_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), &_dependency_handler,
-            &Dependency_Handler::simulation_time_step_callback);
+            &Dependency_Handler::comboboxes_callback);
     }
 
     void
@@ -167,18 +166,9 @@ private:
         connect(
             &_order_spin_box, QOverload<int>::of(&QSpinBox::valueChanged), &_dependency_handler,
             &Dependency_Handler::order_spinbox_callback);
-        connect_buttons_dependencies();
+        connect(&_run_button, QPushButton::clicked, &_dependency_handler, &Dependency_Handler::show_plot_window);
+        connect_line_edits_dependencies();
         connect_comboboxes_dependencies();
-    }
-
-    void
-    set_widgets_names()
-    {
-        _order_spin_box.setObjectName("order");
-        _object_parameters_line_edit.setObjectName("object_parameters");
-        _controller_parameters_line_edit.setObjectName("controller_parameters");
-        _simulation_time_line_edit.setObjectName("simulation_time");
-        _simulation_step_combobox.setObjectName("simulation_step");
     }
 
     void
@@ -194,13 +184,11 @@ private:
     {
         _order_spin_box.setRange(1, 10);
         _order_spin_box.setValue(1);
-
+        _run_button.setText("Run operation");
         configure_labels();
-        configure_buttons();
         configure_comboboxes();
         set_line_edits_default_values();
         set_widgets_ids();
-        set_widgets_names();
         connect_widgets_dependencies();
     }
 
@@ -213,21 +201,18 @@ private:
         this->addWidget(&_object_representation_combobox);
         this->addWidget(&_parameters_label);
         this->addWidget(&_object_parameters_line_edit);
-        this->addWidget(&_confirm_object_parameters_button);
         this->addWidget(&_control_mode_label);
         this->addWidget(&_control_mode_combobox);
         this->addWidget(&_controller_type_label);
         this->addWidget(&_controller_type_combobox);
         this->addWidget(&_controller_parameters_label);
         this->addWidget(&_controller_parameters_line_edit);
-        this->addWidget(&_confirm_controller_parameters_button);
         this->addWidget(&_input_signal_label);
         this->addWidget(&_input_signal_combobox);
         this->addWidget(&_operation_label);
         this->addWidget(&_operation_combobox);
         this->addWidget(&_simulation_time_label);
         this->addWidget(&_simulation_time_line_edit);
-        this->addWidget(&_confirm_simulation_time_button);
         this->addWidget(&_simulation_step_combobox);
         this->addWidget(&_run_button);
     }

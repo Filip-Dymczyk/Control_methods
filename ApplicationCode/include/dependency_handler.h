@@ -29,21 +29,17 @@ public Q_SLOTS:
     }
 
     void
-    buttons_clicked_callback()
+    line_edits_callback()
     {
-        QPushButton* button = qobject_cast<QPushButton*>(sender());
-        if(button != nullptr)
+        QLineEdit* line_edit = qobject_cast<QLineEdit*>(sender());
+        if(line_edit != nullptr)
         {
-            QVariant button_id_variant = button->property("id");
-            Button_ID const button_id  = button_id_variant.value<Button_ID>();
-            QWidget* parent            = button->parentWidget();
+            line_edit->clearFocus();
 
-            if(parent == nullptr)
-            {
-                assert(false);
-                return;
-            }
-            _inputs_parser.parse_button_id(button_id, parent);
+            QVariant line_edit_id_variant  = line_edit->property("id");
+            LineEdit_ID const line_edit_id = line_edit_id_variant.value<LineEdit_ID>();
+
+            _inputs_parser.parse_line_edit_id(line_edit, line_edit_id);
         }
     }
 
@@ -55,20 +51,8 @@ public Q_SLOTS:
         {
             QVariant combobox_id_variant  = combobox->property("id");
             ComboBox_ID const combobox_id = combobox_id_variant.value<ComboBox_ID>();
-            int const current_index       = combobox->currentIndex();
 
-            _inputs_parser.parse_combobox_id(combobox_id, current_index);
-        }
-    }
-
-    void
-    simulation_time_step_callback()
-    {
-        QComboBox* combobox = qobject_cast<QComboBox*>(sender());
-        if(combobox != nullptr)
-        {
-            QVariant const simulation_time_step = combobox->currentData();
-            _inputs_parser.set_simulation_time_step(simulation_time_step.toDouble());
+            _inputs_parser.parse_combobox_id(combobox, combobox_id);
         }
     }
 
