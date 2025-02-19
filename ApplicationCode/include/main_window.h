@@ -4,34 +4,40 @@
 #pragma once
 
 #include <QtCore/QString>
-#include <QtWidgets/QWidget>
-#include "main_layout.h"
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolBar>
+#include "main_widget.h"
 #include "simulator.h"
 
-class Main_Window : public QWidget
+class Main_Window : public QMainWindow
 {
-    static constexpr unsigned width  = 400;
-    static constexpr unsigned height = 800;
-    QString const window_title       = "Dynamical systems control methods.";
+    QString const window_title = "Dynamical systems control methods.";
 
 public:
-    Main_Window() : _main_layout(this), _simulator()
+    Main_Window() : _main_widget(new Main_Widget(this)), _simulator()
     {
         this->setWindowTitle(window_title);
-        this->setFixedSize(width, height);
-        this->setLayout(&_main_layout);
-        connect(&_main_layout, &Main_Layout::show_plot_window, this, &Main_Window::show_plot_window);
+        this->setCentralWidget(_main_widget);
+
+        QPushButton* run_button = new QPushButton("Run");
+        connect(run_button, &QPushButton::clicked, this, &Main_Window::show_plot_window);
+
+        QToolBar* toolbar = new QToolBar();
+        toolbar->addWidget(run_button);
+
+        this->addToolBar(toolbar);
     }
+
+private:
+    Main_Widget* _main_widget {nullptr};
+    Simulator _simulator;
 
     void
     show_plot_window()
     {
-        _simulator.update(_main_layout.dependency_handler().get_input_parameters());
+        _simulator.update(_main_widget->dependency_handler()->get_input_parameters());
         _simulator.run();
         _simulator.show_plot();
     }
-
-private:
-    Main_Layout _main_layout;
-    Simulator _simulator;
 };

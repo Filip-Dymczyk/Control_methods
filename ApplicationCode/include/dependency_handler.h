@@ -55,8 +55,4 @@ public Q_SLOTS:
             _inputs_parser.parse_combobox_id(combobox, combobox_id);
         }
     }
-
-Q_SIGNALS:
-    void
-    show_plot_window();
 };
