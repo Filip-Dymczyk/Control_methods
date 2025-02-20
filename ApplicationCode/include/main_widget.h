@@ -61,7 +61,11 @@ private:
             object_representation_combobox, {"Object equation representation", "Object state space representation"});
 
         ClickableLineEdit* object_parameters_line_edit = new ClickableLineEdit();
-        set_up_line_edit(object_parameters_line_edit, "1.0;1.0");
+        set_up_line_edit(
+            object_parameters_line_edit, "1.0;1.0",
+            "<p><i>Enter object parameters separated by semicolons.</i></p>"
+            "<p><b>NOTE!</b> Format accepted:</p>"
+            "<p><code>ax' + bx = cu</code></p>");
 
         QGridLayout* grid_Layout = new QGridLayout();
 
@@ -91,7 +95,10 @@ private:
         set_up_combobox(controller_type_combobox, {"No controller", "Bang-Bang controller", "PID"});
 
         ClickableLineEdit* controller_parameters_line_edit = new ClickableLineEdit();
-        set_up_line_edit(controller_parameters_line_edit, "1.0;1.0;0.0");
+        set_up_line_edit(
+            controller_parameters_line_edit, "1.0;1.0;0.0",
+            "<p><i>Enter controller parameters divided with semicolons.</i></p>"
+            "<p><b>NOTE!</b> Only first 3 parameters will be accepted.</p>");
 
         QComboBox* input_signal_combobox = new QComboBox();
         set_up_combobox(
@@ -125,7 +132,7 @@ private:
         set_up_combobox(operation_combobox, {"Simulation", "Tuning"});
 
         ClickableLineEdit* simulation_time_line_edit = new ClickableLineEdit();
-        set_up_line_edit(simulation_time_line_edit, "1.0");
+        set_up_line_edit(simulation_time_line_edit, "1.0", "<p><i>Enter operation time in seconds.</i></p>");
 
         QComboBox* _simulation_step_combobox = new QComboBox();
         set_up_combobox(_simulation_step_combobox, {"0.01", "0.001", "0.0001"}, true);
@@ -172,9 +179,10 @@ private:
     }
 
     void
-    set_up_line_edit(ClickableLineEdit* line_edit, QString const& text)
+    set_up_line_edit(ClickableLineEdit* line_edit, QString text, QString tooltip)
     {
         line_edit->setText(text);
+        line_edit->setToolTip(tooltip);
         line_edit->setProperty("id", line_edit_id);
         line_edit_id++;
 

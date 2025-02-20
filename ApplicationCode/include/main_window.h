@@ -22,6 +22,7 @@ public:
         this->setCentralWidget(_main_widget);
 
         QPushButton* run_button = new QPushButton("Run");  // Maybe this will be changed for QAction with and Icon.
+        run_button->setToolTip("<p><i>Run the application.</i></p>");
         connect(run_button, &QPushButton::clicked, this, &Main_Window::show_plot_window);
 
         QToolBar* toolbar = new QToolBar();
