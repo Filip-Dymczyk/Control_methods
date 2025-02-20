@@ -100,6 +100,14 @@ private:
             "<p><i>Enter controller parameters divided with semicolons.</i></p>"
             "<p><b>NOTE!</b> Only first 3 parameters will be accepted.</p>");
 
+        controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
+        connect(
+            _dependency_handler, &Dependency_Handler::disable_controller_parameters,
+            [controller_parameters_line_edit]() { controller_parameters_line_edit->setEnabled(false); });
+        connect(
+            _dependency_handler, &Dependency_Handler::enable_controller_parameters,
+            [controller_parameters_line_edit]() { controller_parameters_line_edit->setEnabled(true); });
+
         QComboBox* input_signal_combobox = new QComboBox();
         set_up_combobox(input_signal_combobox, {"Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
 
