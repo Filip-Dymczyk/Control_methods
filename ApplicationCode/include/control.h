@@ -35,7 +35,7 @@ public:
           _sine_wave(TIME_STEP),
           _pulse_wave(TIME_STEP),
           _selected_object(&_differential_equation_representation_object),
-          _selected_controller(&_pid_controller),
+          _selected_controller(nullptr),
           _selected_input_signal(&_heaviside),
           _regression(),
           _system(_selected_object, _selected_controller, Control_System::Control_Mode::OPEN_LOOP),
@@ -93,7 +93,11 @@ public:
                 _selected_controller = &_pid_controller;
                 break;
             }
-            // TODO: Handle no controller
+            case Controller_Type::NONE:
+            {
+                _selected_controller = nullptr;
+                return;
+            }
             default:
                 break;
         }
@@ -129,8 +133,8 @@ public:
             case Input_Signal::PULSE_WAVE:
             {
                 _selected_input_signal = &_pulse_wave;
+                break;
             }
-            // TODO: Handle no signal.
             default:
                 break;
         }
@@ -184,7 +188,12 @@ public:
     reset()
     {
         _selected_object->reset();
-        _selected_controller->reset();
+
+        if(_selected_controller != nullptr)
+        {
+            _selected_controller->reset();
+        }
+
         _selected_input_signal->reset();
     }
 

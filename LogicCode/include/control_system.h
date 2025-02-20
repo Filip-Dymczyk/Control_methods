@@ -12,11 +12,10 @@ public:
     enum class Control_Mode : std::uint8_t
     {
         OPEN_LOOP,
-        CLOSED_LOOP,
-        NONE
+        CLOSED_LOOP
     };
 
-    Control_System(Object_Representation_Base* object, Controller_Base* controller, Control_Mode const& control_mode)
+    Control_System(Object_Representation_Base* object, Controller_Base*& controller, Control_Mode const& control_mode)
         : _object(object), _controller(controller), _control_mode(control_mode)
     {
     }
@@ -24,40 +23,72 @@ public:
     void
     update(double set_point)
     {
+        double object_update_value = set_point;
+
         if(_control_mode == Control_Mode::OPEN_LOOP)
         {
-            _controller->update(set_point);
+            if(_controller != nullptr)
+            {
+                _controller->update(set_point);
+                object_update_value = _controller->get_value();
+            }
         }
         else
         {
             double const error = set_point - _object->get_value();
-            _controller->update(error);
+
+            if(_controller != nullptr)
+            {
+                _controller->update(error);
+                object_update_value = _controller->get_value();
+            }
+            else
+            {
+                object_update_value = error;
+            }
         }
-        _object->update(_controller->get_value());
+
+        _object->update(object_update_value);
     }
 
     double
     get_control() const
     {
-        return _controller->get_value();
+        if(_controller != nullptr)
+        {
+            return _controller->get_value();
+        }
+        return 0.0;
     }
 
     double
     get_output() const
     {
-        return _object->get_value();
+        if(_object != nullptr)
+        {
+            return _object->get_value();
+        }
+        return 0.0;
     }
 
     double
     get_error() const
     {
-        return _controller->get_error();
+        if(_controller != nullptr)
+        {
+            return _controller->get_error();
+        }
+        return 0.0;
     }
 
     std::array<double, 3> const
     get_x() const
     {
-        return _controller->get_x();
+        if(_controller != nullptr)
+        {
+            return _controller->get_x();
+        }
+        return {};
     }
 
     Controller_Base const*
@@ -82,7 +113,11 @@ public:
     reset()
     {
         _object->reset();
-        _controller->reset();
+
+        if(_controller != nullptr)
+        {
+            _controller->reset();
+        }
     }
 
     void
@@ -94,5 +129,5 @@ public:
 private:
     Control_Mode _control_mode {};
     Object_Representation_Base* _object {nullptr};
-    Controller_Base* _controller {nullptr};
+    Controller_Base*& _controller;
 };

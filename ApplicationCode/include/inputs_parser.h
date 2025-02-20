@@ -11,8 +11,10 @@
 #include "enums.h"
 #include "input_parameters_container.h"
 
-class Inputs_Parser
+class Inputs_Parser : public QObject
 {
+    Q_OBJECT
+
 public:
     void
     parse_line_edit_id(QLineEdit* line_edit, LineEdit_ID line_edit_id)
@@ -65,7 +67,10 @@ public:
             }
             case ComboBox_ID::CONTROLLER_TYPE:
             {
-                _inputs.set_controller_type(static_cast<Controller_Type>(current_index));
+                Controller_Type const new_controller_type = static_cast<Controller_Type>(current_index);
+                check_disable_enable_controller_parameters(new_controller_type);
+
+                _inputs.set_controller_type(new_controller_type);
                 break;
             }
             case ComboBox_ID::INPUT_SIGNAL:
@@ -131,6 +136,31 @@ public:
         return _inputs;
     }
 
+Q_SIGNALS:
+    void
+    disable_controller_parameters();
+
+    void
+    enable_controller_parameters();
+
 private:
     Input_Parameters_Container _inputs {};
+
+    void
+    check_disable_enable_controller_parameters(Controller_Type const& new_controller_type)
+    {
+        Controller_Type const previous_controller_type = _inputs.get_controller_type();
+        if((previous_controller_type == Controller_Type::PID ||
+            previous_controller_type == Controller_Type::BANG_BANG) &&
+           new_controller_type == Controller_Type::NONE)
+        {
+            Q_EMIT disable_controller_parameters();
+        }
+        else if(
+            previous_controller_type == Controller_Type::NONE &&
+            (new_controller_type == Controller_Type::PID || new_controller_type == Controller_Type::BANG_BANG))
+        {
+            Q_EMIT enable_controller_parameters();
+        }
+    }
 };

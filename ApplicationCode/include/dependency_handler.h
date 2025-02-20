@@ -11,21 +11,31 @@ class Dependency_Handler : public QObject
     Q_OBJECT
 
 public:
+    Dependency_Handler() : _inputs_parser(new Inputs_Parser())
+    {
+        connect(
+            _inputs_parser, &Inputs_Parser::disable_controller_parameters, this,
+            &Dependency_Handler::disable_controller_parameters);
+        connect(
+            _inputs_parser, &Inputs_Parser::enable_controller_parameters, this,
+            &Dependency_Handler::enable_controller_parameters);
+    }
+
     Input_Parameters_Container const&
     get_input_parameters() const
     {
-        return _inputs_parser.get_input_parameters();
+        return _inputs_parser->get_input_parameters();
     }
 
 private:
-    Inputs_Parser _inputs_parser {};
+    Inputs_Parser* _inputs_parser {nullptr};
 
 public Q_SLOTS:
 
     void
     order_spinbox_callback(int order)
     {
-        _inputs_parser.set_order(order);
+        _inputs_parser->set_order(order);
     }
 
     void
@@ -39,7 +49,7 @@ public Q_SLOTS:
             QVariant line_edit_id_variant  = line_edit->property("id");
             LineEdit_ID const line_edit_id = line_edit_id_variant.value<LineEdit_ID>();
 
-            _inputs_parser.parse_line_edit_id(line_edit, line_edit_id);
+            _inputs_parser->parse_line_edit_id(line_edit, line_edit_id);
         }
     }
 
@@ -52,7 +62,14 @@ public Q_SLOTS:
             QVariant combobox_id_variant  = combobox->property("id");
             ComboBox_ID const combobox_id = combobox_id_variant.value<ComboBox_ID>();
 
-            _inputs_parser.parse_combobox_id(combobox, combobox_id);
+            _inputs_parser->parse_combobox_id(combobox, combobox_id);
         }
     }
+
+Q_SIGNALS:
+    void
+    disable_controller_parameters();
+
+    void
+    enable_controller_parameters();
 };
