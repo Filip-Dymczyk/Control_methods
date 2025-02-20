@@ -8,10 +8,10 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QSpinBox>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QWidget>
 #include "clickable_line_edit.h"
 #include "dependency_handler.h"
@@ -57,22 +57,11 @@ private:
             &Dependency_Handler::order_spinbox_callback);
 
         QComboBox* object_representation_combobox = new QComboBox();
-        populate_combobox(
+        set_up_combobox(
             object_representation_combobox, {"Object equation representation", "Object state space representation"});
-        connect(
-            object_representation_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
-            &Dependency_Handler::comboboxes_callback);
 
         ClickableLineEdit* object_parameters_line_edit = new ClickableLineEdit();
-        object_parameters_line_edit->setProperty("id", line_edit_id);
-        line_edit_id++;
-        object_parameters_line_edit->setText("1.0;1.0");
-        connect(object_parameters_line_edit, &ClickableLineEdit::clicked, [object_parameters_line_edit]() {
-            object_parameters_line_edit->setFocus();
-        });
-        connect(
-            object_parameters_line_edit, &QLineEdit::editingFinished, _dependency_handler,
-            &Dependency_Handler::line_edits_callback);
+        set_up_line_edit(object_parameters_line_edit, "1.0;1.0");
 
         QGridLayout* grid_Layout = new QGridLayout();
 
@@ -96,34 +85,17 @@ private:
     create_control_loop_group_box()
     {
         QComboBox* control_mode_combobox = new QComboBox();
-        populate_combobox(control_mode_combobox, {"Open loop", "Closed loop"});
-        connect(
-            control_mode_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
-            &Dependency_Handler::comboboxes_callback);
+        set_up_combobox(control_mode_combobox, {"Open loop", "Closed loop"});
 
         QComboBox* controller_type_combobox = new QComboBox();
-        populate_combobox(controller_type_combobox, {"No controller", "Bang-Bang controller", "PID"});
-        connect(
-            controller_type_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
-            &Dependency_Handler::comboboxes_callback);
+        set_up_combobox(controller_type_combobox, {"No controller", "Bang-Bang controller", "PID"});
 
         ClickableLineEdit* controller_parameters_line_edit = new ClickableLineEdit();
-        controller_parameters_line_edit->setText("1.0;1.0;0.0");
-        controller_parameters_line_edit->setProperty("id", line_edit_id);
-        line_edit_id++;
-        connect(controller_parameters_line_edit, &ClickableLineEdit::clicked, [controller_parameters_line_edit]() {
-            controller_parameters_line_edit->setFocus();
-        });
-        connect(
-            controller_parameters_line_edit, &QLineEdit::editingFinished, _dependency_handler,
-            &Dependency_Handler::line_edits_callback);
+        set_up_line_edit(controller_parameters_line_edit, "1.0;1.0;0.0");
 
         QComboBox* input_signal_combobox = new QComboBox();
-        populate_combobox(
+        set_up_combobox(
             input_signal_combobox, {"No signal", "Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
-        connect(
-            input_signal_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
-            &Dependency_Handler::comboboxes_callback);
 
         QGridLayout* grid_Layout = new QGridLayout();
 
@@ -150,28 +122,13 @@ private:
     create_application_parameters_group_box()
     {
         QComboBox* operation_combobox = new QComboBox();
-        populate_combobox(operation_combobox, {"Simulation", "Tuning"});
-        connect(
-            operation_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
-            &Dependency_Handler::comboboxes_callback);
+        set_up_combobox(operation_combobox, {"Simulation", "Tuning"});
 
         ClickableLineEdit* simulation_time_line_edit = new ClickableLineEdit();
-        simulation_time_line_edit->setText("1.0");
-        simulation_time_line_edit->setProperty("id", line_edit_id);
-        line_edit_id++;
-        connect(simulation_time_line_edit, &ClickableLineEdit::clicked, [simulation_time_line_edit]() {
-            simulation_time_line_edit->setFocus();
-        });
-        connect(
-            simulation_time_line_edit, &QLineEdit::editingFinished, _dependency_handler,
-            &Dependency_Handler::line_edits_callback);
+        set_up_line_edit(simulation_time_line_edit, "1.0");
 
         QComboBox* _simulation_step_combobox = new QComboBox();
-        populate_combobox(_simulation_step_combobox, {"0.01", "0.001", "0.0001"}, true);
-        QList<double> default_simulation_steps = {0.01, 0.001, 0.0001};
-        connect(
-            _simulation_step_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
-            &Dependency_Handler::comboboxes_callback);
+        set_up_combobox(_simulation_step_combobox, {"0.01", "0.001", "0.0001"}, true);
 
         QGridLayout* grid_Layout = new QGridLayout();
 
@@ -192,7 +149,7 @@ private:
     }
 
     void
-    populate_combobox(QComboBox* combobox, QList<QString> const& option_list, bool numeric = false)
+    set_up_combobox(QComboBox* combobox, QList<QString> const& option_list, bool numeric = false)
     {
         for(QString const& option: option_list)
         {
@@ -208,5 +165,20 @@ private:
 
         combobox->setProperty("id", combobox_id);
         combobox_id++;
+
+        connect(
+            combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
+            &Dependency_Handler::comboboxes_callback);
+    }
+
+    void
+    set_up_line_edit(ClickableLineEdit* line_edit, QString const& text)
+    {
+        line_edit->setText(text);
+        line_edit->setProperty("id", line_edit_id);
+        line_edit_id++;
+
+        connect(line_edit, &ClickableLineEdit::clicked, [line_edit]() { line_edit->setFocus(); });
+        connect(line_edit, &QLineEdit::editingFinished, _dependency_handler, &Dependency_Handler::line_edits_callback);
     }
 };
