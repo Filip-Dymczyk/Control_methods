@@ -13,8 +13,9 @@ public:
     exec(int argc, char** argv)
     {
         QApplication app(argc, argv);
-        Main_Window main_window {};
-        main_window.show();
+        Main_Window* main_window = new Main_Window();
+        main_window->show();  // First show so that the view is set up for centralizing.
+        main_window->centralize();
         return app.exec();
     }
 };

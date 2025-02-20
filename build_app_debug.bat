@@ -17,13 +17,15 @@ IF NOT EXIST "%cd%\builds\debug_build" (
     mkdir "%cd%\builds\debug_build"
 )
 
-C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\main_layout.moc.cpp" "%cd%\ApplicationCode\include\main_layout.h"
+C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\main_widget.moc.cpp" "%cd%\ApplicationCode\include\main_widget.h"
 C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\dependency_handler.moc.cpp" "%cd%\ApplicationCode\include\dependency_handler.h"
+C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\clickable_line_edit.moc.cpp" "%cd%\ApplicationCode\include\clickable_line_edit.h"
 
 C:\msys64\mingw64\bin\g++.exe -fdiagnostics-color=always -g -O0 -static ^
     "%cd%\MainApp\main.cpp" ^
-    "%cd%\builds\moc_builds\main_layout.moc.cpp" ^
+    "%cd%\builds\moc_builds\main_widget.moc.cpp" ^
     "%cd%\builds\moc_builds\dependency_handler.moc.cpp" ^
+    "%cd%\builds\moc_builds\clickable_line_edit.moc.cpp" ^
     -o "%cd%\builds\debug_build\app_debug.exe" ^
     -I "%cd%\ApplicationCode\include" ^
     -I "%cd%\LogicCode\include" ^
