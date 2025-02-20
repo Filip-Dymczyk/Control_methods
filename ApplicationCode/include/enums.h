@@ -42,7 +42,6 @@ enum class Controller_Type : std::uint8_t
 
 enum class Input_Signal : std::uint8_t
 {
-    NONE,
     HEAVISIDE,
     RAMP,
     RECTANGLE,

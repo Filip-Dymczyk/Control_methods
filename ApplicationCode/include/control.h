@@ -133,8 +133,8 @@ public:
             case Input_Signal::PULSE_WAVE:
             {
                 _selected_input_signal = &_pulse_wave;
+                break;
             }
-            // TODO: Handle no signal.
             default:
                 break;
         }

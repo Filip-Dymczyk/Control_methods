@@ -20,7 +20,7 @@ class Input_Parameters_Container
         Object_Representation object_representation = Object_Representation::EQUATION;
         Control_Mode control_mode                   = Control_Mode::OPEN_LOOP;
         Controller_Type controller_type             = Controller_Type::NONE;
-        Input_Signal input_signal                   = Input_Signal::NONE;
+        Input_Signal input_signal                   = Input_Signal::HEAVISIDE;
         Operation_Type operation_type               = Operation_Type::SIMULATION;
         double simulation_time_step {0.01};
     };

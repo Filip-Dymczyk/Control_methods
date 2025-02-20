@@ -101,8 +101,7 @@ private:
             "<p><b>NOTE!</b> Only first 3 parameters will be accepted.</p>");
 
         QComboBox* input_signal_combobox = new QComboBox();
-        set_up_combobox(
-            input_signal_combobox, {"No signal", "Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
+        set_up_combobox(input_signal_combobox, {"Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
 
         QGridLayout* grid_Layout = new QGridLayout();
 
