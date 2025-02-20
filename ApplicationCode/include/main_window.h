@@ -25,8 +25,13 @@ public:
         run_button->setToolTip("<p><i>Run the application.</i></p>");
         connect(run_button, &QPushButton::clicked, this, &Main_Window::show_plot_window);
 
+        QPushButton* center_button = new QPushButton("Center");
+        center_button->setToolTip("<p><i>Center the window.</i></p>");
+        connect(center_button, &QPushButton::clicked, this, &Main_Window::center);
+
         QToolBar* toolbar = new QToolBar();
         toolbar->addWidget(run_button);
+        toolbar->addWidget(center_button);
 
         this->addToolBar(toolbar);
     }
@@ -46,7 +51,7 @@ public:
     }
 
 private:
-    std::tuple<int, int> _center_position {};  // Maybe used for automatic centering (toolbar)
+    std::tuple<int, int> _center_position {};
     Main_Widget* _main_widget {nullptr};
     Simulator _simulator;
 
@@ -56,5 +61,14 @@ private:
         _simulator.update(_main_widget->dependency_handler()->get_input_parameters());
         _simulator.run();
         _simulator.show_plot();
+    }
+
+    void
+    center()
+    {
+        if(std::tuple_size<decltype(_center_position)>::value == 2)
+        {
+            this->move(std::get<0>(_center_position), std::get<1>(_center_position));
+        }
     }
 };
