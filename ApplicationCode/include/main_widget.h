@@ -11,6 +11,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QWidget>
 #include "clickable_line_edit.h"
@@ -23,7 +24,12 @@ class Main_Widget : public QWidget
 public:
     Main_Widget(QWidget* parent) : QWidget(parent), _dependency_handler(new Dependency_Handler())
     {
-        // QMessageBox::warning(this, "Warning", "This is a warning message!"); // Connect with Dependency_Handler
+        connect(_dependency_handler, &Dependency_Handler::too_many_input_parameters, [this]() {
+            QMessageBox::warning(this, "Warning", "Too many input parameters!\nLeaving only the necessary ones.");
+        });
+        connect(_dependency_handler, &Dependency_Handler::too_few_input_parameters, [this]() {
+            QMessageBox::warning(this, "Warning", "Too few input parameters!\nFilling rest with zeroes.");
+        });
 
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
