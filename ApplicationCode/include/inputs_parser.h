@@ -8,6 +8,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QSpinBox>
+#include <iostream>
 #include "enums.h"
 #include "input_parameters_container.h"
 
@@ -106,7 +107,8 @@ public:
     std::vector<double>
     parse_vector_parameters(QLineEdit* line_edit, int parameters_limit)
     {
-        QStringList const parameters_string_list = line_edit->text().split(";", Qt::SkipEmptyParts);
+        QStringList const parameters_string_list    = line_edit->text().split(";", Qt::SkipEmptyParts);
+        std::size_t const entered_parameters_number = parameters_string_list.size();
         std::vector<double> parameters {};
         parameters.reserve(parameters_limit);
 
@@ -119,6 +121,37 @@ public:
                 break;
             }
             idx++;
+        }
+
+        if(entered_parameters_number > parameters_limit)
+        {
+            Q_EMIT too_many_input_parameters();
+
+            line_edit->setText(get_new_line_edit_text_from_parameters(parameters));
+        }
+        else if(entered_parameters_number < parameters_limit)
+        {
+            Q_EMIT too_few_input_parameters();
+
+            QString new_text = get_new_line_edit_text_from_parameters(parameters);
+            if(parameters.size() > 0)
+            {
+                new_text += ";";  // Avoiding trailing semicolon if line edit was empty.
+            }
+
+            std::size_t const range = parameters_limit - entered_parameters_number;
+            for(std::size_t i = 0; i < range; i++)
+            {
+                double const default_val = 0.0;
+                parameters.push_back(default_val);
+                new_text += QString::number(default_val, 'f', 1);
+                if(i < range - 1)
+                {
+                    new_text += ";";
+                }
+            }
+
+            line_edit->setText(new_text);
         }
         return parameters;
     }
@@ -143,6 +176,12 @@ Q_SIGNALS:
     void
     enable_controller_parameters();
 
+    void
+    too_many_input_parameters();
+
+    void
+    too_few_input_parameters();
+
 private:
     Input_Parameters_Container _inputs {};
 
@@ -162,5 +201,27 @@ private:
         {
             Q_EMIT enable_controller_parameters();
         }
+    }
+
+    QString
+    get_new_line_edit_text_from_parameters(std::vector<double> const& parameters)
+    {
+        std::size_t const range = parameters.size();
+        QString new_text {};
+        for(std::size_t i = 0; i < range; i++)
+        {
+            QString number_str = QString::number(parameters.at(i));
+            if(!number_str.contains("."))
+            {
+                number_str += ".0";
+            }
+
+            new_text += number_str;
+            if(i < range - 1)
+            {
+                new_text += ";";
+            }
+        }
+        return new_text;
     }
 };

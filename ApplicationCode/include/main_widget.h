@@ -23,6 +23,8 @@ class Main_Widget : public QWidget
 public:
     Main_Widget(QWidget* parent) : QWidget(parent), _dependency_handler(new Dependency_Handler())
     {
+        // QMessageBox::warning(this, "Warning", "This is a warning message!"); // Connect with Dependency_Handler
+
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
         QGroupBox* application_parameters_group_box = create_application_parameters_group_box();
