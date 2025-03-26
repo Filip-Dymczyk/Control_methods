@@ -107,7 +107,7 @@ public:
     std::vector<double>
     parse_vector_parameters(QLineEdit* line_edit, int parameters_limit)
     {
-        QStringList const parameters_string_list    = line_edit->text().split(";", Qt::SkipEmptyParts);
+        QStringList const parameters_string_list    = line_edit->text().split("|", Qt::SkipEmptyParts);
         std::size_t const entered_parameters_number = parameters_string_list.size();
         std::vector<double> parameters {};
         parameters.reserve(parameters_limit);
@@ -136,7 +136,7 @@ public:
             QString new_text = get_new_line_edit_text_from_parameters(parameters);
             if(parameters.size() > 0)
             {
-                new_text += ";";  // Avoiding trailing semicolon if line edit was empty.
+                new_text += "|";  // Avoiding trailing pipe if line edit was empty.
             }
 
             std::size_t const range = parameters_limit - entered_parameters_number;
@@ -147,7 +147,7 @@ public:
                 new_text += QString::number(default_val, 'f', 1);
                 if(i < range - 1)
                 {
-                    new_text += ";";
+                    new_text += "|";
                 }
             }
 
@@ -219,7 +219,7 @@ private:
             new_text += number_str;
             if(i < range - 1)
             {
-                new_text += ";";
+                new_text += "|";
             }
         }
         return new_text;

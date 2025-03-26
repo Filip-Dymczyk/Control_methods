@@ -70,8 +70,8 @@ private:
 
         ClickableLineEdit* object_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            object_parameters_line_edit, "1.0;1.0",
-            "<p><i>Enter object parameters separated by semicolons.</i></p>"
+            object_parameters_line_edit, "1.0|1.0",
+            "<p><i>Enter object parameters separated by pipes (|).</i></p>"
             "<p><b>NOTE!</b> Format accepted:</p>"
             "<p><code>ax' + bx = cu</code></p>");
 
@@ -104,8 +104,8 @@ private:
 
         ClickableLineEdit* controller_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            controller_parameters_line_edit, "1.0;1.0;0.0",
-            "<p><i>Enter controller parameters divided with semicolons.</i></p>"
+            controller_parameters_line_edit, "1.0|1.0|0.0",
+            "<p><i>Enter controller parameters divided with pipe (|).</i></p>"
             "<p><b>NOTE!</b> Only first 3 parameters will be accepted.</p>");
 
         controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
