@@ -19,6 +19,13 @@ public:
         connect(
             _inputs_parser, &Inputs_Parser::enable_controller_parameters, this,
             &Dependency_Handler::enable_controller_parameters);
+
+        connect(
+            _inputs_parser, &Inputs_Parser::too_many_input_parameters, this,
+            &Dependency_Handler::too_many_input_parameters);
+        connect(
+            _inputs_parser, &Inputs_Parser::too_few_input_parameters, this,
+            &Dependency_Handler::too_few_input_parameters);
     }
 
     Input_Parameters_Container const&
@@ -72,4 +79,10 @@ Q_SIGNALS:
 
     void
     enable_controller_parameters();
+
+    void
+    too_many_input_parameters();
+
+    void
+    too_few_input_parameters();
 };

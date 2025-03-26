@@ -11,6 +11,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QWidget>
 #include "clickable_line_edit.h"
@@ -23,6 +24,13 @@ class Main_Widget : public QWidget
 public:
     Main_Widget(QWidget* parent) : QWidget(parent), _dependency_handler(new Dependency_Handler())
     {
+        connect(_dependency_handler, &Dependency_Handler::too_many_input_parameters, [this]() {
+            QMessageBox::warning(this, "Warning", "Too many input parameters!\nLeaving only the necessary ones.");
+        });
+        connect(_dependency_handler, &Dependency_Handler::too_few_input_parameters, [this]() {
+            QMessageBox::warning(this, "Warning", "Too few input parameters!\nFilling rest with zeroes.");
+        });
+
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
         QGroupBox* application_parameters_group_box = create_application_parameters_group_box();
@@ -62,8 +70,8 @@ private:
 
         ClickableLineEdit* object_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            object_parameters_line_edit, "1.0;1.0",
-            "<p><i>Enter object parameters separated by semicolons.</i></p>"
+            object_parameters_line_edit, "1.0|1.0",
+            "<p><i>Enter object parameters separated by pipes (|).</i></p>"
             "<p><b>NOTE!</b> Format accepted:</p>"
             "<p><code>ax' + bx = cu</code></p>");
 
@@ -96,8 +104,8 @@ private:
 
         ClickableLineEdit* controller_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            controller_parameters_line_edit, "1.0;1.0;0.0",
-            "<p><i>Enter controller parameters divided with semicolons.</i></p>"
+            controller_parameters_line_edit, "1.0|1.0|0.0",
+            "<p><i>Enter controller parameters divided with pipe (|).</i></p>"
             "<p><b>NOTE!</b> Only first 3 parameters will be accepted.</p>");
 
         controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
