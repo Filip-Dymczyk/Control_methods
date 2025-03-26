@@ -8,7 +8,6 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QSpinBox>
-#include <iostream>
 #include "enums.h"
 #include "input_parameters_container.h"
 
