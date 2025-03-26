@@ -10,9 +10,13 @@
 class Simulator
 {
 public:
-    void
+    bool
     update(Input_Parameters_Container const& input_parameters)
     {
+        if(input_parameters.get_order() != (input_parameters.get_object_parameters().size() - 1u))
+        {
+            return false;
+        }
         _simulation_time      = input_parameters.get_simulation_time();
         _simulation_time_step = input_parameters.get_simulation_time_step();
         _control.set_object(
@@ -24,6 +28,7 @@ public:
             input_parameters.get_controller_parameters());
         _control.set_signal(_simulation_time_step, input_parameters.get_input_signal());
         _control.set_operation_type(input_parameters.get_operation_type());
+        return true;
     }
 
     void
