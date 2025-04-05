@@ -16,6 +16,7 @@
 #include <QtWidgets/QWidget>
 #include "clickable_line_edit.h"
 #include "dependency_handler.h"
+#include "enums.h"
 
 class Main_Widget : public QWidget
 {
@@ -31,13 +32,16 @@ public:
             QMessageBox::warning(this, "Warning", "Too few input parameters!\nFilling rest with zeroes.");
         });
 
-        QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
-        QGroupBox* control_loop_group_box           = create_control_loop_group_box();
+        QGroupBox* dynamical_system_group_box = create_dynamical_system_group_box();
+        QGroupBox* control_loop_group_box     = create_control_loop_group_box();
+        QGroupBox* input_signal_group_box =
+            create_input_signal_group_box(Input_Signal::HEAVISIDE);  // Default signal type.
         QGroupBox* application_parameters_group_box = create_application_parameters_group_box();
 
         QHBoxLayout* horizontal_layout = new QHBoxLayout();
         horizontal_layout->addWidget(dynamical_system_group_box);
         horizontal_layout->addWidget(control_loop_group_box);
+        horizontal_layout->addWidget(input_signal_group_box);
         horizontal_layout->addWidget(application_parameters_group_box);
 
         this->setLayout(horizontal_layout);
@@ -116,9 +120,6 @@ private:
             _dependency_handler, &Dependency_Handler::enable_controller_parameters,
             [controller_parameters_line_edit]() { controller_parameters_line_edit->setEnabled(true); });
 
-        QComboBox* input_signal_combobox = new QComboBox();
-        set_up_combobox(input_signal_combobox, {"Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
-
         QGridLayout* grid_Layout = new QGridLayout();
 
         int row = 0;
@@ -130,14 +131,25 @@ private:
         row++;
         grid_Layout->addWidget(new QLabel("Controller parameters: "), row, 0);
         grid_Layout->addWidget(controller_parameters_line_edit, row, 1);
-        row++;
-        grid_Layout->addWidget(new QLabel("Input signal type: "), row, 0);
-        grid_Layout->addWidget(input_signal_combobox, row, 1);
 
         QGroupBox* control_loop_group_box = new QGroupBox("Control loop parameters");
         control_loop_group_box->setLayout(grid_Layout);
 
         return control_loop_group_box;
+    }
+
+    QGroupBox*
+    create_input_signal_group_box(Input_Signal option)
+    {
+        QComboBox* input_signal_combobox = new QComboBox();
+        set_up_combobox(input_signal_combobox, {"Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
+        input_signal_combobox->setCurrentIndex(static_cast<int>(option));
+
+        QGroupBox* input_signal_group_box = new QGroupBox("Input signal parameters");
+        // Case will be done for the Input Signal.
+        input_signal_group_box->setLayout(basic_signal_layout(input_signal_combobox));
+
+        return input_signal_group_box;
     }
 
     QGroupBox*
@@ -147,7 +159,7 @@ private:
         set_up_combobox(operation_combobox, {"Simulation", "Tuning"});
 
         ClickableLineEdit* simulation_time_line_edit = new ClickableLineEdit();
-        set_up_line_edit(simulation_time_line_edit, "1.0", "<p><i>Enter operation time in seconds.</i></p>");
+        set_up_line_edit(simulation_time_line_edit, "1.0", "<p><i>Enter operation time in seconds.</i></p>", true);
 
         QComboBox* _simulation_step_combobox = new QComboBox();
         set_up_combobox(_simulation_step_combobox, {"0.01", "0.001", "0.0001"}, true);
@@ -194,14 +206,47 @@ private:
     }
 
     void
-    set_up_line_edit(ClickableLineEdit* line_edit, QString text, QString tooltip)
+    set_up_line_edit(ClickableLineEdit* line_edit, QString text, QString tooltip, bool preset_id = false)
     {
         line_edit->setText(text);
         line_edit->setToolTip(tooltip);
-        line_edit->setProperty("id", line_edit_id);
-        line_edit_id++;
+        if(preset_id)
+        {
+            line_edit->setProperty("id", static_cast<int>(LineEdit_ID::SIMULATION_TIME_LINE_EDIT));
+        }
+        else
+        {
+            line_edit->setProperty("id", line_edit_id);
+            line_edit_id++;
+        }
 
         connect(line_edit, &ClickableLineEdit::clicked, [line_edit]() { line_edit->setFocus(); });
         connect(line_edit, &QLineEdit::editingFinished, _dependency_handler, &Dependency_Handler::line_edits_callback);
+    }
+
+    QGridLayout*
+    basic_signal_layout(QComboBox* input_signal_combobox)
+    {
+        line_edit_id = static_cast<int>(LineEdit_ID::START_TIME_LINE_EDIT);
+
+        ClickableLineEdit* start_time_line_edit = new ClickableLineEdit();
+        set_up_line_edit(start_time_line_edit, "0.0", "<p><i>Set up start time in seconds.</i></p>");
+
+        ClickableLineEdit* scaler_line_edit = new ClickableLineEdit();
+        set_up_line_edit(scaler_line_edit, "1.0", "<p><i>Set up scaler parameter.</i></p>");
+
+        QGridLayout* grid_Layout = new QGridLayout();
+
+        int row = 0;
+        grid_Layout->addWidget(new QLabel("Input signal type: "), row, 0);
+        grid_Layout->addWidget(input_signal_combobox, row, 1);
+        row++;
+        grid_Layout->addWidget(new QLabel("Start time [s]: "), row, 0);
+        grid_Layout->addWidget(start_time_line_edit, row, 1);
+        row++;
+        grid_Layout->addWidget(new QLabel("Scaler: "), row, 0);
+        grid_Layout->addWidget(scaler_line_edit, row, 1);
+
+        return grid_Layout;
     }
 };

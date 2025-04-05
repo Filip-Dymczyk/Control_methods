@@ -26,7 +26,9 @@ public:
         _control.set_controller(
             _simulation_time_step, input_parameters.get_controller_type(),
             input_parameters.get_controller_parameters());
-        _control.set_signal(_simulation_time_step, input_parameters.get_input_signal());
+        _control.set_signal(
+            _simulation_time_step, input_parameters.get_input_signal(),
+            input_parameters.get_input_signal_basic_parameters());
         _control.set_operation_type(input_parameters.get_operation_type());
         return true;
     }

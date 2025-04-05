@@ -106,7 +106,10 @@ public:
     }
 
     void
-    set_signal(double time_step, Input_Signal input_signal /*, signal parameters missing*/)
+    set_signal(
+        double time_step, Input_Signal input_signal,
+        Signal_Base::Signal_Basic_Parameters const& signal_basic_parameters,
+        std::vector<double> const& advanced_parameters = {})
     {
         switch(input_signal)
         {
@@ -139,6 +142,7 @@ public:
                 break;
         }
         _selected_input_signal->set_time_step(time_step);
+        _selected_input_signal->set_parameters(signal_basic_parameters);
     }
 
     void

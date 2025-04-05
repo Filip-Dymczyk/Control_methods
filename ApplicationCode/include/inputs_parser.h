@@ -37,9 +37,51 @@ public:
                 _inputs.set_controller_parameters(controller_parameters);
                 break;
             }
+            case LineEdit_ID::START_TIME_LINE_EDIT:
+            {
+                double const start_time = parse_single_number_line_edit(line_edit);
+                _inputs.set_start_time(start_time);
+                break;
+            }
+            case LineEdit_ID::SCALER_LINE_EDIT:
+            {
+                double const scaler = parse_single_number_line_edit(line_edit);
+                _inputs.set_scaler(scaler);
+                break;
+            }
+            case LineEdit_ID::END_TIME_LINE_EDIT:
+            {
+                double const end_time = parse_single_number_line_edit(line_edit);
+                _inputs.set_end_time(end_time);
+                break;
+            }
+            case LineEdit_ID::OMEGA_LINE_EDIT:
+            {
+                double const omega = parse_single_number_line_edit(line_edit);
+                _inputs.set_omega(omega);
+                break;
+            }
+            case LineEdit_ID::OFFSET_LINE_EDIT:
+            {
+                double const offset = parse_single_number_line_edit(line_edit);
+                _inputs.set_offset(offset);
+                break;
+            }
+            case LineEdit_ID::DUTY_CYCLE_LINE_EDIT:
+            {
+                double const duty_cycle = parse_single_number_line_edit(line_edit);
+                _inputs.set_duty_cycle(duty_cycle);
+                break;
+            }
+            case LineEdit_ID::PERIOD_LINE_EDIT:
+            {
+                double const period = parse_single_number_line_edit(line_edit);
+                _inputs.set_period(period);
+                break;
+            }
             case LineEdit_ID::SIMULATION_TIME_LINE_EDIT:
             {
-                double const simulation_time = parse_simulation_time(line_edit);
+                double const simulation_time = parse_single_number_line_edit(line_edit);
                 _inputs.set_simulation_time(simulation_time);
                 break;
             }
@@ -157,7 +199,7 @@ public:
 
     // This will need some error protections.
     double
-    parse_simulation_time(QLineEdit* line_edit)
+    parse_single_number_line_edit(QLineEdit* line_edit)
     {
         return line_edit->text().toDouble();
     }
