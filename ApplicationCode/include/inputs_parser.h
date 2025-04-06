@@ -49,10 +49,10 @@ public:
                 _inputs.set_scaler(scaler);
                 break;
             }
-            case LineEdit_ID::END_TIME_LINE_EDIT:
+            case LineEdit_ID::ON_TIME_LINE_EDIT:
             {
-                double const end_time = parse_single_number_line_edit(line_edit);
-                _inputs.set_end_time(end_time);
+                double const on_time = parse_single_number_line_edit(line_edit);
+                _inputs.set_on_time(on_time);
                 break;
             }
             case LineEdit_ID::OMEGA_LINE_EDIT:

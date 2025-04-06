@@ -10,7 +10,7 @@ enum class LineEdit_ID : std::uint8_t
     CONTROLLER_PARAMETERS_LINE_EDIT,
     START_TIME_LINE_EDIT,
     SCALER_LINE_EDIT,
-    END_TIME_LINE_EDIT,
+    ON_TIME_LINE_EDIT,
     OMEGA_LINE_EDIT,
     OFFSET_LINE_EDIT,
     DUTY_CYCLE_LINE_EDIT,
@@ -60,4 +60,13 @@ enum class Operation_Type : std::uint8_t
 {
     SIMULATION,
     TUNING
+};
+
+enum class Advanced_Input_Signal_Parameters : std::uint8_t
+{
+    ON_TIME,
+    OMEGA,
+    OFFSET,
+    PERIOD,
+    DUTY_CYCLE
 };

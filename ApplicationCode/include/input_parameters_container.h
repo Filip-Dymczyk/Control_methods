@@ -15,7 +15,7 @@ class Input_Parameters_Container
         std::vector<double> controller_parameters {1.0, 1.0, 0.0};
         double start_time {0.0};
         double scaler {1.0};
-        double end_time {0.0};
+        double on_time {0.0};
         double omega {0.0};
         double offset {0.0};
         double duty_cycle {0.0};
@@ -65,9 +65,9 @@ public:
     }
 
     void
-    set_end_time(double end_time)
+    set_on_time(double on_time)
     {
-        _line_edit_inputs.end_time = end_time;
+        _line_edit_inputs.on_time = on_time;
     }
 
     void
@@ -91,7 +91,7 @@ public:
     void
     set_period(double period)
     {
-        _line_edit_inputs.end_time = period;
+        _line_edit_inputs.on_time = period;
     }
 
     void
@@ -196,10 +196,12 @@ public:
         return {_line_edit_inputs.start_time, _line_edit_inputs.scaler};
     }
 
-    std::array<double, 2>
+    std::array<double, 5>
     get_input_signal_advanced_parameters() const
     {
-        return {};
+        return {
+            _line_edit_inputs.on_time, _line_edit_inputs.omega, _line_edit_inputs.offset, _line_edit_inputs.period,
+            _line_edit_inputs.duty_cycle};
     }
 
     Operation_Type
