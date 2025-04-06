@@ -32,6 +32,16 @@ public:
             QMessageBox::warning(this, "Warning", "Too few input parameters!\nFilling rest with zeroes.");
         });
 
+        connect(_dependency_handler, &Dependency_Handler::unable_to_parse, [this](QString text) {
+            QMessageBox::warning(this, "Warning", QString("Inserted values: %1 are not allowed!").arg(text));
+        });
+        connect(_dependency_handler, &Dependency_Handler::value_below_lower_limit, [this](double limit) {
+            QMessageBox::warning(this, "Warning", QString("Inserted value below the limit: %1.").arg(limit));
+        });
+        connect(_dependency_handler, &Dependency_Handler::value_above_upper_limit, [this](double limit) {
+            QMessageBox::warning(this, "Warning", QString("Inserted value above the limit: %1.").arg(limit));
+        });
+
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
         QGroupBox* input_signal_group_box           = create_input_signal_group_box();
