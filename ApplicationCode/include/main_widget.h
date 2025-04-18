@@ -222,11 +222,11 @@ private:
         set_up_line_edit(scaler_line_edit, "1.0", "<p><i>Set up scaler parameter.</i></p>");
 
         ClickableLineEdit* on_time_line_edit = new ClickableLineEdit();
-        set_up_line_edit(on_time_line_edit, "0.0", "<p><i>Set up on time in seconds.</i></p>");
+        set_up_line_edit(on_time_line_edit, "5.0", "<p><i>Set up on time in seconds.</i></p>");
         on_time_line_edit->hide();
 
         ClickableLineEdit* omega_line_edit = new ClickableLineEdit();
-        set_up_line_edit(omega_line_edit, "0.0", "<p><i>Set up omega in radians per second.</i></p>");
+        set_up_line_edit(omega_line_edit, "1.0", "<p><i>Set up omega in radians per second.</i></p>");
         omega_line_edit->hide();
 
         ClickableLineEdit* offset_line_edit = new ClickableLineEdit();
@@ -234,11 +234,11 @@ private:
         offset_line_edit->hide();
 
         ClickableLineEdit* period_line_edit = new ClickableLineEdit();
-        set_up_line_edit(period_line_edit, "0.0", "<p><i>Set up period in seconds.</i></p>");
+        set_up_line_edit(period_line_edit, "2.0", "<p><i>Set up period in seconds.</i></p>");
         period_line_edit->hide();
 
         ClickableLineEdit* duty_cycle_line_edit = new ClickableLineEdit();
-        set_up_line_edit(duty_cycle_line_edit, "0.0", "<p><i>Set up duty cycle 0 - 100%.</i></p>");
+        set_up_line_edit(duty_cycle_line_edit, "50.0", "<p><i>Set up duty cycle 0 - 100%.</i></p>");
         duty_cycle_line_edit->hide();
 
         QGridLayout* grid_Layout = new QGridLayout();
