@@ -3,7 +3,9 @@
 
 #pragma once
 #include <math.h>
+#include <memory>
 #include <string>
+#include <vector>
 #include "base_classes/controller_base.h"
 #include "base_classes/object_representation_base.h"
 #include "base_classes/signal_base.h"
@@ -38,7 +40,7 @@ public:
 
     void
     test_closed_loop_control(
-        Object_Representation_Base* object, Controller_Base* controller, Signal_Base* input_signal,
+        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
         bool const plot_control = false) const
     {
         Plotting_Buffers const buffers =
@@ -49,7 +51,7 @@ public:
 
     void
     test_open_loop_control(
-        Object_Representation_Base* object, Controller_Base* controller, Signal_Base* input_signal,
+        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
         bool plot_control = false) const
     {
         Plotting_Buffers const buffers =
@@ -103,7 +105,7 @@ private:
 
     Plotting_Buffers const
     simulate_open_closed_loop(
-        Object_Representation_Base* object, Controller_Base* controller, Signal_Base* input_signal,
+        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
         Control_System::Control_Mode const& control_mode) const
     {
         input_signal->reset();

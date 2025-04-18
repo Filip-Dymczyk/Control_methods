@@ -38,7 +38,7 @@ public:
           _selected_controller(nullptr),
           _selected_input_signal(&_heaviside),
           _regression(),
-          _system(_selected_object, _selected_controller, Control_System::Control_Mode::OPEN_LOOP),
+          _system(_selected_object, Control_System::Control_Mode::OPEN_LOOP),
           _tuner(_system, _regression),
           _operation_type(Operation_Type::SIMULATION)
     {
@@ -67,9 +67,12 @@ public:
         }
         // If it will be handled like that then input to function will have to take matrices into account and base class
         // as well will have to overload.
-        _selected_object->set_order(static_cast<std::size_t>(order));
-        _selected_object->set_parameters(object_parameters);
-        _selected_object->set_time_step(time_step);
+        if(_selected_object != nullptr)
+        {
+            _selected_object->set_order(static_cast<std::size_t>(order));
+            _selected_object->set_parameters(object_parameters);
+            _selected_object->set_time_step(time_step);
+        }
     }
 
     void
@@ -85,12 +88,12 @@ public:
         {
             case Controller_Type::BANG_BANG:
             {
-                _selected_controller = &_bang_bang_controller;
+                _selected_controller = std::make_shared<Bang_Bang_Controller>(_bang_bang_controller);
                 break;
             }
             case Controller_Type::PID:
             {
-                _selected_controller = &_pid_controller;
+                _selected_controller = std::make_shared<PID>(_pid_controller);
                 break;
             }
             case Controller_Type::NONE:
@@ -101,8 +104,13 @@ public:
             default:
                 break;
         }
-        _selected_controller->set_time_step(time_step);
-        _selected_controller->set_parameters(controller_parameters);
+
+        if(_selected_controller != nullptr)
+        {
+            _selected_controller->set_time_step(time_step);
+            _selected_controller->set_parameters(controller_parameters);
+            _system.set_controller(_selected_controller);
+        }
     }
 
     void
@@ -151,8 +159,12 @@ public:
             default:
                 break;
         }
-        _selected_input_signal->set_time_step(time_step);
-        _selected_input_signal->set_parameters(signal_basic_parameters);
+
+        if(_selected_input_signal != nullptr)
+        {
+            _selected_input_signal->set_time_step(time_step);
+            _selected_input_signal->set_parameters(signal_basic_parameters);
+        }
     }
 
     void
@@ -164,13 +176,21 @@ public:
     double
     get_time() const
     {
-        return _selected_input_signal->time();
+        if(_selected_input_signal != nullptr)
+        {
+            return _selected_input_signal->time();
+        }
+        return 0.0;
     }
 
     double
     get_setpoint() const
     {
-        return _selected_input_signal->get_value();
+        if(_selected_input_signal != nullptr)
+        {
+            return _selected_input_signal->get_value();
+        }
+        return 0.0;
     }
 
     double
@@ -188,6 +208,11 @@ public:
     void
     update()
     {
+        if(_selected_input_signal == nullptr)
+        {
+            assert(false);
+            return;
+        }
         _system.update(_selected_input_signal->get_value());
         _selected_input_signal->update();
     }
@@ -201,14 +226,20 @@ public:
     void
     reset()
     {
-        _selected_object->reset();
+        if(_selected_object != nullptr)
+        {
+            _selected_object->reset();
+        }
 
         if(_selected_controller != nullptr)
         {
             _selected_controller->reset();
         }
 
-        _selected_input_signal->reset();
+        if(_selected_input_signal != nullptr)
+        {
+            _selected_input_signal->reset();
+        }
     }
 
 private:
@@ -223,7 +254,7 @@ private:
     Pulse_Wave _pulse_wave;
 
     Object_Representation_Base* _selected_object;
-    Controller_Base* _selected_controller;
+    std::shared_ptr<Controller_Base> _selected_controller;  // nullptr as default controller, this requires shared_ptr
     Signal_Base* _selected_input_signal;
 
     Recursive_Linear_Regression _regression;

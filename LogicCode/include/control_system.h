@@ -2,6 +2,7 @@
 // Description : Control loop system.
 
 #pragma once
+#include <memory>
 #include "base_classes/controller_base.h"
 #include "base_classes/object_representation_base.h"
 
@@ -12,11 +13,19 @@ public:
     enum class Control_Mode : std::uint8_t
     {
         OPEN_LOOP,
-        CLOSED_LOOP
+        CLOSED_LOOP,
+        NONE
     };
 
-    Control_System(Object_Representation_Base* object, Controller_Base*& controller, Control_Mode const& control_mode)
-        : _object(object), _controller(controller), _control_mode(control_mode)
+    Control_System(
+        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller,
+        Control_Mode const& control_mode)
+        : _object(object), _controller(std::move(controller)), _control_mode(control_mode)
+    {
+    }
+
+    Control_System(Object_Representation_Base* object, Control_Mode const& control_mode)
+        : Control_System(object, nullptr, control_mode)
     {
     }
 
@@ -35,7 +44,11 @@ public:
         }
         else
         {
-            double const error = set_point - _object->get_value();
+            double error = set_point;
+            if(_object != nullptr)
+            {
+                error -= _object->get_value();
+            }
 
             if(_controller != nullptr)
             {
@@ -48,7 +61,10 @@ public:
             }
         }
 
-        _object->update(object_update_value);
+        if(_object != nullptr)
+        {
+            _object->update(object_update_value);
+        }
     }
 
     double
@@ -91,13 +107,13 @@ public:
         return {};
     }
 
-    Controller_Base const*
+    std::shared_ptr<Controller_Base> const
     get_controller() const
     {
         return _controller;
     }
 
-    Controller_Base*
+    std::shared_ptr<Controller_Base>
     get_controller()
     {
         return _controller;
@@ -126,8 +142,14 @@ public:
         _control_mode = control_mode;
     }
 
+    void
+    set_controller(std::shared_ptr<Controller_Base> controller)
+    {
+        _controller = std::move(controller);
+    }
+
 private:
     Control_Mode _control_mode {};
     Object_Representation_Base* _object {nullptr};
-    Controller_Base*& _controller;
+    std::shared_ptr<Controller_Base> _controller {nullptr};
 };

@@ -15,12 +15,12 @@ class Input_Parameters_Container
         std::vector<double> controller_parameters {1.0, 1.0, 0.0};
         double start_time {0.0};
         double scaler {1.0};
-        double on_time {0.0};
-        double omega {0.0};
+        double on_time {5.0};
+        double omega {1.0};
         double offset {0.0};
-        double duty_cycle {0.0};
-        double period {0.0};
-        double simulation_time {1.0};
+        double duty_cycle {0.5};
+        double period {2.0};
+        double simulation_time {10.0};
     };
 
     struct ComboBoxes_Inputs
@@ -91,7 +91,7 @@ public:
     void
     set_period(double period)
     {
-        _line_edit_inputs.on_time = period;
+        _line_edit_inputs.period = period;
     }
 
     void

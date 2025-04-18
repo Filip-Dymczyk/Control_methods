@@ -182,6 +182,7 @@ public:
     void
     reset() override
     {
+        Rectangle::reset();
         set_value(0.0);
         reset_timer();
         _periods_counter = 1u;
