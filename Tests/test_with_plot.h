@@ -3,7 +3,9 @@
 
 #pragma once
 #include <math.h>
+#include <memory>
 #include <string>
+#include <vector>
 #include "base_classes/controller_base.h"
 #include "base_classes/object_representation_base.h"
 #include "base_classes/signal_base.h"
@@ -38,7 +40,7 @@ public:
 
     void
     test_closed_loop_control(
-        Object_Representation_Base* object, Controller_Base* controller, Signal_Base* input_signal,
+        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
         bool const plot_control = false) const
     {
         Plotting_Buffers const buffers =
@@ -49,7 +51,7 @@ public:
 
     void
     test_open_loop_control(
-        Object_Representation_Base* object, Controller_Base* controller, Signal_Base* input_signal,
+        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
         bool plot_control = false) const
     {
         Plotting_Buffers const buffers =
@@ -70,6 +72,7 @@ public:
     void
     test_tuner(Signal_Base* input_signal, TunerT tuner, bool plot_control = false) const
     {
+        std::cout << "2" << std::endl;
         Plotting_Buffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
 
         plot_test(buffers, Control_System::Control_Mode::CLOSED_LOOP, plot_control);
@@ -103,7 +106,7 @@ private:
 
     Plotting_Buffers const
     simulate_open_closed_loop(
-        Object_Representation_Base* object, Controller_Base* controller, Signal_Base* input_signal,
+        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
         Control_System::Control_Mode const& control_mode) const
     {
         input_signal->reset();
@@ -152,9 +155,10 @@ private:
         std::vector<double> set_point {};
         std::vector<double> control {};
         std::vector<double> output {};
-
+        std::cout << "1" << std::endl;
         while(input_signal->time() < _sim_time)
         {
+            std::cout << input_signal->time() << std::endl;
             time.push_back(input_signal->time());
             set_point.push_back(input_signal->get_value());
             control.push_back(tuner.get_control());

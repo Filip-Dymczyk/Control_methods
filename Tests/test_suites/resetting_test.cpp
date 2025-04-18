@@ -2,6 +2,7 @@
 // Description : Unit tests for reset operation.
 
 #include <gtest/gtest.h>
+#include <memory>
 #include "control_system.h"
 #include "object_differential_equation_representation.h"
 #include "pid.h"
@@ -22,10 +23,10 @@ protected:
     void
     test_closed_loop_with_resets()
     {
-        Test_With_Plot::test_closed_loop_control(&_object_differential_equation_representation, &_pid, &_step);
+        Test_With_Plot::test_closed_loop_control(&_object_differential_equation_representation, _pid, &_step);
         _object_differential_equation_representation.reset();
-        _pid.reset();
-        Test_With_Plot::test_closed_loop_control(&_object_differential_equation_representation, &_pid, &_step);
+        _pid->reset();
+        Test_With_Plot::test_closed_loop_control(&_object_differential_equation_representation, _pid, &_step);
     }
 
     void
@@ -39,10 +40,10 @@ protected:
 
 private:
     Heaviside _step {_time_step, {5.0, 1.0}};
-    PID _pid {_time_step, {1.0, 1.0, 1.0}};
+    std::shared_ptr<PID> _pid = std::make_shared<PID>(_time_step, std::vector<double> {1.0, 1.0, 1.0});
     ObjectEquationT _object_differential_equation_representation {_time_step, _order, {0.0, -1.0}, {2.0, 0.50, 3.0}};
     Control_System _system {
-        &_object_differential_equation_representation, &_pid, Control_System::Control_Mode::CLOSED_LOOP};
+        &_object_differential_equation_representation, _pid, Control_System::Control_Mode::CLOSED_LOOP};
     Recursive_Linear_Regression _regression {};
     Pid_Tuner _tuner {_system, _regression};
 };
