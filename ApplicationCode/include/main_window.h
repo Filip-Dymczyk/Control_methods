@@ -47,7 +47,6 @@ public:
         _center_position = std::make_tuple(x, y);
 
         this->move(x, y);
-        this->setFixedSize(this->size());
     }
 
 private:

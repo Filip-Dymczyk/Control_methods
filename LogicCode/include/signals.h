@@ -76,6 +76,16 @@ public:
         reset_on_timer();
     }
 
+    void
+    set_on_time(double on_time)
+    {
+        if(on_time < 0.0)
+        {
+            on_time = 0.0;
+        }
+        _on_time = on_time;
+    }
+
 protected:
     void
     reset_on_timer()
@@ -126,6 +136,22 @@ public:
         reset_timer();
     }
 
+    void
+    set_omega(double omega)
+    {
+        if(omega < 0.0)
+        {
+            omega = 0.0;
+        }
+        _omega = omega;
+    }
+
+    void
+    set_offset(double offset)
+    {
+        _offset = offset;
+    }
+
 private:
     double _omega {};
     double _offset {};
@@ -159,6 +185,30 @@ public:
         set_value(0.0);
         reset_timer();
         _periods_counter = 1u;
+    }
+
+    void
+    set_period(double period)
+    {
+        if(period < 0.0)
+        {
+            period = 0.0;
+        }
+        _period = period;
+    }
+
+    void
+    set_duty_cycle(double duty_cycle)
+    {
+        if(duty_cycle > 1.0)
+        {
+            duty_cycle = 1.0;
+        }
+        if(duty_cycle < 0.0)
+        {
+            duty_cycle = 0.0;
+        }
+        Rectangle::set_on_time(duty_cycle * _period);
     }
 
 private:

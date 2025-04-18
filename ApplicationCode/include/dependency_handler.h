@@ -26,6 +26,14 @@ public:
         connect(
             _inputs_parser, &Inputs_Parser::too_few_input_parameters, this,
             &Dependency_Handler::too_few_input_parameters);
+
+        connect(_inputs_parser, &Inputs_Parser::unable_to_parse, this, &Dependency_Handler::unable_to_parse);
+        connect(
+            _inputs_parser, &Inputs_Parser::value_below_lower_limit, this,
+            &Dependency_Handler::value_below_lower_limit);
+        connect(
+            _inputs_parser, &Inputs_Parser::value_above_upper_limit, this,
+            &Dependency_Handler::value_above_upper_limit);
     }
 
     Input_Parameters_Container const&
@@ -85,4 +93,13 @@ Q_SIGNALS:
 
     void
     too_few_input_parameters();
+
+    void
+    unable_to_parse(QString text);
+
+    void
+    value_below_lower_limit(double limit);
+
+    void
+    value_above_upper_limit(double limit);
 };

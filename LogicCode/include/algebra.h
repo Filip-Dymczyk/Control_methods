@@ -3,6 +3,7 @@
 
 #pragma once
 #include <assert.h>
+#include <cstdio>
 
 template<typename MatrixT>
 void

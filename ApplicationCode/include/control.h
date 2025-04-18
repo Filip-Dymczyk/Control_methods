@@ -106,7 +106,10 @@ public:
     }
 
     void
-    set_signal(double time_step, Input_Signal input_signal /*, signal parameters missing*/)
+    set_signal(
+        double time_step, Input_Signal input_signal,
+        Signal_Base::Signal_Basic_Parameters const& signal_basic_parameters,
+        std::array<double, 5> const& advanced_parameters)
     {
         switch(input_signal)
         {
@@ -122,16 +125,26 @@ public:
             }
             case Input_Signal::RECTANGLE:
             {
+                _rect.set_on_time(
+                    advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::ON_TIME)));
                 _selected_input_signal = &_rect;
                 break;
             }
             case Input_Signal::SINE_WAVE:
             {
+                _sine_wave.set_omega(
+                    advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::OMEGA)));
+                _sine_wave.set_offset(
+                    advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::OFFSET)));
                 _selected_input_signal = &_sine_wave;
                 break;
             }
             case Input_Signal::PULSE_WAVE:
             {
+                _pulse_wave.set_period(
+                    advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::PERIOD)));
+                _pulse_wave.set_duty_cycle(
+                    advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::DUTY_CYCLE)));
                 _selected_input_signal = &_pulse_wave;
                 break;
             }
@@ -139,6 +152,7 @@ public:
                 break;
         }
         _selected_input_signal->set_time_step(time_step);
+        _selected_input_signal->set_parameters(signal_basic_parameters);
     }
 
     void
