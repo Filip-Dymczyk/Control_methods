@@ -72,7 +72,6 @@ public:
     void
     test_tuner(Signal_Base* input_signal, TunerT tuner, bool plot_control = false) const
     {
-        std::cout << "2" << std::endl;
         Plotting_Buffers const buffers = simulate_tuner<TunerT>(input_signal, tuner);
 
         plot_test(buffers, Control_System::Control_Mode::CLOSED_LOOP, plot_control);
@@ -155,10 +154,9 @@ private:
         std::vector<double> set_point {};
         std::vector<double> control {};
         std::vector<double> output {};
-        std::cout << "1" << std::endl;
+
         while(input_signal->time() < _sim_time)
         {
-            std::cout << input_signal->time() << std::endl;
             time.push_back(input_signal->time());
             set_point.push_back(input_signal->get_value());
             control.push_back(tuner.get_control());

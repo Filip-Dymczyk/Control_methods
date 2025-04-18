@@ -3,7 +3,6 @@
 
 #pragma once
 #include <assert.h>
-#include <iostream>
 
 class Simulation_Object_Base
 {
