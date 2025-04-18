@@ -117,13 +117,13 @@ public:
             }
             case LineEdit_ID::DUTY_CYCLE_LINE_EDIT:
             {
-                double const duty_cycle = parse_single_number_line_edit(line_edit, ok, 0.0, 1.0);
+                double const duty_cycle_percent = parse_single_number_line_edit(line_edit, ok, 0.0, 100.0);
                 if(!ok)
                 {
                     return;
                 }
-
-                _inputs.set_duty_cycle(duty_cycle);
+                static double const percent_to_fraction = 1e-02;
+                _inputs.set_duty_cycle(duty_cycle_percent * percent_to_fraction);
                 break;
             }
             case LineEdit_ID::SIMULATION_TIME_LINE_EDIT:
@@ -275,7 +275,7 @@ public:
             return 0.0;
         }
 
-        if(value < lower_limit)
+        if(value != 0.0 && value < lower_limit)
         {
             Q_EMIT value_below_lower_limit(lower_limit);
             ok = false;

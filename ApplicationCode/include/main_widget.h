@@ -172,7 +172,7 @@ private:
         set_up_combobox(operation_combobox, {"Simulation", "Tuning"});
 
         ClickableLineEdit* simulation_time_line_edit = new ClickableLineEdit();
-        set_up_line_edit(simulation_time_line_edit, "1.0", "<p><i>Enter operation time in seconds.</i></p>", true);
+        set_up_line_edit(simulation_time_line_edit, "10.0", "<p><i>Enter operation time in seconds.</i></p>", true);
 
         QComboBox* _simulation_step_combobox = new QComboBox();
         set_up_combobox(_simulation_step_combobox, {"0.01", "0.001", "0.0001"}, true);
@@ -210,7 +210,7 @@ private:
         QLabel* period_label = new QLabel("Period [s]: ");
         period_label->hide();
 
-        QLabel* duty_cycle_label = new QLabel("Duty cycle: ");
+        QLabel* duty_cycle_label = new QLabel("Duty cycle [%]: ");
         duty_cycle_label->hide();
 
         line_edit_id = static_cast<int>(LineEdit_ID::START_TIME_LINE_EDIT);
@@ -238,7 +238,7 @@ private:
         period_line_edit->hide();
 
         ClickableLineEdit* duty_cycle_line_edit = new ClickableLineEdit();
-        set_up_line_edit(duty_cycle_line_edit, "0.0", "<p><i>Set up duty cycle [0 - 1].</i></p>");
+        set_up_line_edit(duty_cycle_line_edit, "0.0", "<p><i>Set up duty cycle 0 - 100%.</i></p>");
         duty_cycle_line_edit->hide();
 
         QGridLayout* grid_Layout = new QGridLayout();

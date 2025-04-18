@@ -20,7 +20,7 @@ class Input_Parameters_Container
         double offset {0.0};
         double duty_cycle {0.0};
         double period {0.0};
-        double simulation_time {1.0};
+        double simulation_time {10.0};
     };
 
     struct ComboBoxes_Inputs
