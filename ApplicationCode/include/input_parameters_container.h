@@ -91,7 +91,7 @@ public:
     void
     set_period(double period)
     {
-        _line_edit_inputs.on_time = period;
+        _line_edit_inputs.period = period;
     }
 
     void

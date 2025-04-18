@@ -20,19 +20,13 @@ public:
     void
     parse_line_edit_id(QLineEdit* line_edit, LineEdit_ID line_edit_id)
     {
-        bool ok;
         switch(line_edit_id)
         {
             case LineEdit_ID::OBJECT_PARAMETERS_LINE_EDIT:
             {
                 int const object_parameters_limit = _inputs.get_order() + 1;
                 std::vector<double> const object_parameters =
-                    parse_vector_parameters(line_edit, object_parameters_limit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                    parse_vector_parameters(line_edit, object_parameters_limit);
                 _inputs.set_object_parameters(object_parameters);
                 break;
             }
@@ -40,100 +34,56 @@ public:
             {
                 int const controller_parameters_limit = 3;  // PID and Bang-Bang Controllers.
                 std::vector<double> const controller_parameters =
-                    parse_vector_parameters(line_edit, controller_parameters_limit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                    parse_vector_parameters(line_edit, controller_parameters_limit);
                 _inputs.set_controller_parameters(controller_parameters);
                 break;
             }
             case LineEdit_ID::START_TIME_LINE_EDIT:
             {
-                double const start_time = parse_single_number_line_edit(line_edit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                double const start_time = parse_single_number_line_edit(line_edit);
                 _inputs.set_start_time(start_time);
                 break;
             }
             case LineEdit_ID::SCALER_LINE_EDIT:
             {
-                double const scaler = parse_single_number_line_edit(line_edit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                double const scaler = parse_single_number_line_edit(line_edit);
                 _inputs.set_scaler(scaler);
                 break;
             }
             case LineEdit_ID::ON_TIME_LINE_EDIT:
             {
-                double const on_time = parse_single_number_line_edit(line_edit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                double const on_time = parse_single_number_line_edit(line_edit);
                 _inputs.set_on_time(on_time);
                 break;
             }
             case LineEdit_ID::OMEGA_LINE_EDIT:
             {
-                double const omega = parse_single_number_line_edit(line_edit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                double const omega = parse_single_number_line_edit(line_edit);
                 _inputs.set_omega(omega);
                 break;
             }
             case LineEdit_ID::OFFSET_LINE_EDIT:
             {
-                double const offset = parse_single_number_line_edit(line_edit, ok, std::numeric_limits<double>::min());
-                if(!ok)
-                {
-                    return;
-                }
-
+                double const offset = parse_single_number_line_edit(line_edit, std::numeric_limits<double>::min());
                 _inputs.set_offset(offset);
                 break;
             }
             case LineEdit_ID::PERIOD_LINE_EDIT:
             {
-                double const period = parse_single_number_line_edit(line_edit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                double const period = parse_single_number_line_edit(line_edit);
                 _inputs.set_period(period);
                 break;
             }
             case LineEdit_ID::DUTY_CYCLE_LINE_EDIT:
             {
-                double const duty_cycle_percent = parse_single_number_line_edit(line_edit, ok, 0.0, 100.0);
-                if(!ok)
-                {
-                    return;
-                }
-                static double const percent_to_fraction = 1e-02;
+                double const duty_cycle_percent         = parse_single_number_line_edit(line_edit, 0.0, 100.0);
+                static double const percent_to_fraction = 0.01;
                 _inputs.set_duty_cycle(duty_cycle_percent * percent_to_fraction);
                 break;
             }
             case LineEdit_ID::SIMULATION_TIME_LINE_EDIT:
             {
-                double const simulation_time = parse_single_number_line_edit(line_edit, ok);
-                if(!ok)
-                {
-                    return;
-                }
-
+                double const simulation_time = parse_single_number_line_edit(line_edit);
                 _inputs.set_simulation_time(simulation_time);
                 break;
             }
@@ -205,13 +155,14 @@ public:
 
     // This will need some error protections.
     std::vector<double>
-    parse_vector_parameters(QLineEdit* line_edit, int parameters_limit, bool& ok)
+    parse_vector_parameters(QLineEdit* line_edit, int parameters_limit)
     {
         QStringList const parameters_string_list    = line_edit->text().split("|", Qt::SkipEmptyParts);
         std::size_t const entered_parameters_number = parameters_string_list.size();
         std::vector<double> parameters {};
         parameters.reserve(parameters_limit);
 
+        bool ok;
         std::size_t idx = 1;
         for(auto const& parameter: parameters_string_list)
         {
@@ -264,9 +215,9 @@ public:
 
     double
     parse_single_number_line_edit(
-        QLineEdit* line_edit, bool& ok, double lower_limit = 0.0,
-        double upper_limit = std::numeric_limits<double>::max())
+        QLineEdit* line_edit, double lower_limit = 0.0, double upper_limit = std::numeric_limits<double>::max())
     {
+        bool ok;
         double const value = line_edit->text().toDouble(&ok);
         if(!ok)
         {
@@ -278,17 +229,15 @@ public:
         if(value != 0.0 && value < lower_limit)
         {
             Q_EMIT value_below_lower_limit(lower_limit);
-            ok = false;
             line_edit->setText(QString::number(lower_limit));
-            return 0.0;
+            return lower_limit;
         }
 
         if(value > upper_limit)
         {
             Q_EMIT value_above_upper_limit(upper_limit);
-            ok = false;
             line_edit->setText(QString::number(upper_limit));
-            return 0.0;
+            return upper_limit;
         }
         return value;
     }
