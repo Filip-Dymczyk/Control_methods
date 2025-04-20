@@ -48,12 +48,6 @@ private:
 public Q_SLOTS:
 
     void
-    order_spinbox_callback(int order)
-    {
-        _inputs_parser->set_order(order);
-    }
-
-    void
     line_edits_callback()
     {
         QLineEdit* line_edit = qobject_cast<QLineEdit*>(sender());

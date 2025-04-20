@@ -72,13 +72,6 @@ private:
     QGroupBox*
     create_dynamical_system_group_box()
     {
-        QSpinBox* order_spin_box = new QSpinBox();
-        order_spin_box->setRange(1, 10);
-        order_spin_box->setValue(1);
-        connect(
-            order_spin_box, QOverload<int>::of(&QSpinBox::valueChanged), _dependency_handler,
-            &Dependency_Handler::order_spinbox_callback);
-
         QComboBox* object_representation_combobox = new QComboBox();
         set_up_combobox(
             object_representation_combobox, {"Object equation representation", "Object state space representation"});
@@ -93,9 +86,6 @@ private:
         QGridLayout* grid_Layout = new QGridLayout();
 
         int row = 0;
-        grid_Layout->addWidget(new QLabel("Object order: "), row, 0);
-        grid_Layout->addWidget(order_spin_box, row, 1);
-        row++;
         grid_Layout->addWidget(new QLabel("Object representation: "), row, 0);
         grid_Layout->addWidget(object_representation_combobox, row, 1);
         row++;
