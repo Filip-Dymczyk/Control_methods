@@ -155,7 +155,7 @@ public:
     }
 
     bool
-    plot_control_signal() const
+    get_plot_control_signal() const
     {
         return _plot_control_signal;
     }

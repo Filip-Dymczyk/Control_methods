@@ -238,7 +238,7 @@ public:
     }
 
     void
-    plot_control_signal(bool checked)
+    set_plot_control_signal(bool checked)
     {
         _inputs.set_plot_control_signal(checked);
     }

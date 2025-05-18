@@ -13,7 +13,7 @@ public:
     void
     update(Input_Parameters_Container const& input_parameters)
     {
-        _plotter.set_plot_control_signal(input_parameters.plot_control_signal());
+        _plotter.set_plot_control_signal(input_parameters.get_plot_control_signal());
         _simulation_time      = input_parameters.get_simulation_time();
         _simulation_time_step = input_parameters.get_simulation_time_step();
         _control.set_object(

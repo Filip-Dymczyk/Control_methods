@@ -78,7 +78,7 @@ public Q_SLOTS:
     void
     plot_control_signal_changed(bool checked)
     {
-        _inputs_parser->plot_control_signal(checked);
+        _inputs_parser->set_plot_control_signal(checked);
     }
 
 Q_SIGNALS:
