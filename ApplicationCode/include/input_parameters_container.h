@@ -41,6 +41,12 @@ public:
     }
 
     void
+    set_plot_control_signal(bool checked)
+    {
+        _plot_control_signal = checked;
+    }
+
+    void
     set_order(int order)
     {
         _order = order;
@@ -148,6 +154,12 @@ public:
         return _order;
     }
 
+    bool
+    plot_control_signal() const
+    {
+        return _plot_control_signal;
+    }
+
     std::vector<double> const&
     get_object_parameters() const
     {
@@ -217,6 +229,7 @@ public:
     }
 
 private:
+    bool _plot_control_signal {false};
     int _order {1};
     LineEdit_Inputs _line_edit_inputs {};
     ComboBoxes_Inputs _comboboxes_inputs {};

@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QtCore/QString>
+#include <QtWidgets/QCheckbox>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QToolBar>
@@ -29,9 +30,18 @@ public:
         center_button->setToolTip("<p><i>Center the window.</i></p>");
         connect(center_button, &QPushButton::clicked, this, &Main_Window::center);
 
+        QCheckBox* plot_control_signal_checkbox = new QCheckBox("Plot control signal");
+        plot_control_signal_checkbox->setLayoutDirection(Qt::RightToLeft);
+        plot_control_signal_checkbox->setToolTip("<p><i>Select to plot control signal.</i></p>");
+        plot_control_signal_checkbox->setChecked(false);
+        connect(
+            plot_control_signal_checkbox, &QCheckBox::stateChanged, _main_widget,
+            &Main_Widget::plot_control_signal_changed);
+
         QToolBar* toolbar = new QToolBar();
         toolbar->addWidget(run_button);
         toolbar->addWidget(center_button);
+        toolbar->addWidget(plot_control_signal_checkbox);
 
         this->addToolBar(toolbar);
     }

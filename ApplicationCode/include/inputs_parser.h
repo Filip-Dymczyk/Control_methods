@@ -237,6 +237,12 @@ public:
         return value;
     }
 
+    void
+    plot_control_signal(bool checked)
+    {
+        _inputs.set_plot_control_signal(checked);
+    }
+
     Input_Parameters_Container const&
     get_input_parameters() const
     {

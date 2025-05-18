@@ -42,6 +42,10 @@ public:
             QMessageBox::warning(this, "Warning", QString("Inserted value above the limit: %1.").arg(limit));
         });
 
+        connect(
+            this, &Main_Widget::plot_control_signal_changed, _dependency_handler,
+            &Dependency_Handler::plot_control_signal_changed);
+
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
         QGroupBox* input_signal_group_box           = create_input_signal_group_box();
@@ -61,6 +65,10 @@ public:
     {
         return _dependency_handler;
     }
+
+Q_SIGNALS:
+    void
+    plot_control_signal_changed(bool checked);
 
 private:
     int combobox_id  = 0;
