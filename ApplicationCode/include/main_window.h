@@ -57,12 +57,12 @@ private:
     void
     show_plot_window()
     {
-        bool const success = _simulator.update(_main_widget->dependency_handler()->get_input_parameters());
-        if(!success)
+        if(!_main_widget->dependency_handler()->get_input_parameters().allowed_to_run())
         {
-            QMessageBox::critical(this, "Error", "Object order is different than the number of entered parameters!");
+            QMessageBox::critical(this, "Error", "Invalid object parameters number!");
             return;
         }
+        _simulator.update(_main_widget->dependency_handler()->get_input_parameters());
         _simulator.run();
         _simulator.show_plot();
     }

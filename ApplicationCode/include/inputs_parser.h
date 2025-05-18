@@ -24,9 +24,8 @@ public:
         {
             case LineEdit_ID::OBJECT_PARAMETERS_LINE_EDIT:
             {
-                int const object_parameters_limit = _inputs.get_order() + 1;
-                std::vector<double> const object_parameters =
-                    parse_vector_parameters(line_edit, object_parameters_limit);
+                std::vector<double> const object_parameters = parse_vector_parameters(line_edit);
+                _inputs.set_order(object_parameters.size() - 1);
                 _inputs.set_object_parameters(object_parameters);
                 break;
             }
@@ -147,20 +146,12 @@ public:
         }
     }
 
-    void
-    set_order(int order)
-    {
-        _inputs.set_order(order);
-    }
-
-    // This will need some error protections.
     std::vector<double>
-    parse_vector_parameters(QLineEdit* line_edit, int parameters_limit)
+    parse_vector_parameters(QLineEdit* line_edit, int parameters_count = -1)
     {
         QStringList const parameters_string_list    = line_edit->text().split("|", Qt::SkipEmptyParts);
         std::size_t const entered_parameters_number = parameters_string_list.size();
         std::vector<double> parameters {};
-        parameters.reserve(parameters_limit);
 
         bool ok;
         std::size_t idx = 1;
@@ -172,43 +163,47 @@ public:
                 Q_EMIT unable_to_parse(parameter);
                 return {};
             }
+
             parameters.push_back(value);
-            if(idx == parameters_limit)
+            if(parameters_count > 0 && idx == parameters_count)
             {
                 break;
             }
             idx++;
         }
 
-        if(entered_parameters_number > parameters_limit)
+        if(parameters_count > 0)
         {
-            Q_EMIT too_many_input_parameters();
-
-            line_edit->setText(get_new_line_edit_text_from_parameters(parameters));
-        }
-        else if(entered_parameters_number < parameters_limit)
-        {
-            Q_EMIT too_few_input_parameters();
-
-            QString new_text = get_new_line_edit_text_from_parameters(parameters);
-            if(parameters.size() > 0)
+            if(entered_parameters_number > parameters_count)
             {
-                new_text += "|";  // Avoiding trailing pipe if line edit was empty.
+                Q_EMIT too_many_input_parameters();
+
+                line_edit->setText(get_new_line_edit_text_from_parameters(parameters));
             }
-
-            std::size_t const range = parameters_limit - entered_parameters_number;
-            for(std::size_t i = 0; i < range; i++)
+            else if(entered_parameters_number < parameters_count)
             {
-                double const default_val = 0.0;
-                parameters.push_back(default_val);
-                new_text += QString::number(default_val, 'f', 1);
-                if(i < range - 1)
+                Q_EMIT too_few_input_parameters();
+
+                QString new_text = get_new_line_edit_text_from_parameters(parameters);
+                if(parameters.size() > 0)
                 {
-                    new_text += "|";
+                    new_text += "|";  // Avoiding trailing pipe if line edit was empty.
                 }
-            }
 
-            line_edit->setText(new_text);
+                std::size_t const range = parameters_count - entered_parameters_number;
+                for(std::size_t i = 0; i < range; i++)
+                {
+                    double const default_val = 0.0;
+                    parameters.push_back(default_val);
+                    new_text += QString::number(default_val, 'f', 1);
+                    if(i < range - 1)
+                    {
+                        new_text += "|";
+                    }
+                }
+
+                line_edit->setText(new_text);
+            }
         }
         return parameters;
     }

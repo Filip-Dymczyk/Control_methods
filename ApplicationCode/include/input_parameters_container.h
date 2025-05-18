@@ -34,6 +34,12 @@ class Input_Parameters_Container
     };
 
 public:
+    bool
+    allowed_to_run() const
+    {
+        return _order > 0;
+    }
+
     void
     set_order(int order)
     {
