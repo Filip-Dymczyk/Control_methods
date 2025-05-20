@@ -81,6 +81,12 @@ public Q_SLOTS:
         _inputs_parser->set_plot_control_signal(checked);
     }
 
+    void
+    enable_measurement_noise(bool checked)
+    {
+        _inputs_parser->set_enable_measurement_noise(checked);
+    }
+
 Q_SIGNALS:
     void
     disable_controller_parameters();

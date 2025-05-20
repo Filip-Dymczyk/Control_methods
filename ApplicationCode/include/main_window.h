@@ -42,7 +42,6 @@ public:
     }
 
 private:
-    bool _measurement_noise_on {false};
     std::tuple<int, int> _center_position {};
     Main_Widget* _main_widget {nullptr};
     Simulator _simulator;
@@ -55,7 +54,7 @@ private:
             QMessageBox::critical(this, "Error", "Invalid object parameters number!");
             return;
         }
-        _simulator.update(_main_widget->dependency_handler()->get_input_parameters(), _measurement_noise_on);
+        _simulator.update(_main_widget->dependency_handler()->get_input_parameters());
         _simulator.run();
         _simulator.show_plot();
     }
@@ -103,6 +102,8 @@ private:
         measurement_noise_checkbox->setLayoutDirection(Qt::RightToLeft);
         measurement_noise_checkbox->setToolTip("<p><i>Enable measurement noise simulation.</i></p>");
         measurement_noise_checkbox->setChecked(false);
+        connect(
+            measurement_noise_checkbox, &QCheckBox::stateChanged, _main_widget, &Main_Widget::enable_measurement_noise);
 
         QToolBar* toolbar = new QToolBar();
         toolbar->addWidget(run_button);
@@ -113,8 +114,7 @@ private:
         QAction* measurement_noise_action = toolbar->addWidget(measurement_noise_line_edit);
         measurement_noise_action->setVisible(false);
 
-        connect(measurement_noise_checkbox, &QCheckBox::stateChanged, [this, measurement_noise_action](bool checked) {
-            this->_measurement_noise_on = checked;
+        connect(measurement_noise_checkbox, &QCheckBox::stateChanged, [measurement_noise_action](bool checked) {
             measurement_noise_action->setVisible(checked);
         });
 

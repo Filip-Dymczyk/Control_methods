@@ -249,6 +249,12 @@ public:
         _inputs.set_plot_control_signal(checked);
     }
 
+    void
+    set_enable_measurement_noise(bool checked)
+    {
+        _inputs.set_enable_measurement_noise(checked);
+    }
+
     Input_Parameters_Container const&
     get_input_parameters() const
     {

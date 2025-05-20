@@ -48,6 +48,12 @@ public:
     }
 
     void
+    set_enable_measurement_noise(bool checked)
+    {
+        _enable_measurement_noise = checked;
+    }
+
+    void
     set_order(int order)
     {
         _order = order;
@@ -155,16 +161,22 @@ public:
         _comboboxes_inputs.operation_type = operation_type;
     }
 
-    int
-    get_order() const
-    {
-        return _order;
-    }
-
     bool
     get_plot_control_signal() const
     {
         return _plot_control_signal;
+    }
+
+    bool
+    get_enable_measurement_noise() const
+    {
+        return _enable_measurement_noise;
+    }
+
+    int
+    get_order() const
+    {
+        return _order;
     }
 
     std::vector<double> const&
@@ -243,6 +255,7 @@ public:
 
 private:
     bool _plot_control_signal {false};
+    bool _enable_measurement_noise {false};
     int _order {1};
     LineEdit_Inputs _line_edit_inputs {};
     ComboBoxes_Inputs _comboboxes_inputs {};
