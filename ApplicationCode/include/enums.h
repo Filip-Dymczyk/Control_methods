@@ -15,7 +15,8 @@ enum class LineEdit_ID : std::uint8_t
     OFFSET_LINE_EDIT,
     PERIOD_LINE_EDIT,
     DUTY_CYCLE_LINE_EDIT,
-    SIMULATION_TIME_LINE_EDIT
+    SIMULATION_TIME_LINE_EDIT,
+    MEASUREMENT_NOISE_LINE_EDIT
 };
 
 enum class ComboBox_ID : std::uint8_t

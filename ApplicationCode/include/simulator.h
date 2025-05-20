@@ -11,7 +11,7 @@ class Simulator
 {
 public:
     void
-    update(Input_Parameters_Container const& input_parameters)
+    update(Input_Parameters_Container const& input_parameters, bool measurement_noise_on)
     {
         _plotter.set_plot_control_signal(input_parameters.get_plot_control_signal());
         _simulation_time      = input_parameters.get_simulation_time();
@@ -28,6 +28,8 @@ public:
             input_parameters.get_input_signal_basic_parameters(),
             input_parameters.get_input_signal_advanced_parameters());
         _control.set_operation_type(input_parameters.get_operation_type());
+        _control.enable_measurement_noise(measurement_noise_on);
+        _control.set_measurement_noise_std(input_parameters.get_measurement_noise_std());
     }
 
     void

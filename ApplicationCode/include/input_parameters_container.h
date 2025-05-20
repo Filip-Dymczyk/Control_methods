@@ -21,6 +21,7 @@ class Input_Parameters_Container
         double duty_cycle {0.5};
         double period {2.0};
         double simulation_time {10.0};
+        double measurement_noise_std {0.001};
     };
 
     struct ComboBoxes_Inputs
@@ -113,6 +114,12 @@ public:
     }
 
     void
+    set_measurement_noise_std(double measurement_noise_std)
+    {
+        _line_edit_inputs.measurement_noise_std = measurement_noise_std;
+    }
+
+    void
     set_simulation_time_step(double simulation_time_step)
     {
         _comboboxes_inputs.simulation_time_step = simulation_time_step;
@@ -176,6 +183,12 @@ public:
     get_simulation_time() const
     {
         return _line_edit_inputs.simulation_time;
+    }
+
+    double
+    get_measurement_noise_std() const
+    {
+        return _line_edit_inputs.measurement_noise_std;
     }
 
     double

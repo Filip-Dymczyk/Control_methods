@@ -60,6 +60,31 @@ public:
         this->setLayout(horizontal_layout);
     }
 
+    void
+    set_up_line_edit(ClickableLineEdit* line_edit, QString text, QString tooltip, bool preset_id = false)
+    {
+        line_edit->setText(text);
+        line_edit->setToolTip(tooltip);
+        if(preset_id)
+        {
+            line_edit->setProperty("id", static_cast<int>(LineEdit_ID::SIMULATION_TIME_LINE_EDIT));
+        }
+        else
+        {
+            line_edit->setProperty("id", line_edit_id);
+            line_edit_id++;
+        }
+
+        connect(line_edit, &ClickableLineEdit::clicked, [line_edit]() { line_edit->setFocus(); });
+        connect(line_edit, &QLineEdit::editingFinished, _dependency_handler, &Dependency_Handler::line_edits_callback);
+    }
+
+    void
+    set_line_edit_id(int line_edit_id_in)
+    {
+        line_edit_id = line_edit_id_in;
+    }
+
     Dependency_Handler const* const
     dependency_handler() const
     {
@@ -292,25 +317,6 @@ private:
         connect(
             combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
             &Dependency_Handler::comboboxes_callback);
-    }
-
-    void
-    set_up_line_edit(ClickableLineEdit* line_edit, QString text, QString tooltip, bool preset_id = false)
-    {
-        line_edit->setText(text);
-        line_edit->setToolTip(tooltip);
-        if(preset_id)
-        {
-            line_edit->setProperty("id", static_cast<int>(LineEdit_ID::SIMULATION_TIME_LINE_EDIT));
-        }
-        else
-        {
-            line_edit->setProperty("id", line_edit_id);
-            line_edit_id++;
-        }
-
-        connect(line_edit, &ClickableLineEdit::clicked, [line_edit]() { line_edit->setFocus(); });
-        connect(line_edit, &QLineEdit::editingFinished, _dependency_handler, &Dependency_Handler::line_edits_callback);
     }
 
     int

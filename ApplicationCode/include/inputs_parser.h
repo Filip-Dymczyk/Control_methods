@@ -86,6 +86,12 @@ public:
                 _inputs.set_simulation_time(simulation_time);
                 break;
             }
+            case LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT:
+            {
+                double const measurement_noise_std = parse_single_number_line_edit(line_edit, 0.0);
+                _inputs.set_measurement_noise_std(measurement_noise_std);
+                break;
+            }
             default:
                 break;
         }
