@@ -29,6 +29,31 @@ public:
                 _inputs.set_object_parameters(object_parameters);
                 break;
             }
+            case LineEdit_ID::A_MATRIX_LINE_EDIT:
+            {
+                std::vector<std::vector<double>> const& A_matrix = parse_matrix_parameters(line_edit);
+                _inputs.set_order(A_matrix.size());
+                _inputs.set_A_matrix(A_matrix);
+                break;
+            }
+            case LineEdit_ID::B_VECTOR_LINE_EDIT:
+            {
+                std::vector<double> const B_vector = parse_vector_parameters(line_edit, -1, false, ";");
+                _inputs.set_B_vector(B_vector);
+                break;
+            }
+            case LineEdit_ID::C_VECTOR_LINE_EDIT:
+            {
+                std::vector<double> const C_vector = parse_vector_parameters(line_edit);
+                _inputs.set_C_vector(C_vector);
+                break;
+            }
+            case LineEdit_ID::D_LINE_EDIT:
+            {
+                double const D = parse_single_number_line_edit(line_edit);
+                _inputs.set_D(D);
+                break;
+            }
             case LineEdit_ID::CONTROLLER_PARAMETERS_LINE_EDIT:
             {
                 int const controller_parameters_limit = 3;  // PID and Bang-Bang Controllers.
@@ -153,9 +178,21 @@ public:
     }
 
     std::vector<double>
-    parse_vector_parameters(QLineEdit* line_edit, int parameters_count = -1)
+    parse_vector_parameters(
+        QLineEdit* line_edit, int parameters_count = -1, bool parsing_matrix = false, QString splitter = ",")
     {
-        QStringList const parameters_string_list    = line_edit->text().split("|", Qt::SkipEmptyParts);
+        QString text = line_edit->text().trimmed();
+        if(!parsing_matrix && (!text.startsWith('[') || !text.endsWith(']')))
+        {
+            Q_EMIT unable_to_parse(text);
+            return {};
+        }
+
+        if(!parsing_matrix)
+        {
+            text = text.mid(1, text.length() - 2);  // Get rid of brackets.
+        }
+        QStringList const parameters_string_list    = text.split(splitter, Qt::SkipEmptyParts);
         std::size_t const entered_parameters_number = parameters_string_list.size();
         std::vector<double> parameters {};
 
@@ -193,7 +230,7 @@ public:
                 QString new_text = get_new_line_edit_text_from_parameters(parameters);
                 if(parameters.size() > 0)
                 {
-                    new_text += "|";  // Avoiding trailing pipe if line edit was empty.
+                    new_text += splitter;  // Avoiding trailing splitter if line edit was empty.
                 }
 
                 std::size_t const range = parameters_count - entered_parameters_number;
@@ -204,7 +241,7 @@ public:
                     new_text += QString::number(default_val, 'f', 1);
                     if(i < range - 1)
                     {
-                        new_text += "|";
+                        new_text += splitter;
                     }
                 }
 
@@ -212,6 +249,33 @@ public:
             }
         }
         return parameters;
+    }
+
+    std::vector<std::vector<double>>
+    parse_matrix_parameters(QLineEdit* line_edit)
+    {
+        QString text = line_edit->text().trimmed();
+        if(!text.startsWith('[') || !text.endsWith(']'))
+        {
+            Q_EMIT unable_to_parse(text);
+            return {};
+        }
+
+        text                                     = text.mid(1, text.length() - 2);  // Get rid of brackets.
+        QStringList const parameters_string_list = text.split(";", Qt::SkipEmptyParts);
+
+        std::vector<std::vector<double>> matrix {};
+        for(auto const& text: parameters_string_list)
+        {
+            std::vector<double> const row = parse_vector_parameters(new QLineEdit(text), -1, true);
+            if(row.empty())
+            {
+                return {};
+            }
+
+            matrix.emplace_back(row);
+        }
+        return matrix;
     }
 
     double

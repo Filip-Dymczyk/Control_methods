@@ -2,7 +2,6 @@
 // Description : Multi-order linear object represented by state space.
 
 #pragma once
-#include <random>
 #include "algebra.h"
 #include "base_classes/object_representation_base.h"
 
@@ -30,10 +29,7 @@ public:
         assert(A[0].size() == order);
         assert(B.size() == order);
         assert(C.size() == order);
-        _A = A;
-        _B = B;
-        _C = C;
-        _D = D;
+        _matrices = {A, B, C, D};
     }
 
     Object_State_Space_Representation(double time_step, std::size_t order)
@@ -45,24 +41,33 @@ public:
     void
     update(double control) override
     {
+        ;
         VectorT const current_state = get_current_state();
 
-        set_value_with_measurement_noise(vectors_multiplication_scalar_product<VectorT>(_C, current_state));
+        set_value_with_measurement_noise(vectors_multiplication_scalar_product<VectorT>(_matrices.C, current_state));
 
         VectorT A_x(order());
-        matrix_vector_multiplication_vector_product<MatrixT, VectorT>(A_x, _A, current_state);
-        VectorT B_u = _B;
+        matrix_vector_multiplication_vector_product<MatrixT, VectorT>(A_x, _matrices.A, current_state);
+        VectorT B_u = _matrices.B;
         scale_vector<VectorT>(B_u, control);
         VectorT new_state_derivative(order());
         add_vectors<VectorT>(new_state_derivative, A_x, B_u);
         _state.update(new_state_derivative);
     }
 
+    void
+    set_parameters(State_Space_Matrices const& matrices) override
+    {
+        assert(matrices.A.size() == _order);
+        assert(matrices.A[0].size() == _order);
+        assert(matrices.B.size() == _order);
+        assert(matrices.C.size() == _order);
+
+        _matrices = matrices;
+    }
+
 private:
-    MatrixT _A {};
-    VectorT _B {};
-    VectorT _C {};
-    double _D {};
+    State_Space_Matrices _matrices;
 
     VectorT
     get_current_state() const
