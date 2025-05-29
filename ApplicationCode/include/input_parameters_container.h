@@ -21,6 +21,7 @@ class Input_Parameters_Container
         double duty_cycle {0.5};
         double period {2.0};
         double simulation_time {10.0};
+        double measurement_noise_std {0.001};
     };
 
     struct ComboBoxes_Inputs
@@ -38,6 +39,18 @@ public:
     allowed_to_run() const
     {
         return _order > 0;
+    }
+
+    void
+    set_plot_control_signal(bool checked)
+    {
+        _plot_control_signal = checked;
+    }
+
+    void
+    set_enable_measurement_noise(bool checked)
+    {
+        _enable_measurement_noise = checked;
     }
 
     void
@@ -107,6 +120,12 @@ public:
     }
 
     void
+    set_measurement_noise_std(double measurement_noise_std)
+    {
+        _line_edit_inputs.measurement_noise_std = measurement_noise_std;
+    }
+
+    void
     set_simulation_time_step(double simulation_time_step)
     {
         _comboboxes_inputs.simulation_time_step = simulation_time_step;
@@ -142,6 +161,18 @@ public:
         _comboboxes_inputs.operation_type = operation_type;
     }
 
+    bool
+    get_plot_control_signal() const
+    {
+        return _plot_control_signal;
+    }
+
+    bool
+    get_enable_measurement_noise() const
+    {
+        return _enable_measurement_noise;
+    }
+
     int
     get_order() const
     {
@@ -164,6 +195,12 @@ public:
     get_simulation_time() const
     {
         return _line_edit_inputs.simulation_time;
+    }
+
+    double
+    get_measurement_noise_std() const
+    {
+        return _line_edit_inputs.measurement_noise_std;
     }
 
     double
@@ -217,6 +254,8 @@ public:
     }
 
 private:
+    bool _plot_control_signal {false};
+    bool _enable_measurement_noise {false};
     int _order {1};
     LineEdit_Inputs _line_edit_inputs {};
     ComboBoxes_Inputs _comboboxes_inputs {};

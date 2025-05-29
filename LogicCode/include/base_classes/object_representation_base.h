@@ -11,7 +11,10 @@ class Object_Representation_Base : public Simulation_Object_Base
 {
 public:
     Object_Representation_Base(double time_step, std::size_t order, std::vector<double> const& init_state)
-        : Simulation_Object_Base(time_step), _state(time_step, order, init_state), _order(order)
+        : Simulation_Object_Base(time_step),
+          _measurement_noise_on(false),
+          _state(time_step, order, init_state),
+          _order(order)
     {
     }
 
@@ -31,7 +34,7 @@ public:
     void
     reset() override
     {
-        set_value(get_initial_output());
+        set_value_with_measurement_noise(get_initial_output());
         _state.reset();
     }
 
@@ -46,19 +49,45 @@ public:
     {
     }
 
+    void
+    enable_measurement_noise(bool enable)
+    {
+        _measurement_noise_on = enable;
+    }
+
+    void
+    set_measurement_noise_std(double measurement_noise_std)
+    {
+        std::normal_distribution<double>::param_type new_params(0.0, measurement_noise_std);
+        _distribution.param(new_params);
+    }
+
+    void
+    set_value_with_measurement_noise(double value)
+    {
+        double measurement_noise = 0.0;
+        if(_measurement_noise_on)
+        {
+            measurement_noise = get_measurement_noise();
+        }
+
+        set_value(value + measurement_noise);
+    }
+
 protected:
     std::size_t _order {};
     State _state;
 
+private:
+    bool _measurement_noise_on;
+    std::mt19937 _generator;
+    std::normal_distribution<double> _distribution {0.0, 0.001};
+
     double
-    measurement_noise()
+    get_measurement_noise()
     {
         return _distribution(_generator);
     }
-
-private:
-    std::mt19937 _generator;
-    std::normal_distribution<double> _distribution {0.0, 0.1};
 
     double
     get_initial_output() const

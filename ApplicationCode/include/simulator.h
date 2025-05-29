@@ -13,6 +13,7 @@ public:
     void
     update(Input_Parameters_Container const& input_parameters)
     {
+        _plotter.set_plot_control_signal(input_parameters.get_plot_control_signal());
         _simulation_time      = input_parameters.get_simulation_time();
         _simulation_time_step = input_parameters.get_simulation_time_step();
         _control.set_object(
@@ -27,6 +28,8 @@ public:
             input_parameters.get_input_signal_basic_parameters(),
             input_parameters.get_input_signal_advanced_parameters());
         _control.set_operation_type(input_parameters.get_operation_type());
+        _control.enable_measurement_noise(input_parameters.get_enable_measurement_noise());
+        _control.set_measurement_noise_std(input_parameters.get_measurement_noise_std());
     }
 
     void

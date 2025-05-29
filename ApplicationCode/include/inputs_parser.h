@@ -86,6 +86,12 @@ public:
                 _inputs.set_simulation_time(simulation_time);
                 break;
             }
+            case LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT:
+            {
+                double const measurement_noise_std = parse_single_number_line_edit(line_edit, 0.0);
+                _inputs.set_measurement_noise_std(measurement_noise_std);
+                break;
+            }
             default:
                 break;
         }
@@ -235,6 +241,18 @@ public:
             return upper_limit;
         }
         return value;
+    }
+
+    void
+    set_plot_control_signal(bool checked)
+    {
+        _inputs.set_plot_control_signal(checked);
+    }
+
+    void
+    set_enable_measurement_noise(bool checked)
+    {
+        _inputs.set_enable_measurement_noise(checked);
     }
 
     Input_Parameters_Container const&

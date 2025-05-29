@@ -173,6 +173,24 @@ public:
         _operation_type = operation_type;
     }
 
+    void
+    enable_measurement_noise(bool enable)
+    {
+        if(_selected_object != nullptr)
+        {
+            _selected_object->enable_measurement_noise(enable);
+        }
+    }
+
+    void
+    set_measurement_noise_std(double measurement_noise_std)
+    {
+        if(_selected_object != nullptr)
+        {
+            _selected_object->set_measurement_noise_std(measurement_noise_std);
+        }
+    }
+
     double
     get_time() const
     {
