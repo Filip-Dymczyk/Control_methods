@@ -46,7 +46,7 @@ public:
 
     void
     set_object(
-        int order, double time_step, Object_Representation object_representation,
+        std::vector<std::size_t> orders, double time_step, Object_Representation object_representation,
         std::vector<double> const& object_parameters, Object_Representation_Base::State_Space_Matrices const& matrices)
     {
         switch(object_representation)
@@ -57,9 +57,8 @@ public:
                     _differential_equation_representation_object);
                 if(_selected_object != nullptr)
                 {
-                    _selected_object->set_order(
-                        static_cast<std::size_t>(order));  // Order needs to be set prior to setting parameters.
-                    _selected_object->set_time_step(time_step);
+                    _selected_object->set_order(orders[static_cast<std::size_t>(
+                        Object_Representation::EQUATION)]);  // Order needs to be set prior to setting parameters.
                     _selected_object->set_parameters(object_parameters);
                 }
                 break;
@@ -70,9 +69,8 @@ public:
                     std::make_shared<Object_State_Space_Representation>(_state_space_representation_object);
                 if(_selected_object != nullptr)
                 {
-                    _selected_object->set_order(
-                        static_cast<std::size_t>(order));  // Order needs to be set prior to setting matrices.
-                    _selected_object->set_time_step(time_step);
+                    _selected_object->set_order(orders[static_cast<std::size_t>(
+                        Object_Representation::STATE_SPACE)]);  // Order needs to be set prior to setting matrices.
                     _selected_object->set_parameters(matrices);
                 }
                 break;
@@ -82,6 +80,7 @@ public:
         }
         if(_selected_object != nullptr)
         {
+            _selected_object->set_time_step(time_step);
             _system.set_object(_selected_object);
         }
     }

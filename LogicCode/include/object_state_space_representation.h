@@ -41,7 +41,6 @@ public:
     void
     update(double control) override
     {
-        ;
         VectorT const current_state = get_current_state();
 
         set_value_with_measurement_noise(vectors_multiplication_scalar_product<VectorT>(_matrices.C, current_state));

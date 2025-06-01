@@ -25,14 +25,14 @@ public:
             case LineEdit_ID::OBJECT_PARAMETERS_LINE_EDIT:
             {
                 std::vector<double> const object_parameters = parse_vector_parameters(line_edit);
-                _inputs.set_order(object_parameters.size() - 1);
+                _inputs.set_order(object_parameters.size() - 1u, Object_Representation::EQUATION);
                 _inputs.set_object_parameters(object_parameters);
                 break;
             }
             case LineEdit_ID::A_MATRIX_LINE_EDIT:
             {
                 std::vector<std::vector<double>> const& A_matrix = parse_matrix_parameters(line_edit);
-                _inputs.set_order(A_matrix.size());
+                _inputs.set_order(A_matrix.size(), Object_Representation::STATE_SPACE);
                 _inputs.set_A_matrix(A_matrix);
                 break;
             }

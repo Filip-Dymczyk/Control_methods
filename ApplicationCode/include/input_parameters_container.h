@@ -42,11 +42,15 @@ public:
     bool
     allowed_to_run() const
     {
-        bool const valid_state_space_matrices_sizes =
-            (_line_edit_inputs.A_matrix.size() == _order) && (_line_edit_inputs.A_matrix[0].size() == _order) &&
-            (_line_edit_inputs.B_vector.size() == _order) && (_line_edit_inputs.C_vector.size() == _order);
-        return _order > 0 && (((_comboboxes_inputs.object_representation == Object_Representation::EQUATION) &&
-                               (_order == _line_edit_inputs.object_parameters.size() - 1))) ||
+        std::size_t const equation_order    = _orders[static_cast<std::size_t>(Object_Representation::EQUATION)];
+        std::size_t const state_space_order = _orders[static_cast<std::size_t>(Object_Representation::STATE_SPACE)];
+        bool const valid_state_space_matrices_sizes = (_line_edit_inputs.A_matrix.size() == state_space_order) &&
+                                                      (_line_edit_inputs.A_matrix[0].size() == state_space_order) &&
+                                                      (_line_edit_inputs.B_vector.size() == state_space_order) &&
+                                                      (_line_edit_inputs.C_vector.size() == state_space_order);
+
+        return ((_comboboxes_inputs.object_representation == Object_Representation::EQUATION) &&
+                (equation_order == _line_edit_inputs.object_parameters.size() - 1u)) ||
                ((_comboboxes_inputs.object_representation == Object_Representation::STATE_SPACE) &&
                 valid_state_space_matrices_sizes);
     }
@@ -64,9 +68,9 @@ public:
     }
 
     void
-    set_order(int order)
+    set_order(std::size_t order, Object_Representation representation)
     {
-        _order = order;
+        _orders[static_cast<std::size_t>(representation)] = order;
     }
 
     void
@@ -207,10 +211,10 @@ public:
         return _enable_measurement_noise;
     }
 
-    int
-    get_order() const
+    std::vector<std::size_t> const
+    get_orders() const
     {
-        return _order;
+        return _orders;
     }
 
     std::vector<double> const&
@@ -314,7 +318,7 @@ public:
 private:
     bool _plot_control_signal {false};
     bool _enable_measurement_noise {false};
-    int _order {2};
+    std::vector<std::size_t> _orders {2u, 2u};
     LineEdit_Inputs _line_edit_inputs {};
     ComboBoxes_Inputs _comboboxes_inputs {};
 };
