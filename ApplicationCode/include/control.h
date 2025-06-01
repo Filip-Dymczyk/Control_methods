@@ -20,7 +20,7 @@
 class Control
 {
     // Default values needed for initialization.
-    static constexpr std::size_t ORDER {1u};
+    static constexpr std::size_t ORDER {2u};
     static constexpr double TIME_STEP {0.01};
 
 public:
@@ -34,7 +34,7 @@ public:
           _rect(TIME_STEP),
           _sine_wave(TIME_STEP),
           _pulse_wave(TIME_STEP),
-          _selected_object(&_differential_equation_representation_object),
+          _selected_object(nullptr),
           _selected_controller(nullptr),
           _selected_input_signal(&_heaviside),
           _regression(),
@@ -46,32 +46,42 @@ public:
 
     void
     set_object(
-        int order, double time_step, Object_Representation object_representation,
-        std::vector<double> const& object_parameters)
+        std::vector<std::size_t> orders, double time_step, Object_Representation object_representation,
+        std::vector<double> const& object_parameters, Object_Representation_Base::State_Space_Matrices const& matrices)
     {
         switch(object_representation)
         {
             case Object_Representation::EQUATION:
             {
-                _selected_object = &_differential_equation_representation_object;
+                _selected_object = std::make_shared<Object_Differential_Equation_Representation>(
+                    _differential_equation_representation_object);
+                if(_selected_object != nullptr)
+                {
+                    _selected_object->set_order(orders[static_cast<std::size_t>(
+                        Object_Representation::EQUATION)]);  // Order needs to be set prior to setting parameters.
+                    _selected_object->set_parameters(object_parameters);
+                }
                 break;
             }
             case Object_Representation::STATE_SPACE:
             {
-                // TODO: when matrix input will be handled
-                // _selected_object = &_state_space_representation_object;
+                _selected_object =
+                    std::make_shared<Object_State_Space_Representation>(_state_space_representation_object);
+                if(_selected_object != nullptr)
+                {
+                    _selected_object->set_order(orders[static_cast<std::size_t>(
+                        Object_Representation::STATE_SPACE)]);  // Order needs to be set prior to setting matrices.
+                    _selected_object->set_parameters(matrices);
+                }
                 break;
             }
             default:
                 break;
         }
-        // If it will be handled like that then input to function will have to take matrices into account and base class
-        // as well will have to overload.
         if(_selected_object != nullptr)
         {
-            _selected_object->set_order(static_cast<std::size_t>(order));
-            _selected_object->set_parameters(object_parameters);
             _selected_object->set_time_step(time_step);
+            _system.set_object(_selected_object);
         }
     }
 
@@ -271,7 +281,7 @@ private:
     Sine_Wave _sine_wave;
     Pulse_Wave _pulse_wave;
 
-    Object_Representation_Base* _selected_object;
+    std::shared_ptr<Object_Representation_Base> _selected_object;
     std::shared_ptr<Controller_Base> _selected_controller;  // nullptr as default controller, this requires shared_ptr
     Signal_Base* _selected_input_signal;
 

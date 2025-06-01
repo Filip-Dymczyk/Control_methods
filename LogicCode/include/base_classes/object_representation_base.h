@@ -10,6 +10,14 @@
 class Object_Representation_Base : public Simulation_Object_Base
 {
 public:
+    struct State_Space_Matrices
+    {
+        std::vector<std::vector<double>> A {};
+        std::vector<double> B {};
+        std::vector<double> C {};
+        double D {};
+    };
+
     Object_Representation_Base(double time_step, std::size_t order, std::vector<double> const& init_state)
         : Simulation_Object_Base(time_step),
           _measurement_noise_on(false),
@@ -46,6 +54,11 @@ public:
 
     virtual void
     set_parameters(std::vector<double> const&)
+    {
+    }
+
+    virtual void
+    set_parameters(State_Space_Matrices const&)
     {
     }
 

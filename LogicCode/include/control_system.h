@@ -18,13 +18,13 @@ public:
     };
 
     Control_System(
-        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller,
+        std::shared_ptr<Object_Representation_Base> object, std::shared_ptr<Controller_Base> controller,
         Control_Mode const& control_mode)
-        : _object(object), _controller(std::move(controller)), _control_mode(control_mode)
+        : _object(std::move(object)), _controller(std::move(controller)), _control_mode(control_mode)
     {
     }
 
-    Control_System(Object_Representation_Base* object, Control_Mode const& control_mode)
+    Control_System(std::shared_ptr<Object_Representation_Base> object, Control_Mode const& control_mode)
         : Control_System(object, nullptr, control_mode)
     {
     }
@@ -148,8 +148,14 @@ public:
         _controller = std::move(controller);
     }
 
+    void
+    set_object(std::shared_ptr<Object_Representation_Base> object)
+    {
+        _object = std::move(object);
+    }
+
 private:
     Control_Mode _control_mode {};
-    Object_Representation_Base* _object {nullptr};
+    std::shared_ptr<Object_Representation_Base> _object {nullptr};
     std::shared_ptr<Controller_Base> _controller {nullptr};
 };

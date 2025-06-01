@@ -36,16 +36,18 @@ protected:
 private:
     Sine_Wave _sine_wave_1 {time_step, 1.0, 1.0, {}};
     std::shared_ptr<PID> pid_1 = std::make_shared<PID>(time_step, std::vector<double> {0.0, 0.0, 0.0});
-    ObjectEquationT object_differential_equation_representation {time_step, order, {0.0, 0.0}, {2.0, 0.50, 3.0}};
+    std::shared_ptr<ObjectEquationT> object_differential_equation_representation = std::make_shared<ObjectEquationT>(
+        time_step, order, std::vector<double> {0.0, 0.0}, std::vector<double> {2.0, 0.50, 3.0});
     Control_System system_1 {
-        &object_differential_equation_representation, pid_1, Control_System::Control_Mode::CLOSED_LOOP};
+        object_differential_equation_representation, pid_1, Control_System::Control_Mode::CLOSED_LOOP};
     Pid_Tuner _tuner_1 {system_1, {}};
 
     Sine_Wave _sine_wave_2 {time_step, 1.0, 1.0, {}};
     std::shared_ptr<PID> pid_2 = std::make_shared<PID>(time_step, std::vector<double> {0.0, 0.0, 0.0});
-    ObjectStateSpaceT object_state_space_representation {
-        time_step, order, {0.0, 0.0}, {{{0.0, 1.0}, {-0.5, -2.0}}}, {0.0, 3.0}, {1.0, 0.0}};
-    Control_System system_2 {&object_state_space_representation, pid_2, Control_System::Control_Mode::CLOSED_LOOP};
+    std::shared_ptr<ObjectStateSpaceT> object_state_space_representation = std::make_shared<ObjectStateSpaceT>(
+        time_step, order, std::vector<double> {0.0, 0.0}, std::vector<std::vector<double>> {{{0.0, 1.0}, {-0.5, -2.0}}},
+        std::vector<double> {0.0, 3.0}, std::vector<double> {1.0, 0.0});
+    Control_System system_2 {object_state_space_representation, pid_2, Control_System::Control_Mode::CLOSED_LOOP};
     Pid_Tuner _tuner_2 {system_2, {}};
 };
 

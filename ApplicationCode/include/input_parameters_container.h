@@ -11,8 +11,12 @@ class Input_Parameters_Container
 {
     struct LineEdit_Inputs
     {
-        std::vector<double> object_parameters {1.0, 1.0};
+        std::vector<double> object_parameters {1.0, 1.0, 1.0};
         std::vector<double> controller_parameters {1.0, 1.0, 0.0};
+        std::vector<std::vector<double>> A_matrix = {{0.0, 1.0}, {-1.0, -1.0}};
+        std::vector<double> B_vector              = {0.0, 1.0};
+        std::vector<double> C_vector              = {1.0, 0.0};
+        double D {0.0};
         double start_time {0.0};
         double scaler {1.0};
         double on_time {5.0};
@@ -38,7 +42,17 @@ public:
     bool
     allowed_to_run() const
     {
-        return _order > 0;
+        std::size_t const equation_order    = _orders[static_cast<std::size_t>(Object_Representation::EQUATION)];
+        std::size_t const state_space_order = _orders[static_cast<std::size_t>(Object_Representation::STATE_SPACE)];
+        bool const valid_state_space_matrices_sizes = (_line_edit_inputs.A_matrix.size() == state_space_order) &&
+                                                      (_line_edit_inputs.A_matrix[0].size() == state_space_order) &&
+                                                      (_line_edit_inputs.B_vector.size() == state_space_order) &&
+                                                      (_line_edit_inputs.C_vector.size() == state_space_order);
+
+        return ((_comboboxes_inputs.object_representation == Object_Representation::EQUATION) &&
+                (equation_order == _line_edit_inputs.object_parameters.size() - 1u)) ||
+               ((_comboboxes_inputs.object_representation == Object_Representation::STATE_SPACE) &&
+                valid_state_space_matrices_sizes);
     }
 
     void
@@ -54,15 +68,39 @@ public:
     }
 
     void
-    set_order(int order)
+    set_order(std::size_t order, Object_Representation representation)
     {
-        _order = order;
+        _orders[static_cast<std::size_t>(representation)] = order;
     }
 
     void
     set_object_parameters(std::vector<double> const& object_parameters)
     {
         _line_edit_inputs.object_parameters = object_parameters;
+    }
+
+    void
+    set_A_matrix(std::vector<std::vector<double>> const& A_matrix)
+    {
+        _line_edit_inputs.A_matrix = A_matrix;
+    }
+
+    void
+    set_B_vector(std::vector<double> const& B_vector)
+    {
+        _line_edit_inputs.B_vector = B_vector;
+    }
+
+    void
+    set_C_vector(std::vector<double> const& C_vector)
+    {
+        _line_edit_inputs.C_vector = C_vector;
+    }
+
+    void
+    set_D(double D)
+    {
+        _line_edit_inputs.D = D;
     }
 
     void
@@ -173,16 +211,40 @@ public:
         return _enable_measurement_noise;
     }
 
-    int
-    get_order() const
+    std::vector<std::size_t> const
+    get_orders() const
     {
-        return _order;
+        return _orders;
     }
 
     std::vector<double> const&
     get_object_parameters() const
     {
         return _line_edit_inputs.object_parameters;
+    }
+
+    std::vector<std::vector<double>> const&
+    get_A_matrix() const
+    {
+        return _line_edit_inputs.A_matrix;
+    }
+
+    std::vector<double> const&
+    get_B_vector() const
+    {
+        return _line_edit_inputs.B_vector;
+    }
+
+    std::vector<double> const&
+    get_C_vector() const
+    {
+        return _line_edit_inputs.C_vector;
+    }
+
+    double
+    get_D() const
+    {
+        return _line_edit_inputs.D;
     }
 
     std::vector<double> const&
@@ -256,7 +318,7 @@ public:
 private:
     bool _plot_control_signal {false};
     bool _enable_measurement_noise {false};
-    int _order {1};
+    std::vector<std::size_t> _orders {2u, 2u};
     LineEdit_Inputs _line_edit_inputs {};
     ComboBoxes_Inputs _comboboxes_inputs {};
 };

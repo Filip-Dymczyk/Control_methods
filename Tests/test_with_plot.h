@@ -40,8 +40,8 @@ public:
 
     void
     test_closed_loop_control(
-        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
-        bool const plot_control = false) const
+        std::shared_ptr<Object_Representation_Base> object, std::shared_ptr<Controller_Base> controller,
+        Signal_Base* input_signal, bool const plot_control = false) const
     {
         Plotting_Buffers const buffers =
             simulate_open_closed_loop(object, controller, input_signal, Control_System::Control_Mode::CLOSED_LOOP);
@@ -51,8 +51,8 @@ public:
 
     void
     test_open_loop_control(
-        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
-        bool plot_control = false) const
+        std::shared_ptr<Object_Representation_Base> object, std::shared_ptr<Controller_Base> controller,
+        Signal_Base* input_signal, bool plot_control = false) const
     {
         Plotting_Buffers const buffers =
             simulate_open_closed_loop(object, controller, input_signal, Control_System::Control_Mode::OPEN_LOOP);
@@ -105,8 +105,8 @@ private:
 
     Plotting_Buffers const
     simulate_open_closed_loop(
-        Object_Representation_Base* object, std::shared_ptr<Controller_Base> controller, Signal_Base* input_signal,
-        Control_System::Control_Mode const& control_mode) const
+        std::shared_ptr<Object_Representation_Base> object, std::shared_ptr<Controller_Base> controller,
+        Signal_Base* input_signal, Control_System::Control_Mode const& control_mode) const
     {
         input_signal->reset();
         Control_System control_loop {object, controller, control_mode};

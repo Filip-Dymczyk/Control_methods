@@ -105,7 +105,9 @@ private:
     int combobox_id  = 0;
     int line_edit_id = 0;
     Input_Signal _previous_input_signal_type {Input_Signal::HEAVISIDE};
+    Object_Representation _previous_object_representation {Object_Representation::EQUATION};
     QGridLayout* _input_signal_layout {nullptr};
+    QGridLayout* _dynamical_system_layout {nullptr};
     Dependency_Handler* _dependency_handler {nullptr};
 
     QGroupBox*
@@ -114,25 +116,68 @@ private:
         QComboBox* object_representation_combobox = new QComboBox();
         set_up_combobox(
             object_representation_combobox, {"Object equation representation", "Object state space representation"});
+        connect(
+            object_representation_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            &update_dynamical_system_layout);
 
         ClickableLineEdit* object_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            object_parameters_line_edit, "1.0|1.0",
-            "<p><i>Enter object parameters separated by pipes (|).</i></p>"
-            "<p><b>NOTE!</b> Format accepted:</p>"
-            "<p><code>ax' + bx = cu</code></p>");
+            object_parameters_line_edit, "[1.0, 1.0, 1.0]",
+            "<p><i>Enter object parameters as a vector, e.g. [a, b].</i></p>");
 
-        QGridLayout* grid_Layout = new QGridLayout();
+        QLabel* A_matrix_label = new QLabel("A: ");
+        A_matrix_label->hide();
+
+        QLabel* B_vector_label = new QLabel("B: ");
+        B_vector_label->hide();
+
+        QLabel* C_vector_label = new QLabel("C: ");
+        C_vector_label->hide();
+
+        QLabel* D_label = new QLabel("D: ");
+        D_label->hide();
+
+        ClickableLineEdit* A_matrix_line_edit = new ClickableLineEdit();
+        set_up_line_edit(
+            A_matrix_line_edit, "[0.0, 1.0; -1.0, -1.0]", "<p><i>Enter object A matrix, e.g. [a, b; c, d].</i></p>");
+        A_matrix_line_edit->hide();
+
+        ClickableLineEdit* B_vector_line_edit = new ClickableLineEdit();
+        set_up_line_edit(B_vector_line_edit, "[0.0; 1.0]", "<p><i>Enter object B vector, e.g. [a; b].</i></p>");
+        B_vector_line_edit->hide();
+
+        ClickableLineEdit* C_vector_line_edit = new ClickableLineEdit();
+        set_up_line_edit(C_vector_line_edit, "[1.0, 0.0]", "<p><i>Enter object C vector, e.g. [a, b].</i></p>");
+        C_vector_line_edit->hide();
+
+        ClickableLineEdit* D_line_edit = new ClickableLineEdit();
+        set_up_line_edit(D_line_edit, "0.0", "<p><i>Enter object D value.</i></p>");
+        D_line_edit->hide();
+
+        _dynamical_system_layout = new QGridLayout();
 
         int row = 0;
-        grid_Layout->addWidget(new QLabel("Object representation: "), row, 0);
-        grid_Layout->addWidget(object_representation_combobox, row, 1);
+        _dynamical_system_layout->addWidget(new QLabel("Object representation: "), row, 0);
+        _dynamical_system_layout->addWidget(object_representation_combobox, row, 1);
         row++;
-        grid_Layout->addWidget(new QLabel("Object parameters: "), row, 0);
-        grid_Layout->addWidget(object_parameters_line_edit, row, 1);
+        _dynamical_system_layout->addWidget(new QLabel("Object parameters: "), row, 0);
+        _dynamical_system_layout->addWidget(object_parameters_line_edit, row, 1);
+        row++;
+        _dynamical_system_layout->addWidget(A_matrix_label, row, 0);
+        _dynamical_system_layout->addWidget(A_matrix_line_edit, row, 1);
+        row++;
+        _dynamical_system_layout->addWidget(B_vector_label, row, 0);
+        _dynamical_system_layout->addWidget(B_vector_line_edit, row, 1);
+        row++;
+        _dynamical_system_layout->addWidget(C_vector_label, row, 0);
+        _dynamical_system_layout->addWidget(C_vector_line_edit, row, 1);
+        row++;
+        _dynamical_system_layout->addWidget(D_label, row, 0);
+        _dynamical_system_layout->addWidget(D_line_edit, row, 1);
+        row++;
 
         QGroupBox* dynamical_system_group_box = new QGroupBox("Dynamical system parameters");
-        dynamical_system_group_box->setLayout(grid_Layout);
+        dynamical_system_group_box->setLayout(_dynamical_system_layout);
 
         return dynamical_system_group_box;
     }
@@ -148,9 +193,8 @@ private:
 
         ClickableLineEdit* controller_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            controller_parameters_line_edit, "1.0|1.0|0.0",
-            "<p><i>Enter controller parameters divided with pipe (|).</i></p>"
-            "<p><b>NOTE!</b> Only first 3 parameters will be accepted.</p>");
+            controller_parameters_line_edit, "[1.0, 1.0, 0.0]",
+            "<p><i>Enter controller parameters as a vector.</i></p>");
 
         controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
         connect(
@@ -355,14 +399,13 @@ private:
     }
 
     void
-    hide_show_grid_layout_widgets(int beginning_row, int rows_to_hide_show, bool hide)
+    hide_show_grid_layout_widgets(QGridLayout* grid_layout, int beginning_row, int rows_to_hide_show, bool hide)
     {
-        for(int row = beginning_row;
-            (row < _input_signal_layout->rowCount() && row < beginning_row + rows_to_hide_show); row++)
+        for(int row = beginning_row; (row < grid_layout->rowCount() && row < beginning_row + rows_to_hide_show); row++)
         {
-            for(int column = 0; column < _input_signal_layout->columnCount(); column++)
+            for(int column = 0; column < grid_layout->columnCount(); column++)
             {
-                QLayoutItem* item = _input_signal_layout->itemAtPosition(row, column);
+                QLayoutItem* item = grid_layout->itemAtPosition(row, column);
                 if(item != nullptr)
                 {
                     QWidget* widget = item->widget();
@@ -388,57 +431,99 @@ private Q_SLOTS:
     update_input_signal_layout()
     {
         QComboBox* combobox = qobject_cast<QComboBox*>(sender());
-        if(combobox != nullptr)
+        if(combobox == nullptr)
         {
-            int const previous_signal_type_row = get_valid_grid_layout_row(_previous_input_signal_type);
-            switch(_previous_input_signal_type)
-            {
-                case Input_Signal::RECTANGLE:
-                {
-                    hide_show_grid_layout_widgets(previous_signal_type_row, 1, true);
-                    break;
-                }
-                case Input_Signal::SINE_WAVE:
-                {
-                    hide_show_grid_layout_widgets(previous_signal_type_row, 2, true);
-                    break;
-                }
-                case Input_Signal::PULSE_WAVE:
-                {
-                    hide_show_grid_layout_widgets(previous_signal_type_row, 2, true);
-                    break;
-                }
-                default:
-                {
-                    break;  // Don't hide anything for HEAVISIDE/RAMP input signal as it's just basic layout.
-                }
-            }
-
-            Input_Signal const signal_type    = static_cast<Input_Signal>(combobox->currentIndex());
-            int const current_signal_type_row = get_valid_grid_layout_row(signal_type);
-            switch(signal_type)
-            {
-                case Input_Signal::RECTANGLE:
-                {
-                    hide_show_grid_layout_widgets(current_signal_type_row, 1, false);
-                    break;
-                }
-                case Input_Signal::SINE_WAVE:
-                {
-                    hide_show_grid_layout_widgets(current_signal_type_row, 2, false);
-                    break;
-                }
-                case Input_Signal::PULSE_WAVE:
-                {
-                    hide_show_grid_layout_widgets(current_signal_type_row, 2, false);
-                    break;
-                }
-                default:
-                {
-                    break;  // Don't show anything for HEAVISIDE/RAMP input signal as it's just basic layout.
-                }
-            }
-            _previous_input_signal_type = signal_type;
+            return;
         }
+
+        int const previous_signal_type_row = get_valid_grid_layout_row(_previous_input_signal_type);
+        switch(_previous_input_signal_type)
+        {
+            case Input_Signal::RECTANGLE:
+            {
+                hide_show_grid_layout_widgets(_input_signal_layout, previous_signal_type_row, 1, true);
+                break;
+            }
+            case Input_Signal::SINE_WAVE:
+            {
+                hide_show_grid_layout_widgets(_input_signal_layout, previous_signal_type_row, 2, true);
+                break;
+            }
+            case Input_Signal::PULSE_WAVE:
+            {
+                hide_show_grid_layout_widgets(_input_signal_layout, previous_signal_type_row, 2, true);
+                break;
+            }
+            default:
+            {
+                break;  // Don't hide anything for HEAVISIDE/RAMP input signal as it's just basic layout.
+            }
+        }
+
+        Input_Signal const signal_type    = static_cast<Input_Signal>(combobox->currentIndex());
+        int const current_signal_type_row = get_valid_grid_layout_row(signal_type);
+        switch(signal_type)
+        {
+            case Input_Signal::RECTANGLE:
+            {
+                hide_show_grid_layout_widgets(_input_signal_layout, current_signal_type_row, 1, false);
+                break;
+            }
+            case Input_Signal::SINE_WAVE:
+            {
+                hide_show_grid_layout_widgets(_input_signal_layout, current_signal_type_row, 2, false);
+                break;
+            }
+            case Input_Signal::PULSE_WAVE:
+            {
+                hide_show_grid_layout_widgets(_input_signal_layout, current_signal_type_row, 2, false);
+                break;
+            }
+            default:
+            {
+                break;  // Don't show anything for HEAVISIDE/RAMP input signal as it's just basic layout.
+            }
+        }
+        _previous_input_signal_type = signal_type;
+    }
+
+    void
+    update_dynamical_system_layout()
+    {
+        QComboBox* combobox = qobject_cast<QComboBox*>(sender());
+        if(combobox == nullptr)
+        {
+            return;
+        }
+
+        static int const EQUATION_BEGINNING_ROW    = 1;
+        static int const EQUATION_LAYOUT_ROWS      = 1;
+        static int const STATE_SPACE_BEGINNING_ROW = 2;
+        static int const STATE_SPACE_LAYOUT_ROWS   = 4;
+        switch(_previous_object_representation)
+        {
+            case Object_Representation::EQUATION:
+            {
+                hide_show_grid_layout_widgets(
+                    _dynamical_system_layout, EQUATION_BEGINNING_ROW, EQUATION_LAYOUT_ROWS, true);
+                hide_show_grid_layout_widgets(
+                    _dynamical_system_layout, STATE_SPACE_BEGINNING_ROW, STATE_SPACE_LAYOUT_ROWS, false);
+                break;
+            }
+            case Object_Representation::STATE_SPACE:
+            {
+                hide_show_grid_layout_widgets(
+                    _dynamical_system_layout, STATE_SPACE_BEGINNING_ROW, STATE_SPACE_LAYOUT_ROWS, true);
+                hide_show_grid_layout_widgets(
+                    _dynamical_system_layout, EQUATION_BEGINNING_ROW, EQUATION_LAYOUT_ROWS, false);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+
+        _previous_object_representation = static_cast<Object_Representation>(combobox->currentIndex());
     }
 };
