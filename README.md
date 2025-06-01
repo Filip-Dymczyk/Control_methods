@@ -1,24 +1,44 @@
-## Author : Filip Dymczyk.
+## Author : Filip Dymczyk
 
-## Repository overview
-The aim of this repository is to increase the knowledge about dynamical systems and control methods, as well as, OOP programming skills. It uses c++17 for implementation. On top of that, it uses: Matplotlibcpp - to display the time reponses of the created simulation objects and GoogleTest - to test the projects elements.
+## Project aim was to:
+- practice *C++17* skills as well as *OOP*, *design patterns* and *best practices*,
+- increase knowledge about the behavior of *dynamical control systems* through their logic implementation,
+- learn to validate components with the use of *GoogleTest* framework,
+- incorporate responses visualization through *Matplotlibcpp*,
+- design a GUI using the *Qt* library and connect it to the dynamical systems simulation.
 
-### Features added:
-- Integrator and derivative component.
-- Linear SISO object representation based on physical model - single differential equation with primitive state variables dependencies.
-- PID controller.
-- Open and closed loop control with PID controller.
-- Possibility to plot responses using Matplotlibcpp.
-- Test API using plots.
-- Basic signals: Heaviside, ramp, rectangle, sine wave, pulse wave.
-- Vectors and matrices algebra operations.
-- Recursive linear regression implementation.
-- PID tuning using RLS.
-- Testing managed via Googletest.
-- Two-position (Bang-Bang) controller.
-- State space representation for linear SISO object.
-- Introduced GUI using Qt framework.
+## Logic features:
+- support of two representations of dynamical objects: 
+    - **differential equation** (SISO), e.g. $\dot{x}$ = $-a_1 x + a_2 u$,
+    - **state space** (MIMO): $$\dot{x} = Ax + Bu \\
+                            y = Cx + Du $$
+- support of two controller types:
+    - **PID**,
+    - **Bang-Bang**.
+- possibility of simulating **measurement noise** on the object output,
+- ability to create whole control loops, configured as **open** or **closed** ones with or without controllers with a selected object representation,
+- different supported input signal types, such as:
+    - **Heaviside**,
+    - **Ramp**,
+    - **Rectangle**,
+    - **Sine Wave**,
+    - **Pulse Wave**.
+- additionally, an experimental feature of **PID Tuner** using **Recursive Linear Regression** was introduced (requires further validation).
 
-### Features to be added:
-- Create simulator class handling whole application logic.
-- Incorporate simulator into GUI - create widgets connections and operate control systems based on their states.
+#### There are plans to expand the control logic features with:
+- different integration (solvers) methods - for now only the simplest **forward Euler** method is utilized,
+- support of **discretization** of continuous objects and simulating their behavior taking the sampling time into account,
+- other types of controllers, e.g. **LQR**,
+- introducing of **observers** and/or **estimators**, such as Kalman filter,
+- **output** or **full state** feedback,
+- **pole-placing** functionalities, e.g. root-locus, regular pole-placement or using optimization (LQ problem).
+
+## GUI features:
+- option to select object representation and entering parameters/matrices in Matlab-like syntax,
+- possibility to simulate it's response on the previously mentioned input signal types with an ability to change their parameters,
+- option to create more advanced control loops (open/closed) with a selected controller type (with changeable parameters),
+- possibility to plot control signal value (optional) and simulate measurement noise with a tunable standard deviation,
+- ability to specify operation time and time step.
+
+#### GUI features to add:
+- introduce PID tuning into GUI (for now, it can be selected but has no effect).
