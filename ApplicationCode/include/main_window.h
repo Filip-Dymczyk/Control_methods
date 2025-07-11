@@ -107,7 +107,7 @@ private:
 
         QCheckBox* pid_derivative_filtering_checkbox = new QCheckBox("Enable PID derivative filtering");
         pid_derivative_filtering_checkbox->setLayoutDirection(Qt::RightToLeft);
-        pid_derivative_filtering_checkbox->setToolTip("<p><i>Enable derivative input low pas filtering.</i></p>");
+        pid_derivative_filtering_checkbox->setToolTip("<p><i>Enable derivative input low pass filtering.</i></p>");
         pid_derivative_filtering_checkbox->setChecked(false);
         connect(
             pid_derivative_filtering_checkbox, &QCheckBox::stateChanged, _main_widget,
