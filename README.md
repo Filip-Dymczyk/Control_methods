@@ -13,7 +13,7 @@
     - **state space** (MIMO): $$\dot{x} = Ax + Bu \\
                             y = Cx + Du $$
 - support of two controller types:
-    - **PID**,
+    - **PID** - with possible derivative input low pass filtering,
     - **Bang-Bang**.
 - possibility of simulating **measurement noise** on the object output,
 - ability to create whole control loops, configured as **open** or **closed** ones with or without controllers with a selected object representation,
@@ -37,7 +37,7 @@
 - option to select object representation and entering parameters/matrices in Matlab-like syntax,
 - possibility to simulate it's response on the previously mentioned input signal types with an ability to change their parameters,
 - option to create more advanced control loops (open/closed) with a selected controller type (with changeable parameters),
-- possibility to plot control signal value (optional) and simulate measurement noise with a tunable standard deviation,
+- possibility to plot control signal value (optional), simulate measurement noise with a tunable standard deviation and low pass filter the PID derivative input with desired coefficient,
 - ability to specify operation time and time step.
 
 #### GUI features to add:
