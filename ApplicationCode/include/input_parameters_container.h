@@ -26,6 +26,7 @@ class Input_Parameters_Container
         double period {2.0};
         double simulation_time {10.0};
         double measurement_noise_std {0.001};
+        double pid_derivative_filtering_coefficient {0.5};
     };
 
     struct ComboBoxes_Inputs
@@ -65,6 +66,12 @@ public:
     set_enable_measurement_noise(bool checked)
     {
         _enable_measurement_noise = checked;
+    }
+
+    void
+    set_enable_pid_derivative_filtering(bool checked)
+    {
+        _enable_pid_derivative_filtering = checked;
     }
 
     void
@@ -164,6 +171,12 @@ public:
     }
 
     void
+    set_pid_derivative_filtering_coefficient(double filtering_coefficient)
+    {
+        _line_edit_inputs.pid_derivative_filtering_coefficient = filtering_coefficient;
+    }
+
+    void
     set_simulation_time_step(double simulation_time_step)
     {
         _comboboxes_inputs.simulation_time_step = simulation_time_step;
@@ -209,6 +222,12 @@ public:
     get_enable_measurement_noise() const
     {
         return _enable_measurement_noise;
+    }
+
+    bool
+    get_enable_pid_derivative_filtering() const
+    {
+        return _enable_pid_derivative_filtering;
     }
 
     std::vector<std::size_t> const
@@ -266,6 +285,12 @@ public:
     }
 
     double
+    get_pid_derivative_filtering_coefficient() const
+    {
+        return _line_edit_inputs.pid_derivative_filtering_coefficient;
+    }
+
+    double
     get_simulation_time_step() const
     {
         return _comboboxes_inputs.simulation_time_step;
@@ -318,6 +343,7 @@ public:
 private:
     bool _plot_control_signal {false};
     bool _enable_measurement_noise {false};
+    bool _enable_pid_derivative_filtering {false};
     std::vector<std::size_t> _orders {2u, 2u};
     LineEdit_Inputs _line_edit_inputs {};
     ComboBoxes_Inputs _comboboxes_inputs {};

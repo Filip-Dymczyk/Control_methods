@@ -87,6 +87,12 @@ public Q_SLOTS:
         _inputs_parser->set_enable_measurement_noise(checked);
     }
 
+    void
+    enable_pid_derivative_filtering(bool checked)
+    {
+        _inputs_parser->set_enable_pid_derivative_filtering(checked);
+    }
+
 Q_SIGNALS:
     void
     disable_controller_parameters();

@@ -53,7 +53,7 @@ public:
     void
     set_parameters(std::vector<double> const& parameters) override
     {
-        _parameters = {parameters};
+        _parameters = parameters;
     }
 
     void
@@ -71,6 +71,18 @@ public:
         Simulation_Object_Base::set_time_step(time_step);
         _error_int.set_time_step(get_time_step());
         _error_der.set_time_step(get_time_step());
+    }
+
+    void
+    enable_derivative_filtering(bool enable)
+    {
+        _error_der.enable_filtering(enable);
+    }
+
+    void
+    set_derivative_filtering_coefficient(double filtering_coefficient)
+    {
+        _error_der.set_filtering_coefficient(filtering_coefficient);
     }
 
 private:

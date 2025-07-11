@@ -88,7 +88,7 @@ public:
             }
             case LineEdit_ID::OFFSET_LINE_EDIT:
             {
-                double const offset = parse_single_number_line_edit(line_edit, std::numeric_limits<double>::min());
+                double const offset = parse_single_number_line_edit(line_edit, std::numeric_limits<double>::infinity());
                 _inputs.set_offset(offset);
                 break;
             }
@@ -115,6 +115,12 @@ public:
             {
                 double const measurement_noise_std = parse_single_number_line_edit(line_edit, 0.0);
                 _inputs.set_measurement_noise_std(measurement_noise_std);
+                break;
+            }
+            case LineEdit_ID::PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT:
+            {
+                double const filtering_coefficient = parse_single_number_line_edit(line_edit, 0.0, 1.0);
+                _inputs.set_pid_derivative_filtering_coefficient(filtering_coefficient);
                 break;
             }
             default:
@@ -317,6 +323,12 @@ public:
     set_enable_measurement_noise(bool checked)
     {
         _inputs.set_enable_measurement_noise(checked);
+    }
+
+    void
+    set_enable_pid_derivative_filtering(bool checked)
+    {
+        _inputs.set_enable_pid_derivative_filtering(checked);
     }
 
     Input_Parameters_Container const&
