@@ -87,17 +87,6 @@ private:
             plot_control_signal_checkbox, &QCheckBox::stateChanged, _main_widget,
             &Main_Widget::plot_control_signal_changed);
 
-        ClickableLineEdit* measurement_noise_line_edit = new ClickableLineEdit();
-        _main_widget->set_up_line_edit(
-            measurement_noise_line_edit, "0.001", "<p><i>Set measurement noise standard deviation.</i></p>");
-        measurement_noise_line_edit->setProperty("id", static_cast<int>(LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT));
-        _main_widget->set_line_edit_id(static_cast<int>(LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT) + 1);
-
-        QFontMetrics metrics(measurement_noise_line_edit->font());
-        int const text_width = metrics.horizontalAdvance(measurement_noise_line_edit->text());
-        int const padding    = 50;
-        measurement_noise_line_edit->setFixedWidth(text_width + padding);
-
         QCheckBox* measurement_noise_checkbox = new QCheckBox("Enable measurement noise");
         measurement_noise_checkbox->setLayoutDirection(Qt::RightToLeft);
         measurement_noise_checkbox->setToolTip("<p><i>Enable measurement noise simulation.</i></p>");
@@ -105,18 +94,61 @@ private:
         connect(
             measurement_noise_checkbox, &QCheckBox::stateChanged, _main_widget, &Main_Widget::enable_measurement_noise);
 
+        ClickableLineEdit* measurement_noise_line_edit = new ClickableLineEdit();
+        _main_widget->set_up_line_edit(
+            measurement_noise_line_edit, "0.001", "<p><i>Set measurement noise standard deviation.</i></p>");
+        measurement_noise_line_edit->setProperty("id", static_cast<int>(LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT));
+        _main_widget->set_line_edit_id(static_cast<int>(LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT) + 1);
+
+        QFontMetrics const metrics_measurement_noise(measurement_noise_line_edit->font());
+        int text_width    = metrics_measurement_noise.horizontalAdvance(measurement_noise_line_edit->text());
+        int const padding = 50;
+        measurement_noise_line_edit->setFixedWidth(text_width + padding);
+
+        QCheckBox* pid_derivative_filtering_checkbox = new QCheckBox("Enable PID derivative filtering");
+        pid_derivative_filtering_checkbox->setLayoutDirection(Qt::RightToLeft);
+        pid_derivative_filtering_checkbox->setToolTip("<p><i>Enable derivative input low pass filtering.</i></p>");
+        pid_derivative_filtering_checkbox->setChecked(false);
+        connect(
+            pid_derivative_filtering_checkbox, &QCheckBox::stateChanged, _main_widget,
+            &Main_Widget::enable_pid_derivative_filtering);
+
+        ClickableLineEdit* pid_derivative_filtering_coefficient_line_edit = new ClickableLineEdit();
+        _main_widget->set_up_line_edit(
+            pid_derivative_filtering_coefficient_line_edit, "0.5", "<p><i>Set filtering coefficient.</i></p>");
+        pid_derivative_filtering_coefficient_line_edit->setProperty(
+            "id", static_cast<int>(LineEdit_ID::PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT));
+        _main_widget->set_line_edit_id(
+            static_cast<int>(LineEdit_ID::PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT) + 1);
+
+        QFontMetrics const metrics_pid_derivative_filtering_coefficient {
+            pid_derivative_filtering_coefficient_line_edit->font()};
+        text_width = metrics_pid_derivative_filtering_coefficient.horizontalAdvance(
+            pid_derivative_filtering_coefficient_line_edit->text());
+        pid_derivative_filtering_coefficient_line_edit->setFixedWidth(text_width + padding);
+
         QToolBar* toolbar = new QToolBar();
         toolbar->addWidget(run_button);
         toolbar->addWidget(center_button);
         toolbar->addWidget(plot_control_signal_checkbox);
-        toolbar->addWidget(measurement_noise_checkbox);
 
+        toolbar->addWidget(measurement_noise_checkbox);
         QAction* measurement_noise_action = toolbar->addWidget(measurement_noise_line_edit);
         measurement_noise_action->setVisible(false);
+
+        toolbar->addWidget(pid_derivative_filtering_checkbox);
+        QAction* pid_derivative_filtering_coefficient_action =
+            toolbar->addWidget(pid_derivative_filtering_coefficient_line_edit);
+        pid_derivative_filtering_coefficient_action->setVisible(false);
 
         connect(measurement_noise_checkbox, &QCheckBox::stateChanged, [measurement_noise_action](bool checked) {
             measurement_noise_action->setVisible(checked);
         });
+        connect(
+            pid_derivative_filtering_checkbox, &QCheckBox::stateChanged,
+            [pid_derivative_filtering_coefficient_action](bool checked) {
+                pid_derivative_filtering_coefficient_action->setVisible(checked);
+            });
 
         return toolbar;
     }

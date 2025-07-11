@@ -22,6 +22,14 @@ public:
             {input_parameters.get_A_matrix(), input_parameters.get_B_vector(), input_parameters.get_C_vector(),
              input_parameters.get_D()});
         _control.set_control_mode(input_parameters.get_control_mode());
+
+        // Prior to setting the controller - to update it properly.
+        if(input_parameters.get_controller_type() == Controller_Type::PID)
+        {
+            _control.enable_pid_derivative_filtering(input_parameters.get_enable_pid_derivative_filtering());
+            _control.set_pid_derivative_filtering_coefficient(
+                input_parameters.get_pid_derivative_filtering_coefficient());
+        }
         _control.set_controller(
             _simulation_time_step, input_parameters.get_controller_type(),
             input_parameters.get_controller_parameters());

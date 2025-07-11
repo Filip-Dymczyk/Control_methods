@@ -48,6 +48,9 @@ public:
         connect(
             this, &Main_Widget::enable_measurement_noise, _dependency_handler,
             &Dependency_Handler::enable_measurement_noise);
+        connect(
+            this, &Main_Widget::enable_pid_derivative_filtering, _dependency_handler,
+            &Dependency_Handler::enable_pid_derivative_filtering);
 
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
@@ -100,6 +103,9 @@ Q_SIGNALS:
 
     void
     enable_measurement_noise(bool checked);
+
+    void
+    enable_pid_derivative_filtering(bool checked);
 
 private:
     int combobox_id  = 0;
