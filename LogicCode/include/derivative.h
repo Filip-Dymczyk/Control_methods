@@ -13,18 +13,42 @@ public:
     update(double input) override
     {
         assert(get_time_step() > 0.0);
-        double const derivative = (input - _previous_value) / get_time_step();
+
+        if(_enable_filtering)
+        {
+            input = _filtering_coefficient * _previous_input + (1.0 - _filtering_coefficient) * input;
+        }
+
+        double const derivative = (input - _previous_input) / get_time_step();
         set_value(derivative);
-        _previous_value = input;
+
+        _previous_input = input;
     }
 
     void
     reset() override
     {
         set_value(0.0);
-        _previous_value = 0.0;
+        _previous_input = 0.0;
+    }
+
+    void
+    enable_filtering(bool enable)
+    {
+        _enable_filtering = enable;
+    }
+
+    void
+    set_filtering_coefficient(double filtering_coefficient)
+    {
+        assert(filtering_coefficient > 0.0);
+        assert(filtering_coefficient < 1.0);
+
+        _filtering_coefficient = filtering_coefficient;
     }
 
 private:
-    double _previous_value {};
+    bool _enable_filtering {false};
+    double _previous_input {};
+    double _filtering_coefficient {};
 };
