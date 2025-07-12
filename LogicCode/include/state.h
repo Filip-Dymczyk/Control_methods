@@ -102,6 +102,13 @@ public:
         }
     }
 
+    void
+    set_initial_conditions(std::vector<double> initial_conditions)
+    {
+        assert(initial_conditions.size() == _initial_state.size());
+        _initial_state = initial_conditions;
+    }
+
 private:
     std::size_t _order {};
     std::vector<double> _initial_state {};
