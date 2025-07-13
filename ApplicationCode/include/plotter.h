@@ -5,9 +5,11 @@
 
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
+#include <QtCharts/QValueAxis>
 #include <QtCore/QString>
 #include <QtWidgets/QMainWindow>
-#include <vector>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
 #include "control_system.h"
 
 class Plotter
@@ -53,9 +55,18 @@ class Plotter
 
 public:
     Plotter(QWidget* parent)
-        : _chart(new QChart()), _chart_view(new QChartView(_chart)), _chart_window(new QMainWindow(parent))
+        : _axis_x(new QValueAxis()),
+          _axis_y(new QValueAxis()),
+          _chart(new QChart()),
+          _chart_view(new QChartView(_chart)),
+          _chart_window(new QMainWindow(parent))
     {
+        _axis_x->setTitleText("Time [s]");
+        _axis_y->setTitleText("Output");
+
         _chart->legend()->setVisible(true);
+        _chart->addAxis(_axis_x, Qt::AlignBottom);
+        _chart->addAxis(_axis_y, Qt::AlignLeft);
 
         _chart_view->setRenderHint(QPainter::Antialiasing);
         _chart_view->setRubberBand(QChartView::RectangleRubberBand);
@@ -76,6 +87,11 @@ public:
         _chart->addSeries(_line_series.set_point);
         _chart->addSeries(_line_series.output);
 
+        _line_series.set_point->attachAxis(_axis_x);
+        _line_series.set_point->attachAxis(_axis_y);
+        _line_series.output->attachAxis(_axis_x);
+        _line_series.output->attachAxis(_axis_y);
+
         _chart_window->setCentralWidget(central_widget);
     }
 
@@ -88,41 +104,47 @@ public:
     void
     update(double time, double set_point, double control, double output)
     {
-        _min_y = std::min(_min_y, std::min(set_point, output));
-        _max_y = std::max(_max_y, std::max(set_point, output));
+        static double const abs_diff = 0.01;
+        double new_min               = _min_y;
+        double new_max               = _max_y;
+        new_min                      = std::min(new_min, std::min(set_point, output));
+        new_max                      = std::max(new_max, std::max(set_point, output));
 
         if(_plot_control_signal)
         {
-            _min_y = std::min(_min_y, control);
-            _max_y = std::max(_max_y, control);
+            new_min = std::min(new_min, control);
+            new_max = std::max(new_max, control);
         }
 
+        if((std::abs(_min_y - new_min) >= abs_diff) || (std::abs(_max_y - new_max) >= abs_diff))
+        {
+            _min_y = new_min;
+            _max_y = new_max;
+
+            double const y_padding = (_max_y - _min_y) * 0.1;
+            _chart->axes(Qt::Vertical).first()->setRange(_min_y - y_padding, _max_y + y_padding);
+        }
         _line_series.update(time, set_point, control, output);
     }
 
     void
-    plot(Control_System::Control_Mode control_mode, double time_range)
+    show_chart(Control_System::Control_Mode control_mode, double time_range)
     {
-        _chart_window->hide();
-
         if(_plot_control_signal && !_chart->series().contains(_line_series.control))
         {
             _chart->addSeries(_line_series.control);
+            _line_series.control->attachAxis(_axis_x);
+            _line_series.control->attachAxis(_axis_y);
         }
         else if(!_plot_control_signal && _chart->series().contains(_line_series.control))
         {
+            _line_series.control->detachAxis(_axis_x);
+            _line_series.control->detachAxis(_axis_y);
             _chart->removeSeries(_line_series.control);
         }
 
-        _chart->createDefaultAxes();
-
-        double const y_padding = (_max_y - _min_y) * 0.1;
-
-        _chart->axes(Qt::Horizontal).first()->setRange(0.0, time_range);
-        _chart->axes(Qt::Vertical).first()->setRange(_min_y - y_padding, _max_y + y_padding);
-
+        _axis_x->setRange(0.0, time_range);
         set_chart_title(control_mode);
-
         _chart_window->show();
     }
 
@@ -139,6 +161,8 @@ private:
     double _min_y {std::numeric_limits<double>::infinity()};
     double _max_y {-std::numeric_limits<double>::infinity()};
     LineSeries _line_series {};
+    QValueAxis* _axis_x {nullptr};
+    QValueAxis* _axis_y {nullptr};
     QChart* _chart {nullptr};
     QChartView* _chart_view {nullptr};
     QMainWindow* _chart_window {nullptr};

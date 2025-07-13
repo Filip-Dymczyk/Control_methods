@@ -47,7 +47,7 @@ private:
     Simulator _simulator;
 
     void
-    show_plot_window()
+    run_simulation()
     {
         if(!_main_widget->dependency_handler()->get_input_parameters().allowed_to_run())
         {
@@ -56,7 +56,6 @@ private:
         }
         _simulator.update(_main_widget->dependency_handler()->get_input_parameters());
         _simulator.run();
-        _simulator.show_plot();
     }
 
     void
@@ -73,7 +72,7 @@ private:
     {
         QPushButton* run_button = new QPushButton("Run");  // Maybe this will be changed for QAction with and Icon.
         run_button->setToolTip("<p><i>Run the application.</i></p>");
-        connect(run_button, &QPushButton::clicked, this, &Main_Window::show_plot_window);
+        connect(run_button, &QPushButton::clicked, this, &Main_Window::run_simulation);
 
         QPushButton* center_button = new QPushButton("Center");
         center_button->setToolTip("<p><i>Center the window.</i></p>");
