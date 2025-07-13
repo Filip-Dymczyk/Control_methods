@@ -42,7 +42,7 @@ public:
     void
     reset() override
     {
-        set_value_with_measurement_noise(get_initial_output());
+        set_value_with_measurement_noise(0.0);
         _state.reset();
     }
 
@@ -87,6 +87,12 @@ public:
         set_value(value + measurement_noise);
     }
 
+    virtual void
+    set_initial_conditions(std::vector<double> initial_conditions)
+    {
+        _state.set_initial_conditions(initial_conditions);
+    }
+
 protected:
     std::size_t _order {};
     State _state;
@@ -100,11 +106,5 @@ private:
     get_measurement_noise()
     {
         return _distribution(_generator);
-    }
-
-    double
-    get_initial_output() const
-    {
-        return _state.get_init_state(_order - 1);
     }
 };

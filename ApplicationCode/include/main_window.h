@@ -51,7 +51,7 @@ private:
     {
         if(!_main_widget->dependency_handler()->get_input_parameters().allowed_to_run())
         {
-            QMessageBox::critical(this, "Error", "Invalid object parameters number!");
+            QMessageBox::critical(this, "Error", "Some inputs have invalid sizes!");
             return;
         }
         _simulator.update(_main_widget->dependency_handler()->get_input_parameters());

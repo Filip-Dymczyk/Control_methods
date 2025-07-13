@@ -6,6 +6,8 @@
 
 enum class LineEdit_ID : std::uint8_t
 {
+    //---THESE NEED TO BE IN ORDER OF THEIR DEFINITIONS FOR PROPER PARSINGS---
+    INITIAL_CONDITIONS_LINE_EDIT,
     OBJECT_PARAMETERS_LINE_EDIT,
     A_MATRIX_LINE_EDIT,
     B_VECTOR_LINE_EDIT,
@@ -20,6 +22,7 @@ enum class LineEdit_ID : std::uint8_t
     PERIOD_LINE_EDIT,
     DUTY_CYCLE_LINE_EDIT,
     SIMULATION_TIME_LINE_EDIT,
+    //------------------------------------------------------------------------
     MEASUREMENT_NOISE_LINE_EDIT,
     PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT
 };

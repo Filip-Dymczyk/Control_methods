@@ -56,4 +56,5 @@ add_test_executable(pid_tuning_test Tests/test_suites/pid_tuning_test.cpp)
 add_test_executable(control_system_with_bang_bang_controller_test Tests/test_suites/control_system_with_bang_bang_controller_test.cpp)
 add_test_executable(resetting_test Tests/test_suites/resetting_test.cpp)
 add_test_executable(derivative_filtering_test Tests/test_suites/derivative_filtering_test.cpp)
+add_test_executable(initial_conditions_setting_test Tests/test_suites/initial_conditions_setting_test.cpp)
 #-------------------------------------------------

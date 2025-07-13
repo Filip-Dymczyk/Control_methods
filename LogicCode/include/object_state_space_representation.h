@@ -2,6 +2,7 @@
 // Description : Multi-order linear object represented by state space.
 
 #pragma once
+#include <algorithm>
 #include "algebra.h"
 #include "base_classes/object_representation_base.h"
 
@@ -23,7 +24,7 @@ public:
     Object_State_Space_Representation(
         double time_step, std::size_t order, VectorT const& init_state, MatrixT const& A, VectorT const& B,
         VectorT const& C, double D = 0.0)
-        : Object_Representation_Base(time_step, order, init_state)
+        : Object_Representation_Base(time_step, order, std::vector<double>(init_state.rbegin(), init_state.rend()))
     {
         assert(A.size() == order);
         assert(A[0].size() == order);
@@ -63,6 +64,13 @@ public:
         assert(matrices.C.size() == _order);
 
         _matrices = matrices;
+    }
+
+    void
+    set_initial_conditions(std::vector<double> initial_conditions) override
+    {
+        std::reverse(initial_conditions.begin(), initial_conditions.end());
+        _state.set_initial_conditions(initial_conditions);
     }
 
 private:
