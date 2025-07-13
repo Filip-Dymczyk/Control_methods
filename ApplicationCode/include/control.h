@@ -111,7 +111,7 @@ public:
             case Controller_Type::NONE:
             {
                 _selected_controller = nullptr;
-                return;
+                break;
             }
             default:
                 break;
@@ -121,8 +121,8 @@ public:
         {
             _selected_controller->set_time_step(time_step);
             _selected_controller->set_parameters(controller_parameters);
-            _system.set_controller(_selected_controller);
         }
+        _system.set_controller(_selected_controller);
     }
 
     void
