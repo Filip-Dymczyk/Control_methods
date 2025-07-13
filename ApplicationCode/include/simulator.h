@@ -10,6 +10,8 @@
 class Simulator
 {
 public:
+    Simulator(QWidget* parent) : _plotter(parent) {}
+
     void
     update(Input_Parameters_Container const& input_parameters)
     {
@@ -58,7 +60,7 @@ public:
     void
     show_plot()
     {
-        _plotter.plot(_control.get_control_mode());
+        _plotter.plot(_control.get_control_mode(), _simulation_time);
     }
 
 private:
@@ -72,5 +74,5 @@ private:
     double _simulation_time {};
     double _simulation_time_step {};
     Control _control {};
-    Plotter _plotter {};
+    Plotter _plotter;
 };
