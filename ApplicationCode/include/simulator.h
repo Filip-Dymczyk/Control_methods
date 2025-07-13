@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <QtWidgets/QApplication>
 #include "control.h"
 #include "input_parameters_container.h"
 #include "plotter.h"
@@ -15,11 +16,12 @@ public:
     void
     update(Input_Parameters_Container const& input_parameters)
     {
+        _simulation_time = input_parameters.get_simulation_time();
         _plotter.set_plot_control_signal(input_parameters.get_plot_control_signal());
-        _simulation_time      = input_parameters.get_simulation_time();
-        _simulation_time_step = input_parameters.get_simulation_time_step();
+
+        double const simulation_time_step = input_parameters.get_simulation_time_step();
         _control.set_object(
-            input_parameters.get_orders(), _simulation_time_step, input_parameters.get_object_representation(),
+            input_parameters.get_orders(), simulation_time_step, input_parameters.get_object_representation(),
             input_parameters.get_initial_conditions(), input_parameters.get_object_parameters(),
             {input_parameters.get_A_matrix(), input_parameters.get_B_vector(), input_parameters.get_C_vector(),
              input_parameters.get_D()});
@@ -33,10 +35,9 @@ public:
                 input_parameters.get_pid_derivative_filtering_coefficient());
         }
         _control.set_controller(
-            _simulation_time_step, input_parameters.get_controller_type(),
-            input_parameters.get_controller_parameters());
+            simulation_time_step, input_parameters.get_controller_type(), input_parameters.get_controller_parameters());
         _control.set_signal(
-            _simulation_time_step, input_parameters.get_input_signal(),
+            simulation_time_step, input_parameters.get_input_signal(),
             input_parameters.get_input_signal_basic_parameters(),
             input_parameters.get_input_signal_advanced_parameters());
         _control.set_operation_type(input_parameters.get_operation_type());
@@ -48,19 +49,16 @@ public:
     run()
     {
         reset();
+        _plotter.show_chart(_control.get_control_mode(), _simulation_time);
         while(_control.get_time() < _simulation_time)
         {
             _plotter.update(
                 _control.get_time(), _control.get_setpoint(), _control.get_control_value(),
                 _control.get_object_value());
             _control.update();
-        }
-    }
 
-    void
-    show_plot()
-    {
-        _plotter.plot(_control.get_control_mode(), _simulation_time);
+            QApplication::processEvents();
+        }
     }
 
 private:
@@ -72,7 +70,6 @@ private:
     }
 
     double _simulation_time {};
-    double _simulation_time_step {};
     Control _control {};
     Plotter _plotter;
 };
