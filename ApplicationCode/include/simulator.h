@@ -18,7 +18,7 @@ public:
         _simulation_time_step = input_parameters.get_simulation_time_step();
         _control.set_object(
             input_parameters.get_orders(), _simulation_time_step, input_parameters.get_object_representation(),
-            input_parameters.get_object_parameters(),
+            input_parameters.get_initial_conditions(), input_parameters.get_object_parameters(),
             {input_parameters.get_A_matrix(), input_parameters.get_B_vector(), input_parameters.get_C_vector(),
              input_parameters.get_D()});
         _control.set_control_mode(input_parameters.get_control_mode());

@@ -22,6 +22,12 @@ public:
     {
         switch(line_edit_id)
         {
+            case LineEdit_ID::INITIAL_CONDITIONS_LINE_EDIT:
+            {
+                std::vector<double> const initial_conditions = parse_vector_parameters(line_edit);
+                _inputs.set_initial_conditions(initial_conditions);
+                break;
+            }
             case LineEdit_ID::OBJECT_PARAMETERS_LINE_EDIT:
             {
                 std::vector<double> const object_parameters = parse_vector_parameters(line_edit);

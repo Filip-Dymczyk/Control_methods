@@ -126,6 +126,10 @@ private:
             object_representation_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &update_dynamical_system_layout);
 
+        ClickableLineEdit* initial_conditions_line_edit = new ClickableLineEdit();
+        set_up_line_edit(
+            initial_conditions_line_edit, "[0.0, 0.0]", "<p><i>Enter initial conditions, e.g [x01, x02].</i></p>");
+
         ClickableLineEdit* object_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
             object_parameters_line_edit, "[1.0, 1.0, 1.0]",
@@ -165,6 +169,9 @@ private:
         int row = 0;
         _dynamical_system_layout->addWidget(new QLabel("Object representation: "), row, 0);
         _dynamical_system_layout->addWidget(object_representation_combobox, row, 1);
+        row++;
+        _dynamical_system_layout->addWidget(new QLabel("Initial conditions: "), row, 0);
+        _dynamical_system_layout->addWidget(initial_conditions_line_edit, row, 1);
         row++;
         _dynamical_system_layout->addWidget(new QLabel("Object parameters: "), row, 0);
         _dynamical_system_layout->addWidget(object_parameters_line_edit, row, 1);
@@ -502,9 +509,9 @@ private Q_SLOTS:
             return;
         }
 
-        static int const EQUATION_BEGINNING_ROW    = 1;
+        static int const EQUATION_BEGINNING_ROW    = 2;
         static int const EQUATION_LAYOUT_ROWS      = 1;
-        static int const STATE_SPACE_BEGINNING_ROW = 2;
+        static int const STATE_SPACE_BEGINNING_ROW = 3;
         static int const STATE_SPACE_LAYOUT_ROWS   = 4;
         switch(_previous_object_representation)
         {

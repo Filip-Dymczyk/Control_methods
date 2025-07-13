@@ -11,6 +11,7 @@ class Input_Parameters_Container
 {
     struct LineEdit_Inputs
     {
+        std::vector<double> initial_conditions {0.0, 0.0};
         std::vector<double> object_parameters {1.0, 1.0, 1.0};
         std::vector<double> controller_parameters {1.0, 1.0, 0.0};
         std::vector<std::vector<double>> A_matrix = {{0.0, 1.0}, {-1.0, -1.0}};
@@ -51,9 +52,10 @@ public:
                                                       (_line_edit_inputs.C_vector.size() == state_space_order);
 
         return ((_comboboxes_inputs.object_representation == Object_Representation::EQUATION) &&
-                (equation_order == _line_edit_inputs.object_parameters.size() - 1u)) ||
+                (equation_order == _line_edit_inputs.object_parameters.size() - 1u) &&
+                (equation_order == _line_edit_inputs.initial_conditions.size())) ||
                ((_comboboxes_inputs.object_representation == Object_Representation::STATE_SPACE) &&
-                valid_state_space_matrices_sizes);
+                valid_state_space_matrices_sizes && (state_space_order == _line_edit_inputs.initial_conditions.size()));
     }
 
     void
@@ -78,6 +80,12 @@ public:
     set_order(std::size_t order, Object_Representation representation)
     {
         _orders[static_cast<std::size_t>(representation)] = order;
+    }
+
+    void
+    set_initial_conditions(std::vector<double> const& initial_conditions)
+    {
+        _line_edit_inputs.initial_conditions = initial_conditions;
     }
 
     void
@@ -234,6 +242,12 @@ public:
     get_orders() const
     {
         return _orders;
+    }
+
+    std::vector<double> const&
+    get_initial_conditions() const
+    {
+        return _line_edit_inputs.initial_conditions;
     }
 
     std::vector<double> const&
