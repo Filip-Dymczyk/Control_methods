@@ -31,13 +31,9 @@ C:\msys64\mingw64\bin\g++.exe -fdiagnostics-color=always -g -static ^
     -I "%cd%\ApplicationCode\include" ^
     -I "%cd%\LogicCode\include" ^
     -I "%cd%\3rdParty" ^
-    -I "C:\Users\User\AppData\Local\Programs\Python\Python311\include" ^
-    -I "C:\Users\User\AppData\Local\Programs\Python\Python311\Lib\site-packages\numpy\core\include" ^
     -I "C:\Qt\6.7.2\mingw_64\include" ^
     -L "C:\Qt\6.7.2\mingw_64\lib" ^
-    -lQt6Widgets -lQt6Core -lQt6Gui ^
-    -L "C:\Users\User\AppData\Local\Programs\Python\Python311\libs" ^
-    -lpython311 ^
+    -lQt6Widgets -lQt6Core -lQt6Gui -lQt6Charts^
     -DQT_NO_KEYWORDS
 
 IF %ERRORLEVEL% NEQ 0 (

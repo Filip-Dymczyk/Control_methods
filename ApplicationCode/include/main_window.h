@@ -20,7 +20,7 @@ class Main_Window : public QMainWindow
     QString const window_title = "Dynamical systems control methods.";
 
 public:
-    Main_Window() : _main_widget(new Main_Widget(this)), _simulator()
+    Main_Window() : _main_widget(new Main_Widget(this)), _simulator(this)
     {
         this->setWindowTitle(window_title);
         this->setCentralWidget(_main_widget);
