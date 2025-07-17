@@ -20,6 +20,8 @@ C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\main_widget.moc.cpp"
 C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\dependency_handler.moc.cpp" "%cd%\ApplicationCode\include\dependency_handler.h"
 C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\clickable_line_edit.moc.cpp" "%cd%\ApplicationCode\include\clickable_line_edit.h"
 C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\inputs_parser.moc.cpp" "%cd%\ApplicationCode\include\inputs_parser.h"
+C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\simulator.moc.cpp" "%cd%\ApplicationCode\include\simulator.h"
+C:\Qt\6.7.2\mingw_64\bin\moc.exe -o "%cd%\builds\moc_builds\plotter.moc.cpp" "%cd%\ApplicationCode\include\plotter.h"
 
 C:\msys64\mingw64\bin\g++.exe -fdiagnostics-color=always -g -static ^
     "%cd%\MainApp\main.cpp" ^
@@ -27,6 +29,8 @@ C:\msys64\mingw64\bin\g++.exe -fdiagnostics-color=always -g -static ^
     "%cd%\builds\moc_builds\dependency_handler.moc.cpp" ^
     "%cd%\builds\moc_builds\clickable_line_edit.moc.cpp" ^
     "%cd%\builds\moc_builds\inputs_parser.moc.cpp" ^
+    "%cd%\builds\moc_builds\simulator.moc.cpp" ^
+    "%cd%\builds\moc_builds\plotter.moc.cpp" ^
     -o "%cd%\builds\app_build\app.exe" ^
     -I "%cd%\ApplicationCode\include" ^
     -I "%cd%\LogicCode\include" ^
