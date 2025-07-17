@@ -76,7 +76,8 @@ public:
             }
             case LineEdit_ID::SCALER_LINE_EDIT:
             {
-                double const scaler = parse_single_number_line_edit(line_edit);
+                double const scaler = parse_single_number_line_edit(
+                    line_edit, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
                 _inputs.set_scaler(scaler);
                 break;
             }
@@ -94,7 +95,8 @@ public:
             }
             case LineEdit_ID::OFFSET_LINE_EDIT:
             {
-                double const offset = parse_single_number_line_edit(line_edit, std::numeric_limits<double>::infinity());
+                double const offset = parse_single_number_line_edit(
+                    line_edit, -std::numeric_limits<double>::infinity(), std::numeric_limits<double>::infinity());
                 _inputs.set_offset(offset);
                 break;
             }
@@ -279,7 +281,8 @@ public:
         std::vector<std::vector<double>> matrix {};
         for(auto const& text: parameters_string_list)
         {
-            std::vector<double> const row = parse_vector_parameters(new QLineEdit(text), -1, true);
+            QLineEdit text_line_edit      = QLineEdit(text);
+            std::vector<double> const row = parse_vector_parameters(&text_line_edit, -1, true);
             if(row.empty())
             {
                 return {};
