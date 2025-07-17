@@ -151,4 +151,11 @@ private:
 
         return toolbar;
     }
+
+    void
+    closeEvent(QCloseEvent* event) override
+    {
+        _simulator.break_simulation();
+        QMainWindow::closeEvent(event);
+    }
 };

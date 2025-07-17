@@ -9,11 +9,14 @@
 #include <QtCore/QString>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include "control_system.h"
 
-class Plotter
+class Plotter : public QObject
 {
+    Q_OBJECT
+
     struct LineSeries
     {
         QLineSeries* set_point {nullptr};
@@ -55,7 +58,8 @@ class Plotter
 
 public:
     Plotter(QWidget* parent)
-        : _axis_x(new QValueAxis()),
+        : QObject(parent),
+          _axis_x(new QValueAxis()),
           _axis_y(new QValueAxis()),
           _chart(new QChart()),
           _chart_view(new QChartView(_chart)),
@@ -79,11 +83,6 @@ public:
         QVBoxLayout* layout     = new QVBoxLayout(central_widget);
         layout->addWidget(_chart_view);
 
-        QPushButton* reset_zoom_button = new QPushButton("Reset Zoom");
-        layout->addWidget(reset_zoom_button);
-
-        QObject::connect(reset_zoom_button, &QPushButton::clicked, [this]() { _chart->zoomReset(); });
-
         _chart->addSeries(_line_series.set_point);
         _chart->addSeries(_line_series.output);
 
@@ -93,6 +92,19 @@ public:
         _line_series.output->attachAxis(_axis_y);
 
         _chart_window->setCentralWidget(central_widget);
+
+        QPushButton* reset_zoom_button = new QPushButton("Reset Zoom");
+        QObject::connect(reset_zoom_button, &QPushButton::clicked, [this]() { _chart->zoomReset(); });
+
+        _stop_simulation_button = new QPushButton("Stop simulation");
+        _stop_simulation_button->setCheckable(true);
+        connect(_stop_simulation_button, &QPushButton::toggled, this, &toggle_stop_simulation);
+
+        QToolBar* toolbar = new QToolBar();
+        toolbar->addWidget(reset_zoom_button);
+        toolbar->addWidget(_stop_simulation_button);
+
+        _chart_window->addToolBar(toolbar);
     }
 
     void
@@ -154,7 +166,12 @@ public:
         _min_y = std::numeric_limits<double>::infinity();
         _max_y = -std::numeric_limits<double>::infinity();
         _line_series.reset();
+        _stop_simulation_button->setChecked(false);
     }
+
+Q_SIGNALS:
+    void
+    toggle_stop_simulation();
 
 private:
     bool _plot_control_signal {false};
@@ -166,6 +183,7 @@ private:
     QChart* _chart {nullptr};
     QChartView* _chart_view {nullptr};
     QMainWindow* _chart_window {nullptr};
+    QPushButton* _stop_simulation_button {nullptr};
 
     void
     set_chart_title(Control_System::Control_Mode control_mode)

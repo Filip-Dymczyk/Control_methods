@@ -8,13 +8,19 @@
 #include "input_parameters_container.h"
 #include "plotter.h"
 
-class Simulator
+class Simulator : public QObject
 {
+    Q_OBJECT
+
 public:
-    Simulator(QWidget* parent) : _plotter(parent) {}
+    Simulator(QWidget* parent) : QObject(parent), _plotter(parent)
+    {
+        connect(&_plotter, Plotter::toggle_stop_simulation, this, &toggle_stop_simulation);
+    }
 
     void
     update(Input_Parameters_Container const& input_parameters)
+
     {
         _simulation_time = input_parameters.get_simulation_time();
         _plotter.set_plot_control_signal(input_parameters.get_plot_control_signal());
@@ -52,13 +58,27 @@ public:
         _plotter.show_chart(_control.get_control_mode(), _simulation_time);
         while(_control.get_time() < _simulation_time)
         {
-            _plotter.update(
-                _control.get_time(), _control.get_setpoint(), _control.get_control_value(),
-                _control.get_object_value());
-            _control.update();
+            if(_break_simulation)
+            {
+                return;
+            }
 
+            if(!_stop_simulation)
+            {
+                _plotter.update(
+                    _control.get_time(), _control.get_setpoint(), _control.get_control_value(),
+                    _control.get_object_value());
+
+                _control.update();
+            }
             QApplication::processEvents();
         }
+    }
+
+    void
+    break_simulation()
+    {
+        _break_simulation = true;
     }
 
 private:
@@ -67,9 +87,20 @@ private:
     {
         _control.reset();
         _plotter.reset();
+        _stop_simulation = false;  // Restores the state after the toggling from plotter reset.
     }
 
+    bool _stop_simulation {false};
+    bool _break_simulation {false};
     double _simulation_time {};
     Control _control {};
     Plotter _plotter;
+
+private Q_SLOTS:
+
+    void
+    toggle_stop_simulation()
+    {
+        _stop_simulation = !_stop_simulation;
+    }
 };
