@@ -60,6 +60,8 @@ public:
         _timer.set_time_step(time_step);
     }
 
+    virtual ~Signal_Base() = default;
+
 protected:
     Signal_Basic_Parameters _parameters {};
 

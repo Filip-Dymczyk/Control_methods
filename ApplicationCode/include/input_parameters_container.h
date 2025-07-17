@@ -44,10 +44,10 @@ public:
     bool
     allowed_to_run() const
     {
-        std::size_t const equation_order    = _orders[static_cast<std::size_t>(Object_Representation::EQUATION)];
-        std::size_t const state_space_order = _orders[static_cast<std::size_t>(Object_Representation::STATE_SPACE)];
+        std::size_t const equation_order    = _orders.at(static_cast<std::size_t>(Object_Representation::EQUATION));
+        std::size_t const state_space_order = _orders.at(static_cast<std::size_t>(Object_Representation::STATE_SPACE));
         bool const valid_state_space_matrices_sizes = (_line_edit_inputs.A_matrix.size() == state_space_order) &&
-                                                      (_line_edit_inputs.A_matrix[0].size() == state_space_order) &&
+                                                      (_line_edit_inputs.A_matrix.at(0).size() == state_space_order) &&
                                                       (_line_edit_inputs.B_vector.size() == state_space_order) &&
                                                       (_line_edit_inputs.C_vector.size() == state_space_order);
 
@@ -79,7 +79,7 @@ public:
     void
     set_order(std::size_t order, Object_Representation representation)
     {
-        _orders[static_cast<std::size_t>(representation)] = order;
+        _orders.at(static_cast<std::size_t>(representation)) = order;
     }
 
     void

@@ -14,6 +14,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QWidget>
+#include <memory>
 #include "clickable_line_edit.h"
 #include "dependency_handler.h"
 #include "enums.h"
@@ -23,33 +24,33 @@ class Main_Widget : public QWidget
     Q_OBJECT
 
 public:
-    Main_Widget(QWidget* parent) : QWidget(parent), _dependency_handler(new Dependency_Handler())
+    Main_Widget(QWidget* parent) : QWidget(parent), _dependency_handler(std::make_unique<Dependency_Handler>())
     {
-        connect(_dependency_handler, &Dependency_Handler::too_many_input_parameters, [this]() {
+        connect(_dependency_handler.get(), &Dependency_Handler::too_many_input_parameters, [this]() {
             QMessageBox::warning(this, "Warning", "Too many input parameters!\nLeaving only the necessary ones.");
         });
-        connect(_dependency_handler, &Dependency_Handler::too_few_input_parameters, [this]() {
+        connect(_dependency_handler.get(), &Dependency_Handler::too_few_input_parameters, [this]() {
             QMessageBox::warning(this, "Warning", "Too few input parameters!\nFilling rest with zeroes.");
         });
 
-        connect(_dependency_handler, &Dependency_Handler::unable_to_parse, [this](QString text) {
+        connect(_dependency_handler.get(), &Dependency_Handler::unable_to_parse, [this](QString text) {
             QMessageBox::warning(this, "Warning", QString("Inserted values: %1 are not allowed!").arg(text));
         });
-        connect(_dependency_handler, &Dependency_Handler::value_below_lower_limit, [this](double limit) {
+        connect(_dependency_handler.get(), &Dependency_Handler::value_below_lower_limit, [this](double limit) {
             QMessageBox::warning(this, "Warning", QString("Inserted value below the limit: %1.").arg(limit));
         });
-        connect(_dependency_handler, &Dependency_Handler::value_above_upper_limit, [this](double limit) {
+        connect(_dependency_handler.get(), &Dependency_Handler::value_above_upper_limit, [this](double limit) {
             QMessageBox::warning(this, "Warning", QString("Inserted value above the limit: %1.").arg(limit));
         });
 
         connect(
-            this, &Main_Widget::plot_control_signal_changed, _dependency_handler,
+            this, &Main_Widget::plot_control_signal_changed, _dependency_handler.get(),
             &Dependency_Handler::plot_control_signal_changed);
         connect(
-            this, &Main_Widget::enable_measurement_noise, _dependency_handler,
+            this, &Main_Widget::enable_measurement_noise, _dependency_handler.get(),
             &Dependency_Handler::enable_measurement_noise);
         connect(
-            this, &Main_Widget::enable_pid_derivative_filtering, _dependency_handler,
+            this, &Main_Widget::enable_pid_derivative_filtering, _dependency_handler.get(),
             &Dependency_Handler::enable_pid_derivative_filtering);
 
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
@@ -82,7 +83,9 @@ public:
         }
 
         connect(line_edit, &ClickableLineEdit::clicked, [line_edit]() { line_edit->setFocus(); });
-        connect(line_edit, &QLineEdit::editingFinished, _dependency_handler, &Dependency_Handler::line_edits_callback);
+        connect(
+            line_edit, &QLineEdit::editingFinished, _dependency_handler.get(),
+            &Dependency_Handler::line_edits_callback);
     }
 
     void
@@ -94,7 +97,7 @@ public:
     Dependency_Handler const* const
     dependency_handler() const
     {
-        return _dependency_handler;
+        return _dependency_handler.get();
     }
 
 Q_SIGNALS:
@@ -114,7 +117,7 @@ private:
     Object_Representation _previous_object_representation {Object_Representation::EQUATION};
     QGridLayout* _input_signal_layout {nullptr};
     QGridLayout* _dynamical_system_layout {nullptr};
-    Dependency_Handler* _dependency_handler {nullptr};
+    std::unique_ptr<Dependency_Handler> _dependency_handler {nullptr};
 
     QGroupBox*
     create_dynamical_system_group_box()
@@ -211,10 +214,10 @@ private:
 
         controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
         connect(
-            _dependency_handler, &Dependency_Handler::disable_controller_parameters,
+            _dependency_handler.get(), &Dependency_Handler::disable_controller_parameters,
             [controller_parameters_line_edit]() { controller_parameters_line_edit->setEnabled(false); });
         connect(
-            _dependency_handler, &Dependency_Handler::enable_controller_parameters,
+            _dependency_handler.get(), &Dependency_Handler::enable_controller_parameters,
             [controller_parameters_line_edit]() { controller_parameters_line_edit->setEnabled(true); });
 
         QGridLayout* grid_Layout = new QGridLayout();
@@ -378,7 +381,7 @@ private:
         combobox_id++;
 
         connect(
-            combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler,
+            combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), _dependency_handler.get(),
             &Dependency_Handler::comboboxes_callback);
     }
 

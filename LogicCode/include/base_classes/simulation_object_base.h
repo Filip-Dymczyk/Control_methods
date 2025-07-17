@@ -35,6 +35,8 @@ public:
         _time_step = time_step;
     }
 
+    virtual ~Simulation_Object_Base() = default;
+
 protected:
     void
     set_value(double value)
