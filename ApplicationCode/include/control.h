@@ -27,8 +27,8 @@ public:
     Control()
         : _differential_equation_representation_object(TIME_STEP, ORDER),
           _state_space_representation_object(TIME_STEP, ORDER),
-          _pid_controller(TIME_STEP),
-          _bang_bang_controller(TIME_STEP),
+          _pid_controller(std::make_shared<PID>(TIME_STEP)),
+          _bang_bang_controller(std::make_shared<Bang_Bang_Controller>(TIME_STEP)),
           _heaviside(TIME_STEP),
           _ramp(TIME_STEP),
           _rect(TIME_STEP),
@@ -100,12 +100,12 @@ public:
         {
             case Controller_Type::BANG_BANG:
             {
-                _selected_controller = std::make_shared<Bang_Bang_Controller>(_bang_bang_controller);
+                _selected_controller = _bang_bang_controller;
                 break;
             }
             case Controller_Type::PID:
             {
-                _selected_controller = std::make_shared<PID>(_pid_controller);
+                _selected_controller = _pid_controller;
                 break;
             }
             case Controller_Type::NONE:
@@ -206,13 +206,19 @@ public:
     void
     enable_pid_derivative_filtering(bool enable)
     {
-        _pid_controller.enable_derivative_filtering(enable);
+        if(_pid_controller != nullptr)
+        {
+            _pid_controller->enable_derivative_filtering(enable);
+        }
     }
 
     void
     set_pid_derivative_filtering_coefficient(double filtering_coefficient)
     {
-        _pid_controller.set_derivative_filtering_coefficient(filtering_coefficient);
+        if(_pid_controller != nullptr)
+        {
+            _pid_controller->set_derivative_filtering_coefficient(filtering_coefficient);
+        }
     }
 
     double
@@ -255,7 +261,21 @@ public:
             assert(false);
             return;
         }
-        _system.update(_selected_input_signal->get_value());
+
+        double const input = _selected_input_signal->get_value();
+        switch(_operation_type)
+        {
+            case Operation_Type::TUNING:
+                _tuner.update(input);
+                break;
+            case Operation_Type::SIMULATION:
+                _system.update(input);
+                break;
+            default:
+                assert(false);
+                break;
+        }
+
         _selected_input_signal->update();
     }
 
@@ -265,17 +285,46 @@ public:
         return _system.get_control_mode();
     }
 
+    Operation_Type
+    get_operation_type() const
+    {
+        return _operation_type;
+    }
+
+    std::array<double, 3>
+    get_pid_parameters() const
+    {
+        if(_pid_controller != nullptr)
+        {
+            return _pid_controller->get_parameters();
+        }
+
+        assert(false);
+        return {};
+    }
+
     void
     reset()
     {
-        if(_selected_object != nullptr)
+        switch(_operation_type)
         {
-            _selected_object->reset();
-        }
-
-        if(_selected_controller != nullptr)
-        {
-            _selected_controller->reset();
+            case Operation_Type::TUNING:
+                _tuner.reset();
+                _tuner.set_initial_pid_parameters(_pid_controller->get_parameters());
+                break;
+            case Operation_Type::SIMULATION:
+                if(_selected_object != nullptr)
+                {
+                    _selected_object->reset();
+                }
+                if(_selected_controller != nullptr)
+                {
+                    _selected_controller->reset();
+                }
+                break;
+            default:
+                assert(false);
+                break;
         }
 
         if(_selected_input_signal != nullptr)
@@ -287,8 +336,8 @@ public:
 private:
     Object_Differential_Equation_Representation _differential_equation_representation_object;
     Object_State_Space_Representation _state_space_representation_object;
-    PID _pid_controller;
-    Bang_Bang_Controller _bang_bang_controller;
+    std::shared_ptr<PID> _pid_controller;
+    std::shared_ptr<Bang_Bang_Controller> _bang_bang_controller;
     Heaviside _heaviside;
     Ramp _ramp;
     Rectangle _rect;

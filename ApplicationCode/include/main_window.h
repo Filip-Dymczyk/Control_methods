@@ -22,6 +22,9 @@ class Main_Window : public QMainWindow
 public:
     Main_Window() : _main_widget(new Main_Widget(this)), _simulator(this)
     {
+        connect(
+            &_simulator, &Simulator::update_pid_parameters_line_edit_after_tuning, _main_widget,
+            &Main_Widget::update_pid_parameters_line_edit);
         this->setWindowTitle(window_title);
         this->setCentralWidget(_main_widget);
 

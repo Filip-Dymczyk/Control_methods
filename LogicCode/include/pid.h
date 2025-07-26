@@ -50,6 +50,12 @@ public:
         return {get_error(), _error_int.get_value(), _error_der.get_value()};
     }
 
+    std::array<double, 3>
+    get_parameters() const
+    {
+        return {_parameters.kp, _parameters.ki, _parameters.kd};
+    }
+
     void
     set_parameters(std::vector<double> const& parameters) override
     {
