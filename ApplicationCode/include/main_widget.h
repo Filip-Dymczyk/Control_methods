@@ -100,6 +100,16 @@ public:
         return _dependency_handler.get();
     }
 
+public Q_SLOTS:
+
+    void
+    update_pid_parameters_line_edit(std::array<double, 3> pid_parameters)
+    {
+        _controller_parameters_line_edit->setText(
+            QString("[%1, %2, %3]").arg(pid_parameters[0]).arg(pid_parameters[1]).arg(pid_parameters[2]));
+        Q_EMIT _controller_parameters_line_edit->editingFinished();
+    }
+
 Q_SIGNALS:
     void
     plot_control_signal_changed(bool checked);
@@ -117,6 +127,9 @@ private:
     Object_Representation _previous_object_representation {Object_Representation::EQUATION};
     QGridLayout* _input_signal_layout {nullptr};
     QGridLayout* _dynamical_system_layout {nullptr};
+    QComboBox* _control_mode_combobox {nullptr};
+    QComboBox* _controller_type_combobox {nullptr};
+    ClickableLineEdit* _controller_parameters_line_edit {nullptr};
     std::unique_ptr<Dependency_Handler> _dependency_handler {nullptr};
 
     QGroupBox*
@@ -201,36 +214,36 @@ private:
     QGroupBox*
     create_control_loop_group_box()
     {
-        QComboBox* control_mode_combobox = new QComboBox();
-        set_up_combobox(control_mode_combobox, {"Open loop", "Closed loop"});
+        _control_mode_combobox = new QComboBox();
+        set_up_combobox(_control_mode_combobox, {"Open loop", "Closed loop"});
 
-        QComboBox* controller_type_combobox = new QComboBox();
-        set_up_combobox(controller_type_combobox, {"No controller", "Bang-Bang controller", "PID"});
+        _controller_type_combobox = new QComboBox();
+        set_up_combobox(_controller_type_combobox, {"No controller", "Bang-Bang controller", "PID"});
 
-        ClickableLineEdit* controller_parameters_line_edit = new ClickableLineEdit();
+        _controller_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            controller_parameters_line_edit, "[1.0, 1.0, 0.0]",
+            _controller_parameters_line_edit, "[1.0, 1.0, 0.0]",
             "<p><i>Enter controller parameters as a vector.</i></p>");
 
-        controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
-        connect(
-            _dependency_handler.get(), &Dependency_Handler::disable_controller_parameters,
-            [controller_parameters_line_edit]() { controller_parameters_line_edit->setEnabled(false); });
-        connect(
-            _dependency_handler.get(), &Dependency_Handler::enable_controller_parameters,
-            [controller_parameters_line_edit]() { controller_parameters_line_edit->setEnabled(true); });
+        _controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
+        connect(_dependency_handler.get(), &Dependency_Handler::disable_controller_parameters, [this]() {
+            _controller_parameters_line_edit->setEnabled(false);
+        });
+        connect(_dependency_handler.get(), &Dependency_Handler::enable_controller_parameters, [this]() {
+            _controller_parameters_line_edit->setEnabled(true);
+        });
 
         QGridLayout* grid_Layout = new QGridLayout();
 
         int row = 0;
         grid_Layout->addWidget(new QLabel("Control mode: "), row, 0);
-        grid_Layout->addWidget(control_mode_combobox, row, 1);
+        grid_Layout->addWidget(_control_mode_combobox, row, 1);
         row++;
         grid_Layout->addWidget(new QLabel("Controller type: "), row, 0);
-        grid_Layout->addWidget(controller_type_combobox, row, 1);
+        grid_Layout->addWidget(_controller_type_combobox, row, 1);
         row++;
         grid_Layout->addWidget(new QLabel("Controller parameters: "), row, 0);
-        grid_Layout->addWidget(controller_parameters_line_edit, row, 1);
+        grid_Layout->addWidget(_controller_parameters_line_edit, row, 1);
 
         QGroupBox* control_loop_group_box = new QGroupBox("Control loop parameters");
         control_loop_group_box->setLayout(grid_Layout);
@@ -258,7 +271,24 @@ private:
     create_application_parameters_group_box()
     {
         QComboBox* operation_combobox = new QComboBox();
-        set_up_combobox(operation_combobox, {"Simulation", "Tuning"});
+        set_up_combobox(operation_combobox, {"Simulation", "PID Tuning"});
+        operation_combobox->setToolTip("Simulate / Tune PID \nTuning available when PID and Closed Loop selected");
+        operation_combobox->setEnabled(false);
+
+        auto const lambda = [this, operation_combobox]() {
+            bool const enable_tuning =
+                (static_cast<Control_Mode>(_control_mode_combobox->currentIndex()) == Control_Mode::CLOSED_LOOP) &&
+                (static_cast<Controller_Type>(_controller_type_combobox->currentIndex()) == Controller_Type::PID);
+            operation_combobox->setEnabled(enable_tuning);
+
+            if(!enable_tuning)
+            {
+                operation_combobox->setCurrentIndex(static_cast<int>(Operation_Type::SIMULATION));
+            }
+        };
+
+        connect(_control_mode_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), lambda);
+        connect(_controller_type_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), lambda);
 
         ClickableLineEdit* simulation_time_line_edit = new ClickableLineEdit();
         set_up_line_edit(simulation_time_line_edit, "10.0", "<p><i>Enter operation time in seconds.</i></p>", true);

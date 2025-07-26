@@ -5,6 +5,7 @@
 
 #include <QtWidgets/QApplication>
 #include "control.h"
+#include "enums.h"
 #include "input_parameters_container.h"
 #include "plotter.h"
 
@@ -32,16 +33,14 @@ public:
             {input_parameters.get_A_matrix(), input_parameters.get_B_vector(), input_parameters.get_C_vector(),
              input_parameters.get_D()});
         _control.set_control_mode(input_parameters.get_control_mode());
-
-        // Prior to setting the controller - to update it properly.
+        _control.set_controller(
+            simulation_time_step, input_parameters.get_controller_type(), input_parameters.get_controller_parameters());
         if(input_parameters.get_controller_type() == Controller_Type::PID)
         {
             _control.enable_pid_derivative_filtering(input_parameters.get_enable_pid_derivative_filtering());
             _control.set_pid_derivative_filtering_coefficient(
                 input_parameters.get_pid_derivative_filtering_coefficient());
         }
-        _control.set_controller(
-            simulation_time_step, input_parameters.get_controller_type(), input_parameters.get_controller_parameters());
         _control.set_signal(
             simulation_time_step, input_parameters.get_input_signal(),
             input_parameters.get_input_signal_basic_parameters(),
@@ -73,6 +72,11 @@ public:
             }
             QApplication::processEvents();
         }
+
+        if(_control.get_operation_type() == Operation_Type::TUNING)
+        {
+            Q_EMIT update_pid_parameters_line_edit_after_tuning(_control.get_pid_parameters());
+        }
     }
 
     void
@@ -80,6 +84,10 @@ public:
     {
         _break_simulation = true;
     }
+
+Q_SIGNALS:
+    void
+    update_pid_parameters_line_edit_after_tuning(std::array<double, 3> pid_parameters);
 
 private:
     void

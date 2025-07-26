@@ -36,6 +36,12 @@ public:
     }
 
     void
+    set_initial_pid_parameters(std::array<double, 3> pid_parameters)
+    {
+        _regression.set_initial_coefficients(pid_parameters);
+    }
+
+    void
     reset()
     {
         _control_system.reset();
