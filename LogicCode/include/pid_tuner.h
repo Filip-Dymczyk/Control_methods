@@ -17,6 +17,11 @@ public:
     void
     update(double input)
     {
+        if(_control_system.get_controller() == nullptr)
+        {
+            assert(false);
+        }
+
         _control_system.update(input);
         _regression.update(_control_system.get_x(), _control_system.get_error());
         _control_system.get_controller()->set_parameters(

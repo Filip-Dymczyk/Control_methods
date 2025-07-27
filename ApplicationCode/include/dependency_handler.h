@@ -4,6 +4,7 @@
 #pragma once
 #include <QtCore/QVariant>
 #include <QtWidgets/QPushButton>
+#include <memory>
 #include "inputs_parser.h"
 
 class Dependency_Handler : public QObject
@@ -11,45 +12,54 @@ class Dependency_Handler : public QObject
     Q_OBJECT
 
 public:
-    Dependency_Handler() : _inputs_parser(new Inputs_Parser())
+    Dependency_Handler() : _inputs_parser(std::make_unique<Inputs_Parser>())
     {
         connect(
-            _inputs_parser, &Inputs_Parser::disable_controller_parameters, this,
+            _inputs_parser.get(), &Inputs_Parser::disable_controller_parameters, this,
             &Dependency_Handler::disable_controller_parameters);
         connect(
-            _inputs_parser, &Inputs_Parser::enable_controller_parameters, this,
+            _inputs_parser.get(), &Inputs_Parser::enable_controller_parameters, this,
             &Dependency_Handler::enable_controller_parameters);
 
         connect(
-            _inputs_parser, &Inputs_Parser::too_many_input_parameters, this,
+            _inputs_parser.get(), &Inputs_Parser::too_many_input_parameters, this,
             &Dependency_Handler::too_many_input_parameters);
         connect(
-            _inputs_parser, &Inputs_Parser::too_few_input_parameters, this,
+            _inputs_parser.get(), &Inputs_Parser::too_few_input_parameters, this,
             &Dependency_Handler::too_few_input_parameters);
 
-        connect(_inputs_parser, &Inputs_Parser::unable_to_parse, this, &Dependency_Handler::unable_to_parse);
+        connect(_inputs_parser.get(), &Inputs_Parser::unable_to_parse, this, &Dependency_Handler::unable_to_parse);
         connect(
-            _inputs_parser, &Inputs_Parser::value_below_lower_limit, this,
+            _inputs_parser.get(), &Inputs_Parser::value_below_lower_limit, this,
             &Dependency_Handler::value_below_lower_limit);
         connect(
-            _inputs_parser, &Inputs_Parser::value_above_upper_limit, this,
+            _inputs_parser.get(), &Inputs_Parser::value_above_upper_limit, this,
             &Dependency_Handler::value_above_upper_limit);
     }
 
     Input_Parameters_Container const&
     get_input_parameters() const
     {
+        if(_inputs_parser == nullptr)
+        {
+            assert(false);
+        }
         return _inputs_parser->get_input_parameters();
     }
 
 private:
-    Inputs_Parser* _inputs_parser {nullptr};
+    std::unique_ptr<Inputs_Parser> _inputs_parser {nullptr};
 
 public Q_SLOTS:
 
     void
     line_edits_callback()
     {
+        if(_inputs_parser == nullptr)
+        {
+            assert(false);
+        }
+
         QLineEdit* line_edit = qobject_cast<QLineEdit*>(sender());
         if(line_edit != nullptr)
         {
@@ -65,6 +75,11 @@ public Q_SLOTS:
     void
     comboboxes_callback()
     {
+        if(_inputs_parser == nullptr)
+        {
+            assert(false);
+        }
+
         QComboBox* combobox = qobject_cast<QComboBox*>(sender());
         if(combobox != nullptr)
         {
@@ -78,18 +93,33 @@ public Q_SLOTS:
     void
     plot_control_signal_changed(bool checked)
     {
+        if(_inputs_parser == nullptr)
+        {
+            assert(false);
+        }
+
         _inputs_parser->set_plot_control_signal(checked);
     }
 
     void
     enable_measurement_noise(bool checked)
     {
+        if(_inputs_parser == nullptr)
+        {
+            assert(false);
+        }
+
         _inputs_parser->set_enable_measurement_noise(checked);
     }
 
     void
     enable_pid_derivative_filtering(bool checked)
     {
+        if(_inputs_parser == nullptr)
+        {
+            assert(false);
+        }
+
         _inputs_parser->set_enable_pid_derivative_filtering(checked);
     }
 

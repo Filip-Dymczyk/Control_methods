@@ -25,8 +25,9 @@ class Control
 
 public:
     Control()
-        : _differential_equation_representation_object(TIME_STEP, ORDER),
-          _state_space_representation_object(TIME_STEP, ORDER),
+        : _differential_equation_representation_object(
+              std::make_shared<Object_Differential_Equation_Representation>(TIME_STEP, ORDER)),
+          _state_space_representation_object(std::make_shared<Object_State_Space_Representation>(TIME_STEP, ORDER)),
           _pid_controller(std::make_shared<PID>(TIME_STEP)),
           _bang_bang_controller(std::make_shared<Bang_Bang_Controller>(TIME_STEP)),
           _heaviside(TIME_STEP),
@@ -54,8 +55,7 @@ public:
         {
             case Object_Representation::EQUATION:
             {
-                _selected_object = std::make_shared<Object_Differential_Equation_Representation>(
-                    _differential_equation_representation_object);
+                _selected_object = _differential_equation_representation_object;
                 if(_selected_object != nullptr)
                 {
                     _selected_object->set_order(orders[static_cast<std::size_t>(
@@ -66,8 +66,7 @@ public:
             }
             case Object_Representation::STATE_SPACE:
             {
-                _selected_object =
-                    std::make_shared<Object_State_Space_Representation>(_state_space_representation_object);
+                _selected_object = _state_space_representation_object;
                 if(_selected_object != nullptr)
                 {
                     _selected_object->set_order(orders[static_cast<std::size_t>(
@@ -310,17 +309,14 @@ public:
         {
             case Operation_Type::TUNING:
                 _tuner.reset();
+                if(_pid_controller == nullptr)
+                {
+                    assert(false);
+                }
                 _tuner.set_initial_pid_parameters(_pid_controller->get_parameters());
                 break;
             case Operation_Type::SIMULATION:
-                if(_selected_object != nullptr)
-                {
-                    _selected_object->reset();
-                }
-                if(_selected_controller != nullptr)
-                {
-                    _selected_controller->reset();
-                }
+                _system.reset();
                 break;
             default:
                 assert(false);
@@ -334,8 +330,8 @@ public:
     }
 
 private:
-    Object_Differential_Equation_Representation _differential_equation_representation_object;
-    Object_State_Space_Representation _state_space_representation_object;
+    std::shared_ptr<Object_Differential_Equation_Representation> _differential_equation_representation_object;
+    std::shared_ptr<Object_State_Space_Representation> _state_space_representation_object;
     std::shared_ptr<PID> _pid_controller;
     std::shared_ptr<Bang_Bang_Controller> _bang_bang_controller;
     Heaviside _heaviside;

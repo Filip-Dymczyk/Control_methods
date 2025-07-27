@@ -59,7 +59,7 @@ public:
         {
             if(_break_simulation || !_plotter.is_window_open())
             {
-                return;
+                break;
             }
 
             if(!_stop_simulation)
