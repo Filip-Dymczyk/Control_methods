@@ -169,6 +169,16 @@ public:
         _stop_simulation_button->setChecked(false);
     }
 
+    bool
+    is_window_open() const
+    {
+        if(_chart_window == nullptr)
+        {
+            return false;
+        }
+        return _chart_window->isVisible();
+    }
+
 Q_SIGNALS:
     void
     toggle_stop_simulation();

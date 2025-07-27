@@ -128,7 +128,10 @@ public:
     void
     reset()
     {
-        _object->reset();
+        if(_object != nullptr)
+        {
+            _object->reset();
+        }
 
         if(_controller != nullptr)
         {
