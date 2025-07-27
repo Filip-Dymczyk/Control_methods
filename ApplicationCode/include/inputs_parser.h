@@ -131,6 +131,12 @@ public:
                 _inputs.set_pid_derivative_filtering_coefficient(filtering_coefficient);
                 break;
             }
+            case LineEdit_ID::RLS_FORGETTING_FACTOR_LINE_EDIT:
+            {
+                double const RLS_forgetting_factor = parse_single_number_line_edit(line_edit, 0.0, 1.0);
+                _inputs.set_RLS_forgetting_factor(RLS_forgetting_factor);
+                break;
+            }
             default:
                 break;
         }
