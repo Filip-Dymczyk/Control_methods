@@ -218,6 +218,12 @@ public:
     }
 
     void
+    set_RLS_forgetting_factor(double forgetting_factor)
+    {
+        _tuner.set_RLS_forgetting_factor(forgetting_factor);
+    }
+
+    void
     enable_pid_derivative_filtering(bool enable)
     {
         if(_pid_controller != nullptr)

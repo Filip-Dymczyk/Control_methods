@@ -97,10 +97,11 @@ private:
             measurement_noise_checkbox, &QCheckBox::stateChanged, _main_widget, &Main_Widget::enable_measurement_noise);
 
         ClickableLineEdit* measurement_noise_line_edit = new ClickableLineEdit();
+        LineEdit_ID line_edit_id                       = LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT;
         _main_widget->set_up_line_edit(
             measurement_noise_line_edit, "0.001", "<p><i>Set measurement noise standard deviation.</i></p>");
-        measurement_noise_line_edit->setProperty("id", static_cast<int>(LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT));
-        _main_widget->set_line_edit_id(static_cast<int>(LineEdit_ID::MEASUREMENT_NOISE_LINE_EDIT) + 1);
+        measurement_noise_line_edit->setProperty("id", static_cast<int>(line_edit_id));
+        _main_widget->set_line_edit_id(static_cast<int>(line_edit_id) + 1);
 
         QFontMetrics const metrics_measurement_noise(measurement_noise_line_edit->font());
         int text_width    = metrics_measurement_noise.horizontalAdvance(measurement_noise_line_edit->text());
@@ -116,12 +117,21 @@ private:
             &Main_Widget::enable_pid_derivative_filtering);
 
         ClickableLineEdit* pid_derivative_filtering_coefficient_line_edit = new ClickableLineEdit();
+        line_edit_id = LineEdit_ID::PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT;
         _main_widget->set_up_line_edit(
             pid_derivative_filtering_coefficient_line_edit, "0.5", "<p><i>Set filtering coefficient.</i></p>");
-        pid_derivative_filtering_coefficient_line_edit->setProperty(
-            "id", static_cast<int>(LineEdit_ID::PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT));
-        _main_widget->set_line_edit_id(
-            static_cast<int>(LineEdit_ID::PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT) + 1);
+        pid_derivative_filtering_coefficient_line_edit->setProperty("id", static_cast<int>(line_edit_id));
+        _main_widget->set_line_edit_id(static_cast<int>(line_edit_id) + 1);
+
+        QLabel* RLS_forgetting_factor_label                = new QLabel("Enter tuning forgetting factor: ");
+        ClickableLineEdit* RLS_forgetting_factor_line_edit = new ClickableLineEdit();
+        line_edit_id                                       = LineEdit_ID::RLS_FORGETTING_FACTOR_LINE_EDIT;
+        QString const tooltip                              = "<p><i>Set RLS forgetting factor (tuning).</i></p>";
+        RLS_forgetting_factor_label->setToolTip(tooltip);
+        _main_widget->set_up_line_edit(RLS_forgetting_factor_line_edit, "0.99", tooltip);
+        RLS_forgetting_factor_line_edit->setProperty("id", static_cast<int>(line_edit_id));
+        RLS_forgetting_factor_line_edit->setMaximumWidth(50);
+        _main_widget->set_line_edit_id(static_cast<int>(line_edit_id) + 1);
 
         QFontMetrics const metrics_pid_derivative_filtering_coefficient {
             pid_derivative_filtering_coefficient_line_edit->font()};
@@ -143,6 +153,14 @@ private:
             toolbar->addWidget(pid_derivative_filtering_coefficient_line_edit);
         pid_derivative_filtering_coefficient_action->setVisible(false);
 
+        QWidget* padding_spacer = new QWidget();
+        padding_spacer->setFixedWidth(5);
+        toolbar->addWidget(padding_spacer);
+        QAction* RLS_forgetting_factor_label_action = toolbar->addWidget(RLS_forgetting_factor_label);
+        QAction* RLS_forgetting_factor_action       = toolbar->addWidget(RLS_forgetting_factor_line_edit);
+        RLS_forgetting_factor_label_action->setVisible(false);
+        RLS_forgetting_factor_action->setVisible(false);
+
         connect(measurement_noise_checkbox, &QCheckBox::stateChanged, [measurement_noise_action](bool checked) {
             measurement_noise_action->setVisible(checked);
         });
@@ -150,6 +168,14 @@ private:
             pid_derivative_filtering_checkbox, &QCheckBox::stateChanged,
             [pid_derivative_filtering_coefficient_action](bool checked) {
                 pid_derivative_filtering_coefficient_action->setVisible(checked);
+            });
+
+        connect(
+            _main_widget, &Main_Widget::check_tuning_enabled,
+            [this, RLS_forgetting_factor_label_action, RLS_forgetting_factor_action]() {
+                bool const tuning_enabled = _main_widget->is_tuning_enabled();
+                RLS_forgetting_factor_label_action->setVisible(tuning_enabled);
+                RLS_forgetting_factor_action->setVisible(tuning_enabled);
             });
 
         return toolbar;

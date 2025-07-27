@@ -58,6 +58,12 @@ public:
         QGroupBox* input_signal_group_box           = create_input_signal_group_box();
         QGroupBox* application_parameters_group_box = create_application_parameters_group_box();
 
+        connect(
+            _control_mode_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &check_tuning_enabled);
+        connect(
+            _controller_type_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
+            &check_tuning_enabled);
+
         QHBoxLayout* horizontal_layout = new QHBoxLayout();
         horizontal_layout->addWidget(dynamical_system_group_box);
         horizontal_layout->addWidget(control_loop_group_box);
@@ -94,6 +100,18 @@ public:
         line_edit_id = line_edit_id_in;
     }
 
+    bool
+    is_tuning_enabled() const
+    {
+        if(_control_mode_combobox == nullptr || _controller_type_combobox == nullptr)
+        {
+            assert(false);
+            return false;
+        }
+        return (static_cast<Control_Mode>(_control_mode_combobox->currentIndex()) == Control_Mode::CLOSED_LOOP) &&
+               (static_cast<Controller_Type>(_controller_type_combobox->currentIndex()) == Controller_Type::PID);
+    }
+
     Dependency_Handler const* const
     dependency_handler() const
     {
@@ -119,6 +137,9 @@ Q_SIGNALS:
 
     void
     enable_pid_derivative_filtering(bool checked);
+
+    void
+    check_tuning_enabled();
 
 private:
     int combobox_id  = 0;
@@ -276,9 +297,7 @@ private:
         operation_combobox->setEnabled(false);
 
         auto const lambda = [this, operation_combobox]() {
-            bool const enable_tuning =
-                (static_cast<Control_Mode>(_control_mode_combobox->currentIndex()) == Control_Mode::CLOSED_LOOP) &&
-                (static_cast<Controller_Type>(_controller_type_combobox->currentIndex()) == Controller_Type::PID);
+            bool const enable_tuning = is_tuning_enabled();
             operation_combobox->setEnabled(enable_tuning);
 
             if(!enable_tuning)

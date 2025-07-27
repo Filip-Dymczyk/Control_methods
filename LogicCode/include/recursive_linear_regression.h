@@ -64,6 +64,12 @@ public:
     }
 
     void
+    set_lambda(double lambda)
+    {
+        _lambda = lambda;
+    }
+
+    void
     reset()
     {
         _P = {};

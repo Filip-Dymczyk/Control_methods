@@ -24,7 +24,8 @@ enum class LineEdit_ID : std::uint8_t
     SIMULATION_TIME_LINE_EDIT,
     //------------------------------------------------------------------------
     MEASUREMENT_NOISE_LINE_EDIT,
-    PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT
+    PID_DERIVATIVE_FILTERING_COEFFICIENT_LINE_EDIT,
+    RLS_FORGETTING_FACTOR_LINE_EDIT
 };
 
 enum class ComboBox_ID : std::uint8_t

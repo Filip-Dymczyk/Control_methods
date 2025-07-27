@@ -28,6 +28,7 @@ class Input_Parameters_Container
         double simulation_time {10.0};
         double measurement_noise_std {0.001};
         double pid_derivative_filtering_coefficient {0.5};
+        double RLS_forgetting_factor {0.99};
     };
 
     struct ComboBoxes_Inputs
@@ -185,6 +186,12 @@ public:
     }
 
     void
+    set_RLS_forgetting_factor(double forgetting_factor)
+    {
+        _line_edit_inputs.RLS_forgetting_factor = forgetting_factor;
+    }
+
+    void
     set_simulation_time_step(double simulation_time_step)
     {
         _comboboxes_inputs.simulation_time_step = simulation_time_step;
@@ -302,6 +309,12 @@ public:
     get_pid_derivative_filtering_coefficient() const
     {
         return _line_edit_inputs.pid_derivative_filtering_coefficient;
+    }
+
+    double
+    get_RLS_forgetting_factor() const
+    {
+        return _line_edit_inputs.RLS_forgetting_factor;
     }
 
     double

@@ -48,6 +48,10 @@ public:
         _control.set_operation_type(input_parameters.get_operation_type());
         _control.enable_measurement_noise(input_parameters.get_enable_measurement_noise());
         _control.set_measurement_noise_std(input_parameters.get_measurement_noise_std());
+        if(_control.get_operation_type() == Operation_Type::TUNING)
+        {
+            _control.set_RLS_forgetting_factor(input_parameters.get_RLS_forgetting_factor());
+        }
     }
 
     void

@@ -47,6 +47,12 @@ public:
     }
 
     void
+    set_RLS_forgetting_factor(double forgetting_factor)
+    {
+        _regression.set_lambda(forgetting_factor);
+    }
+
+    void
     reset()
     {
         _control_system.reset();
