@@ -57,7 +57,7 @@ public:
         _plotter.show_chart(_control.get_control_mode(), _simulation_time);
         while(_control.get_time() < _simulation_time)
         {
-            if(_break_simulation)
+            if(_break_simulation || !_plotter.is_window_open())
             {
                 return;
             }
