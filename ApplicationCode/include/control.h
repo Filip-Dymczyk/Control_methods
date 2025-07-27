@@ -30,14 +30,14 @@ public:
           _state_space_representation_object(std::make_shared<Object_State_Space_Representation>(TIME_STEP, ORDER)),
           _pid_controller(std::make_shared<PID>(TIME_STEP)),
           _bang_bang_controller(std::make_shared<Bang_Bang_Controller>(TIME_STEP)),
-          _heaviside(TIME_STEP),
-          _ramp(TIME_STEP),
-          _rect(TIME_STEP),
-          _sine_wave(TIME_STEP),
-          _pulse_wave(TIME_STEP),
+          _heaviside(std::make_shared<Heaviside>(TIME_STEP)),
+          _ramp(std::make_shared<Ramp>(TIME_STEP)),
+          _rect(std::make_shared<Rectangle>(TIME_STEP)),
+          _sine_wave(std::make_shared<Sine_Wave>(TIME_STEP)),
+          _pulse_wave(std::make_shared<Pulse_Wave>(TIME_STEP)),
           _selected_object(nullptr),
           _selected_controller(nullptr),
-          _selected_input_signal(std::make_unique<Heaviside>(_heaviside)),
+          _selected_input_signal(_heaviside),
           _regression(),
           _system(_selected_object, Control_System::Control_Mode::OPEN_LOOP),
           _tuner(_system, _regression),
@@ -134,37 +134,52 @@ public:
         {
             case Input_Signal::HEAVISIDE:
             {
-                _selected_input_signal = std::make_unique<Heaviside>(_heaviside);
+                _selected_input_signal = _heaviside;
                 break;
             }
             case Input_Signal::RAMP:
             {
-                _selected_input_signal = std::make_unique<Ramp>(_ramp);
+                _selected_input_signal = _ramp;
                 break;
             }
             case Input_Signal::RECTANGLE:
             {
-                _rect.set_on_time(
+                if(_rect == nullptr)
+                {
+                    assert(false);
+                }
+
+                _rect->set_on_time(
                     advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::ON_TIME)));
-                _selected_input_signal = std::make_unique<Rectangle>(_rect);
+                _selected_input_signal = _rect;
                 break;
             }
             case Input_Signal::SINE_WAVE:
             {
-                _sine_wave.set_omega(
+                if(_sine_wave == nullptr)
+                {
+                    assert(false);
+                }
+
+                _sine_wave->set_omega(
                     advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::OMEGA)));
-                _sine_wave.set_offset(
+                _sine_wave->set_offset(
                     advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::OFFSET)));
-                _selected_input_signal = std::make_unique<Sine_Wave>(_sine_wave);
+                _selected_input_signal = _sine_wave;
                 break;
             }
             case Input_Signal::PULSE_WAVE:
             {
-                _pulse_wave.set_period(
+                if(_pulse_wave == nullptr)
+                {
+                    assert(false);
+                }
+
+                _pulse_wave->set_period(
                     advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::PERIOD)));
-                _pulse_wave.set_duty_cycle(
+                _pulse_wave->set_duty_cycle(
                     advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::DUTY_CYCLE)));
-                _selected_input_signal = std::make_unique<Pulse_Wave>(_pulse_wave);
+                _selected_input_signal = std::move(_pulse_wave);
                 break;
             }
             default:
@@ -334,15 +349,15 @@ private:
     std::shared_ptr<Object_State_Space_Representation> _state_space_representation_object;
     std::shared_ptr<PID> _pid_controller;
     std::shared_ptr<Bang_Bang_Controller> _bang_bang_controller;
-    Heaviside _heaviside;
-    Ramp _ramp;
-    Rectangle _rect;
-    Sine_Wave _sine_wave;
-    Pulse_Wave _pulse_wave;
+    std::shared_ptr<Heaviside> _heaviside;
+    std::shared_ptr<Ramp> _ramp;
+    std::shared_ptr<Rectangle> _rect;
+    std::shared_ptr<Sine_Wave> _sine_wave;
+    std::shared_ptr<Pulse_Wave> _pulse_wave;
 
     std::shared_ptr<Object_Representation_Base> _selected_object;
     std::shared_ptr<Controller_Base> _selected_controller;
-    std::unique_ptr<Signal_Base> _selected_input_signal;
+    std::shared_ptr<Signal_Base> _selected_input_signal;
 
     Recursive_Linear_Regression _regression;
     Control_System _system;
