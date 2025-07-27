@@ -179,7 +179,7 @@ public:
                     advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::PERIOD)));
                 _pulse_wave->set_duty_cycle(
                     advanced_parameters.at(static_cast<std::size_t>(Advanced_Input_Signal_Parameters::DUTY_CYCLE)));
-                _selected_input_signal = std::move(_pulse_wave);
+                _selected_input_signal = _pulse_wave;
                 break;
             }
             default:
