@@ -8,7 +8,7 @@
 
 class DerivativeFilteringTest : public testing::Test, public Test_With_Plot
 {
-    static constexpr double _time_step    = 0.1;
+    static constexpr double _time_step = 0.1;
 
 protected:
     DerivativeFilteringTest() : Test_With_Plot(4.0) {}
@@ -17,7 +17,7 @@ protected:
     test_derivative()
     {
         Test_With_Plot::test_component(&_derivative, &_pulse_wave);
-         _derivative.reset();
+        _derivative.reset();
         _pulse_wave.reset();
     }
 
@@ -26,8 +26,8 @@ protected:
     Pulse_Wave _pulse_wave {_time_step, 0.5, 2.0, {}};
 };
 
-TEST_F(DerivativeFilteringTest, DerivativeFilteringTest) 
-{ 
+TEST_F(DerivativeFilteringTest, DerivativeFilteringTest)
+{
     test_derivative();
 
     _derivative.set_filtering_coefficient(0.8);

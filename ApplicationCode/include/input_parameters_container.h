@@ -13,7 +13,8 @@ class Input_Parameters_Container
     {
         std::vector<double> initial_conditions {0.0, 0.0};
         std::vector<double> object_parameters {1.0, 1.0, 1.0};
-        std::vector<double> controller_parameters {1.0, 1.0, 0.0};
+        std::vector<double> pid_parameters {1.0, 0.0, 0.0};
+        std::vector<double> band_bang_parameters {-1.0, 1.0, 0.1};
         std::vector<std::vector<double>> A_matrix = {{0.0, 1.0}, {-1.0, -1.0}};
         std::vector<double> B_vector              = {0.0, 1.0};
         std::vector<double> C_vector              = {1.0, 0.0};
@@ -122,7 +123,16 @@ public:
     void
     set_controller_parameters(std::vector<double> const& controller_parameters)
     {
-        _line_edit_inputs.controller_parameters = controller_parameters;
+        switch(_comboboxes_inputs.controller_type)
+        {
+            case Controller_Type::PID:
+                _line_edit_inputs.pid_parameters = controller_parameters;
+                break;
+            case Controller_Type::BANG_BANG:
+                _line_edit_inputs.band_bang_parameters = controller_parameters;
+            default:
+                break;
+        }
     }
 
     void
@@ -287,10 +297,21 @@ public:
         return _line_edit_inputs.D;
     }
 
-    std::vector<double> const&
+    std::vector<double> const
     get_controller_parameters() const
     {
-        return _line_edit_inputs.controller_parameters;
+        std::vector<double> controller_parameters {0.0, 0.0, 0.0};
+        switch(_comboboxes_inputs.controller_type)
+        {
+            case Controller_Type::PID:
+                controller_parameters = _line_edit_inputs.pid_parameters;
+                break;
+            case Controller_Type::BANG_BANG:
+                controller_parameters = _line_edit_inputs.band_bang_parameters;
+            default:
+                break;
+        }
+        return controller_parameters;
     }
 
     double

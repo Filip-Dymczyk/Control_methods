@@ -165,6 +165,7 @@ public:
                 check_disable_enable_controller_parameters(new_controller_type);
 
                 _inputs.set_controller_type(new_controller_type);
+                Q_EMIT controller_type_changed(_inputs.get_controller_parameters());
                 break;
             }
             case ComboBox_ID::INPUT_SIGNAL:
@@ -373,6 +374,9 @@ Q_SIGNALS:
 
     void
     value_above_upper_limit(double limit);
+
+    void
+    controller_type_changed(std::vector<double> const& controller_parameters);
 
 private:
     Input_Parameters_Container _inputs {};

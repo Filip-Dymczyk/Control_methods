@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include <QtWidgets/QLineEdit>
 #include <QtGui/QMouseEvent>
+#include <QtWidgets/QLineEdit>
 
 class ClickableLineEdit : public QLineEdit
 {
@@ -14,12 +14,12 @@ public:
     ClickableLineEdit(QWidget* parent = nullptr) : QLineEdit(parent) {}
 
 Q_SIGNALS:
-    void 
+    void
     clicked();
 
 protected:
-    void 
-    mousePressEvent(QMouseEvent* event) override 
+    void
+    mousePressEvent(QMouseEvent* event) override
     {
         Q_EMIT clicked();
         QLineEdit::mousePressEvent(event);
