@@ -55,6 +55,9 @@ public:
         connect(
             _dependency_handler.get(), &Dependency_Handler::controller_type_changed, this,
             &Main_Widget::controller_type_changed);
+        connect(
+            _dependency_handler.get(), &Dependency_Handler::input_signal_changed, this,
+            &Main_Widget::input_signal_changed);
 
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
@@ -151,6 +154,8 @@ private:
     QComboBox* _control_mode_combobox {nullptr};
     QComboBox* _controller_type_combobox {nullptr};
     ClickableLineEdit* _controller_parameters_line_edit {nullptr};
+    ClickableLineEdit* _start_time_line_edit {nullptr};
+    ClickableLineEdit* _scaler_line_edit {nullptr};
     std::unique_ptr<Dependency_Handler> _dependency_handler {nullptr};
 
     QGroupBox*
@@ -360,13 +365,13 @@ private:
 
         line_edit_id = static_cast<int>(LineEdit_ID::START_TIME_LINE_EDIT);
 
-        ClickableLineEdit* start_time_line_edit = new ClickableLineEdit();
-        set_up_line_edit(start_time_line_edit, "0.0", "<p><i>Set up start time in seconds.</i></p>");
-        start_time_line_edit->hide();
+        _start_time_line_edit = new ClickableLineEdit();
+        set_up_line_edit(_start_time_line_edit, "0.0", "<p><i>Set up start time in seconds.</i></p>");
+        _start_time_line_edit->hide();
 
-        ClickableLineEdit* scaler_line_edit = new ClickableLineEdit();
-        set_up_line_edit(scaler_line_edit, "1.0", "<p><i>Set up scaler parameter.</i></p>");
-        scaler_line_edit->hide();
+        _scaler_line_edit = new ClickableLineEdit();
+        set_up_line_edit(_scaler_line_edit, "1.0", "<p><i>Set up scaler parameter.</i></p>");
+        _scaler_line_edit->hide();
 
         ClickableLineEdit* on_time_line_edit = new ClickableLineEdit();
         set_up_line_edit(on_time_line_edit, "5.0", "<p><i>Set up on time in seconds.</i></p>");
@@ -395,10 +400,10 @@ private:
         grid_Layout->addWidget(input_signal_combobox, row, 1);
         row++;
         grid_Layout->addWidget(start_time_label, row, 0);
-        grid_Layout->addWidget(start_time_line_edit, row, 1);
+        grid_Layout->addWidget(_start_time_line_edit, row, 1);
         row++;
         grid_Layout->addWidget(scaler_label, row, 0);
-        grid_Layout->addWidget(scaler_line_edit, row, 1);
+        grid_Layout->addWidget(_scaler_line_edit, row, 1);
         row++;
         grid_Layout->addWidget(on_time_label, row, 0);
         grid_Layout->addWidget(on_time_line_edit, row, 1);
@@ -557,6 +562,15 @@ private Q_SLOTS:
     controller_type_changed(std::vector<double> const& controller_parameters)
     {
         set_controller_parameters_line_edit_text(controller_parameters);
+    }
+
+    void
+    input_signal_changed(Signal_Base::Signal_Basic_Parameters const& signal_basic_parameters)
+    {
+        _start_time_line_edit->setText(QString::number(signal_basic_parameters.start_time, 'f', 1));
+        _scaler_line_edit->setText(QString::number(signal_basic_parameters.scaler, 'f', 1));
+        Q_EMIT _start_time_line_edit->editingFinished();
+        Q_EMIT _scaler_line_edit->editingFinished();
     }
 
     void

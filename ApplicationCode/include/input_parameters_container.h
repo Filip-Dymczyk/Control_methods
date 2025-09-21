@@ -3,6 +3,9 @@
 
 #pragma once
 #include <cstdint>
+#include <map>
+#include <string>
+#include <unordered_map>
 #include <vector>
 #include "base_classes/signal_base.h"
 #include "enums.h"
@@ -19,8 +22,7 @@ class Input_Parameters_Container
         std::vector<double> B_vector              = {0.0, 1.0};
         std::vector<double> C_vector              = {1.0, 0.0};
         double D {0.0};
-        double start_time {0.0};
-        double scaler {1.0};
+        std::unordered_map<Input_Signal, std::unordered_map<std::string, double>> input_signal_basic_parameters_map;
         double on_time {5.0};
         double omega {1.0};
         double offset {0.0};
@@ -30,6 +32,16 @@ class Input_Parameters_Container
         double measurement_noise_std {0.001};
         double pid_derivative_filtering_coefficient {0.5};
         double RLS_forgetting_factor {0.99};
+
+        LineEdit_Inputs()
+        {
+            for(int i = static_cast<int>(Input_Signal::NO_SIGNAL); i <= static_cast<int>(Input_Signal::PULSE_WAVE); ++i)
+            {
+                Input_Signal const signal_type                               = static_cast<Input_Signal>(i);
+                input_signal_basic_parameters_map[signal_type]["start_time"] = 0.0;
+                input_signal_basic_parameters_map[signal_type]["scaler"]     = 1.0;
+            }
+        }
     };
 
     struct ComboBoxes_Inputs
@@ -138,13 +150,13 @@ public:
     void
     set_start_time(double start_time)
     {
-        _line_edit_inputs.start_time = start_time;
+        _line_edit_inputs.input_signal_basic_parameters_map[get_input_signal()]["start_time"] = start_time;
     }
 
     void
     set_scaler(double scaler)
     {
-        _line_edit_inputs.scaler = scaler;
+        _line_edit_inputs.input_signal_basic_parameters_map[get_input_signal()]["scaler"] = scaler;
     }
 
     void
@@ -371,7 +383,9 @@ public:
     Signal_Base::Signal_Basic_Parameters
     get_input_signal_basic_parameters() const
     {
-        return {_line_edit_inputs.start_time, _line_edit_inputs.scaler};
+        return {
+            _line_edit_inputs.input_signal_basic_parameters_map.at(get_input_signal()).at("start_time"),
+            _line_edit_inputs.input_signal_basic_parameters_map.at(get_input_signal()).at("scaler")};
     }
 
     std::array<double, 5>
