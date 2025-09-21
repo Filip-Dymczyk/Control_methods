@@ -52,6 +52,9 @@ public:
         connect(
             this, &Main_Widget::enable_pid_derivative_filtering, _dependency_handler.get(),
             &Dependency_Handler::enable_pid_derivative_filtering);
+        connect(
+            _dependency_handler.get(), &Dependency_Handler::controller_type_changed, this,
+            &Main_Widget::controller_type_changed);
 
         QGroupBox* dynamical_system_group_box       = create_dynamical_system_group_box();
         QGroupBox* control_loop_group_box           = create_control_loop_group_box();
@@ -123,9 +126,7 @@ public Q_SLOTS:
     void
     update_pid_parameters_line_edit(std::array<double, 3> pid_parameters)
     {
-        _controller_parameters_line_edit->setText(
-            QString("[%1, %2, %3]").arg(pid_parameters[0]).arg(pid_parameters[1]).arg(pid_parameters[2]));
-        Q_EMIT _controller_parameters_line_edit->editingFinished();
+        set_controller_parameters_line_edit_text(std::vector<double>(pid_parameters.begin(), pid_parameters.end()));
     }
 
 Q_SIGNALS:
@@ -243,7 +244,7 @@ private:
 
         _controller_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            _controller_parameters_line_edit, "[1.0, 1.0, 0.0]",
+            _controller_parameters_line_edit, "[0.0, 0.0, 0.0]",
             "<p><i>Enter controller parameters as a vector.</i></p>");
 
         _controller_parameters_line_edit->setEnabled(false);  // No controller as initial controller type.
@@ -590,5 +591,21 @@ private Q_SLOTS:
         }
 
         _previous_object_representation = static_cast<Object_Representation>(combobox->currentIndex());
+    }
+
+    void
+    controller_type_changed(std::vector<double> const& controller_parameters)
+    {
+        set_controller_parameters_line_edit_text(controller_parameters);
+    }
+
+    void
+    set_controller_parameters_line_edit_text(std::vector<double> const& controller_parameters)
+    {
+        _controller_parameters_line_edit->setText(QString("[%1, %2, %3]")
+                                                      .arg(QString::number(controller_parameters[0], 'f', 3))
+                                                      .arg(QString::number(controller_parameters[1], 'f', 3))
+                                                      .arg(QString::number(controller_parameters[2], 'f', 3)));
+        Q_EMIT _controller_parameters_line_edit->editingFinished();
     }
 };

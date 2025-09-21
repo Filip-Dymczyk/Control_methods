@@ -35,6 +35,10 @@ public:
         connect(
             _inputs_parser.get(), &Inputs_Parser::value_above_upper_limit, this,
             &Dependency_Handler::value_above_upper_limit);
+
+        connect(
+            _inputs_parser.get(), &Inputs_Parser::controller_type_changed, this,
+            &Dependency_Handler::controller_type_changed);
     }
 
     Input_Parameters_Container const&
@@ -144,4 +148,7 @@ Q_SIGNALS:
 
     void
     value_above_upper_limit(double limit);
+
+    void
+    controller_type_changed(std::vector<double> const& controller_parameters);
 };
