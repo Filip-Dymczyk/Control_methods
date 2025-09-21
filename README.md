@@ -39,6 +39,4 @@
 - option to create more advanced control loops (open/closed) with a selected controller type (with changeable parameters),
 - possibility to plot control signal value (optional), simulate measurement noise with a tunable standard deviation and low pass filter the PID derivative input with desired coefficient,
 - ability to specify operation time and time step.
-
-#### GUI features to add:
-- introduce PID tuning into GUI (for now, it can be selected but has no effect).
+- added experimental **PID Tuner** using **RLS** with tunable parameters (requires further validation).
