@@ -6,6 +6,26 @@
 #include <cstdint>
 #include "base_classes/signal_base.h"
 
+class No_Signal : public Signal_Base
+{
+public:
+    No_Signal(double time_step, Signal_Basic_Parameters const& parameters) : Signal_Base(time_step, parameters) {}
+
+    No_Signal(double time_step) : No_Signal(time_step, {}) {}
+
+    void
+    update() override
+    {
+        update_timer();
+    }
+
+    void
+    reset() override
+    {
+        reset_timer();
+    }
+};
+
 // NOTE: Heaviside function - a * 1(t - t0).
 class Heaviside : public Signal_Base
 {

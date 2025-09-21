@@ -145,7 +145,6 @@ Q_SIGNALS:
 private:
     int combobox_id  = 0;
     int line_edit_id = 0;
-    Input_Signal _previous_input_signal_type {Input_Signal::HEAVISIDE};
     Object_Representation _previous_object_representation {Object_Representation::EQUATION};
     QGridLayout* _input_signal_layout {nullptr};
     QGridLayout* _dynamical_system_layout {nullptr};
@@ -277,7 +276,8 @@ private:
     create_input_signal_group_box()
     {
         QComboBox* input_signal_combobox = new QComboBox();
-        set_up_combobox(input_signal_combobox, {"Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
+        set_up_combobox(
+            input_signal_combobox, {"No Signal", "Heaviside", "Ramp", "Rectangle", "Sine wave", "Pulse wave"});
         connect(
             input_signal_combobox, QOverload<int>::of(&QComboBox::currentIndexChanged), this,
             &update_input_signal_layout);
@@ -337,6 +337,12 @@ private:
     QGridLayout*
     input_signal_group_box_layout(QComboBox* input_signal_combobox)
     {
+        QLabel* start_time_label = new QLabel("Start time [s]: ");
+        start_time_label->hide();
+
+        QLabel* scaler_label = new QLabel("Scaler: ");
+        scaler_label->hide();
+
         QLabel* on_time_label = new QLabel("On time [s]: ");
         on_time_label->hide();
 
@@ -356,9 +362,11 @@ private:
 
         ClickableLineEdit* start_time_line_edit = new ClickableLineEdit();
         set_up_line_edit(start_time_line_edit, "0.0", "<p><i>Set up start time in seconds.</i></p>");
+        start_time_line_edit->hide();
 
         ClickableLineEdit* scaler_line_edit = new ClickableLineEdit();
         set_up_line_edit(scaler_line_edit, "1.0", "<p><i>Set up scaler parameter.</i></p>");
+        scaler_line_edit->hide();
 
         ClickableLineEdit* on_time_line_edit = new ClickableLineEdit();
         set_up_line_edit(on_time_line_edit, "5.0", "<p><i>Set up on time in seconds.</i></p>");
@@ -382,18 +390,16 @@ private:
 
         QGridLayout* grid_Layout = new QGridLayout();
 
-        // Default widgets (shared among all the input signals) are not hidden.
         int row = 0;
         grid_Layout->addWidget(new QLabel("Input signal type: "), row, 0);
         grid_Layout->addWidget(input_signal_combobox, row, 1);
         row++;
-        grid_Layout->addWidget(new QLabel("Start time [s]: "), row, 0);
+        grid_Layout->addWidget(start_time_label, row, 0);
         grid_Layout->addWidget(start_time_line_edit, row, 1);
         row++;
-        grid_Layout->addWidget(new QLabel("Scaler: "), row, 0);
+        grid_Layout->addWidget(scaler_label, row, 0);
         grid_Layout->addWidget(scaler_line_edit, row, 1);
         row++;
-
         grid_Layout->addWidget(on_time_label, row, 0);
         grid_Layout->addWidget(on_time_line_edit, row, 1);
         row++;
@@ -435,39 +441,11 @@ private:
             &Dependency_Handler::comboboxes_callback);
     }
 
-    int
-    get_valid_grid_layout_row(Input_Signal signal_type) const
-    {
-        int valid_row = 0;
-        switch(signal_type)
-        {
-            case Input_Signal::RECTANGLE:
-            {
-                valid_row = static_cast<int>(signal_type) + 1;
-                break;
-            }
-            case Input_Signal::SINE_WAVE:
-            {
-                valid_row = static_cast<int>(signal_type) + 1;
-                break;
-            }
-            case Input_Signal::PULSE_WAVE:
-            {
-                valid_row = static_cast<int>(signal_type) + 2;
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
-        return valid_row;
-    }
-
     void
     hide_show_grid_layout_widgets(QGridLayout* grid_layout, int beginning_row, int rows_to_hide_show, bool hide)
     {
-        for(int row = beginning_row; (row < grid_layout->rowCount() && row < beginning_row + rows_to_hide_show); row++)
+        for(int row = beginning_row; (row < grid_layout->rowCount()) && (row < beginning_row + rows_to_hide_show);
+            row++)
         {
             for(int column = 0; column < grid_layout->columnCount(); column++)
             {
@@ -502,55 +480,37 @@ private Q_SLOTS:
             return;
         }
 
-        int const previous_signal_type_row = get_valid_grid_layout_row(_previous_input_signal_type);
-        switch(_previous_input_signal_type)
+        static constexpr int starting_row = 1;
+        hide_show_grid_layout_widgets(_input_signal_layout, starting_row, _input_signal_layout->rowCount(), true);
+
+        static constexpr int number_of_basic_signal_parameters = 2;
+        static constexpr int rect_starting_row                 = 3;
+        static constexpr int sine_wave_starting_row            = 4;
+        static constexpr int pulse_wave_starting_row           = 6;
+        static constexpr int rect_rows                         = 1;
+        static constexpr int sine_wave_rows                    = 2;
+        static constexpr int pulse_wave_rows                   = 2;
+
+        Input_Signal const signal_type = static_cast<Input_Signal>(combobox->currentIndex());
+        if(signal_type != Input_Signal::NO_SIGNAL)
         {
-            case Input_Signal::RECTANGLE:
-            {
-                hide_show_grid_layout_widgets(_input_signal_layout, previous_signal_type_row, 1, true);
-                break;
-            }
-            case Input_Signal::SINE_WAVE:
-            {
-                hide_show_grid_layout_widgets(_input_signal_layout, previous_signal_type_row, 2, true);
-                break;
-            }
-            case Input_Signal::PULSE_WAVE:
-            {
-                hide_show_grid_layout_widgets(_input_signal_layout, previous_signal_type_row, 2, true);
-                break;
-            }
-            default:
-            {
-                break;  // Don't hide anything for HEAVISIDE/RAMP input signal as it's just basic layout.
-            }
+            hide_show_grid_layout_widgets(_input_signal_layout, starting_row, number_of_basic_signal_parameters, false);
         }
 
-        Input_Signal const signal_type    = static_cast<Input_Signal>(combobox->currentIndex());
-        int const current_signal_type_row = get_valid_grid_layout_row(signal_type);
         switch(signal_type)
         {
             case Input_Signal::RECTANGLE:
-            {
-                hide_show_grid_layout_widgets(_input_signal_layout, current_signal_type_row, 1, false);
+                hide_show_grid_layout_widgets(_input_signal_layout, rect_starting_row, rect_rows, false);
                 break;
-            }
             case Input_Signal::SINE_WAVE:
-            {
-                hide_show_grid_layout_widgets(_input_signal_layout, current_signal_type_row, 2, false);
+                hide_show_grid_layout_widgets(_input_signal_layout, sine_wave_starting_row, sine_wave_rows, false);
                 break;
-            }
             case Input_Signal::PULSE_WAVE:
-            {
-                hide_show_grid_layout_widgets(_input_signal_layout, current_signal_type_row, 2, false);
+                hide_show_grid_layout_widgets(_input_signal_layout, pulse_wave_starting_row, pulse_wave_rows, false);
                 break;
-            }
             default:
-            {
-                break;  // Don't show anything for HEAVISIDE/RAMP input signal as it's just basic layout.
-            }
+                break;
         }
-        _previous_input_signal_type = signal_type;
     }
 
     void
@@ -562,26 +522,26 @@ private Q_SLOTS:
             return;
         }
 
-        static int const EQUATION_BEGINNING_ROW    = 2;
-        static int const EQUATION_LAYOUT_ROWS      = 1;
-        static int const STATE_SPACE_BEGINNING_ROW = 3;
-        static int const STATE_SPACE_LAYOUT_ROWS   = 4;
+        static constexpr int equation_beginning_row    = 2;
+        static constexpr int equation_layout_rows      = 1;
+        static constexpr int state_space_beginning_row = 3;
+        static constexpr int state_space_layout_rows   = 4;
         switch(_previous_object_representation)
         {
             case Object_Representation::EQUATION:
             {
                 hide_show_grid_layout_widgets(
-                    _dynamical_system_layout, EQUATION_BEGINNING_ROW, EQUATION_LAYOUT_ROWS, true);
+                    _dynamical_system_layout, equation_beginning_row, equation_layout_rows, true);
                 hide_show_grid_layout_widgets(
-                    _dynamical_system_layout, STATE_SPACE_BEGINNING_ROW, STATE_SPACE_LAYOUT_ROWS, false);
+                    _dynamical_system_layout, state_space_beginning_row, state_space_layout_rows, false);
                 break;
             }
             case Object_Representation::STATE_SPACE:
             {
                 hide_show_grid_layout_widgets(
-                    _dynamical_system_layout, STATE_SPACE_BEGINNING_ROW, STATE_SPACE_LAYOUT_ROWS, true);
+                    _dynamical_system_layout, state_space_beginning_row, state_space_layout_rows, true);
                 hide_show_grid_layout_widgets(
-                    _dynamical_system_layout, EQUATION_BEGINNING_ROW, EQUATION_LAYOUT_ROWS, false);
+                    _dynamical_system_layout, equation_beginning_row, equation_layout_rows, false);
                 break;
             }
             default:

@@ -35,9 +35,10 @@ public:
           _rect(std::make_shared<Rectangle>(TIME_STEP)),
           _sine_wave(std::make_shared<Sine_Wave>(TIME_STEP)),
           _pulse_wave(std::make_shared<Pulse_Wave>(TIME_STEP)),
+          _no_signal(std::make_shared<No_Signal>(TIME_STEP)),
           _selected_object(nullptr),
           _selected_controller(nullptr),
-          _selected_input_signal(_heaviside),
+          _selected_input_signal(_no_signal),
           _regression(),
           _system(_selected_object, Control_System::Control_Mode::OPEN_LOOP),
           _tuner(_system, _regression),
@@ -132,6 +133,11 @@ public:
     {
         switch(input_signal)
         {
+            case Input_Signal::NO_SIGNAL:
+            {
+                _selected_input_signal = _no_signal;
+                break;
+            }
             case Input_Signal::HEAVISIDE:
             {
                 _selected_input_signal = _heaviside;
@@ -360,6 +366,7 @@ private:
     std::shared_ptr<Rectangle> _rect;
     std::shared_ptr<Sine_Wave> _sine_wave;
     std::shared_ptr<Pulse_Wave> _pulse_wave;
+    std::shared_ptr<No_Signal> _no_signal;
 
     std::shared_ptr<Object_Representation_Base> _selected_object;
     std::shared_ptr<Controller_Base> _selected_controller;
