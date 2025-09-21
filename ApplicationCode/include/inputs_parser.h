@@ -171,6 +171,7 @@ public:
             case ComboBox_ID::INPUT_SIGNAL:
             {
                 _inputs.set_input_signal(static_cast<Input_Signal>(current_index));
+                Q_EMIT input_signal_changed(_inputs.get_input_signal_basic_parameters());
                 break;
             }
             case ComboBox_ID::OPERATION_TYPE:
@@ -377,6 +378,9 @@ Q_SIGNALS:
 
     void
     controller_type_changed(std::vector<double> const& controller_parameters);
+
+    void
+    input_signal_changed(Signal_Base::Signal_Basic_Parameters const& signal_basic_parameters);
 
 private:
     Input_Parameters_Container _inputs {};

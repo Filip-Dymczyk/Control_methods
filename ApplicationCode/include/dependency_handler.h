@@ -39,6 +39,9 @@ public:
         connect(
             _inputs_parser.get(), &Inputs_Parser::controller_type_changed, this,
             &Dependency_Handler::controller_type_changed);
+        connect(
+            _inputs_parser.get(), &Inputs_Parser::input_signal_changed, this,
+            &Dependency_Handler::input_signal_changed);
     }
 
     Input_Parameters_Container const&
@@ -151,4 +154,7 @@ Q_SIGNALS:
 
     void
     controller_type_changed(std::vector<double> const& controller_parameters);
+
+    void
+    input_signal_changed(Signal_Base::Signal_Basic_Parameters const& signal_basic_parameters);
 };
