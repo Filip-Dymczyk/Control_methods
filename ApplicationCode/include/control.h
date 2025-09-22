@@ -50,12 +50,13 @@ public:
     set_object(
         std::vector<std::size_t> orders, double time_step, Object_Representation object_representation,
         std::vector<double> const& initial_conditions, std::vector<double> const& object_parameters,
-        Object_Representation_Base::State_Space_Matrices const& matrices)
+        double control_signal_scaler, Object_Representation_Base::State_Space_Matrices const& matrices)
     {
         switch(object_representation)
         {
             case Object_Representation::EQUATION:
             {
+                _differential_equation_representation_object->set_control_signal_scaler(control_signal_scaler);
                 _selected_object = _differential_equation_representation_object;
                 if(_selected_object != nullptr)
                 {

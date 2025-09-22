@@ -31,8 +31,15 @@ public:
             case LineEdit_ID::OBJECT_PARAMETERS_LINE_EDIT:
             {
                 std::vector<double> const object_parameters = parse_vector_parameters(line_edit);
-                _inputs.set_order(object_parameters.size() - 1u, Object_Representation::EQUATION);
+                _inputs.set_order(object_parameters.size(), Object_Representation::EQUATION);
                 _inputs.set_object_parameters(object_parameters);
+                break;
+            }
+            case LineEdit_ID::CONTROL_SIGNAL_SCALER_LINE_EDIT:
+            {
+                double const control_signal_scaler = parse_single_number_line_edit(
+                    line_edit, -std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
+                _inputs.set_control_signal_scaler(control_signal_scaler);
                 break;
             }
             case LineEdit_ID::A_MATRIX_LINE_EDIT:
