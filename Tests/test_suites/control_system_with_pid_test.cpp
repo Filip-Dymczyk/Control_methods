@@ -33,7 +33,7 @@ private:
     Sine_Wave _sine_wave {_time_step, 20.0, 5.0, {}};
     std::shared_ptr<PID> _pid        = std::make_shared<PID>(_time_step, std::vector<double> {1.0, 1.0, 1.0});
     std::shared_ptr<ObjectT> _object = std::make_shared<ObjectT>(
-        _time_step, order, std::vector<double> {0.0, 0.0}, std::vector<double> {1.0, 1.0, 1.0});
+        _time_step, order, std::vector<double> {0.0, 0.0}, std::vector<double> {1.0, 1.0}, 1.0);
 };
 
 TEST_F(ControlSystemWithPidTest, OpenLoopControlTest) { test_open_loop_control(); }

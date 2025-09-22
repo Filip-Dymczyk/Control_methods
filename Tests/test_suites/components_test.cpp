@@ -55,7 +55,7 @@ private:
     Derivative _derivative {_time_step};
     PID _pid {_time_step, {1.0, 1.0, 1.0}};
     Object_Differential_Equation_Representation _object_differential_equation {
-        _time_step, _order, init_state, {1.0, 1.0, 1.0}};
+        _time_step, _order, init_state, {1.0, 1.0}, 1.0};
     Object_State_Space_Representation _object_state_space {
         _time_step, _order, init_state, {{{0.0, 1.0}, {-1.0, -1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
 };

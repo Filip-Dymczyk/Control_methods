@@ -32,7 +32,7 @@ protected:
     std::vector<std::vector<double>> const init_states = {{1.0, 0.0}, {3.0, 0.0}, {5.0, 1.0}};
     Heaviside _heaviside {_time_step, {0.0, 0.0}};  // Scaler set to 0 - response to initial conditions.
     Object_Differential_Equation_Representation _object_differential_equation {
-        _time_step, _order, init_states.at(0), {1.0, 1.0, 1.0}};
+        _time_step, _order, init_states.at(0), {1.0, 1.0}, 1.0};
     Object_State_Space_Representation _object_state_space {
         _time_step, _order, init_states.at(0), {{{0.0, 1.0}, {-1.0, -1.0}}}, {0.0, 1.0}, {1.0, 0.0}};
 };

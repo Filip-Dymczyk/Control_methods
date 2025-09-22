@@ -174,8 +174,11 @@ private:
 
         ClickableLineEdit* object_parameters_line_edit = new ClickableLineEdit();
         set_up_line_edit(
-            object_parameters_line_edit, "[1.0, 1.0, 1.0]",
+            object_parameters_line_edit, "[1.0, 1.0]",
             "<p><i>Enter object parameters as a vector, e.g. [a, b].</i></p>");
+
+        ClickableLineEdit* control_signal_scaler_line_edit = new ClickableLineEdit();
+        set_up_line_edit(control_signal_scaler_line_edit, "1.0", "<p><i>Enter control signal scaler.</i></p>");
 
         QLabel* A_matrix_label = new QLabel("A: ");
         A_matrix_label->hide();
@@ -217,6 +220,9 @@ private:
         row++;
         _dynamical_system_layout->addWidget(new QLabel("Object parameters: "), row, 0);
         _dynamical_system_layout->addWidget(object_parameters_line_edit, row, 1);
+        row++;
+        _dynamical_system_layout->addWidget(new QLabel("Input signal scaler: "), row, 0);
+        _dynamical_system_layout->addWidget(control_signal_scaler_line_edit, row, 1);
         row++;
         _dynamical_system_layout->addWidget(A_matrix_label, row, 0);
         _dynamical_system_layout->addWidget(A_matrix_line_edit, row, 1);
@@ -528,8 +534,8 @@ private Q_SLOTS:
         }
 
         static constexpr int equation_beginning_row    = 2;
-        static constexpr int equation_layout_rows      = 1;
-        static constexpr int state_space_beginning_row = 3;
+        static constexpr int equation_layout_rows      = 2;
+        static constexpr int state_space_beginning_row = 4;
         static constexpr int state_space_layout_rows   = 4;
         switch(_previous_object_representation)
         {

@@ -15,7 +15,8 @@ class Input_Parameters_Container
     struct LineEdit_Inputs
     {
         std::vector<double> initial_conditions {0.0, 0.0};
-        std::vector<double> object_parameters {1.0, 1.0, 1.0};
+        std::vector<double> object_parameters {1.0, 1.0};
+        double control_signal_scaler {1.0};
         std::vector<double> pid_parameters {1.0, 0.0, 0.0};
         std::vector<double> band_bang_parameters {-1.0, 1.0, 0.1};
         std::vector<std::vector<double>> A_matrix = {{0.0, 1.0}, {-1.0, -1.0}};
@@ -66,7 +67,7 @@ public:
                                                       (_line_edit_inputs.C_vector.size() == state_space_order);
 
         return ((_comboboxes_inputs.object_representation == Object_Representation::EQUATION) &&
-                (equation_order == _line_edit_inputs.object_parameters.size() - 1u) &&
+                (equation_order == _line_edit_inputs.object_parameters.size()) &&
                 (equation_order == _line_edit_inputs.initial_conditions.size())) ||
                ((_comboboxes_inputs.object_representation == Object_Representation::STATE_SPACE) &&
                 valid_state_space_matrices_sizes && (state_space_order == _line_edit_inputs.initial_conditions.size()));
@@ -106,6 +107,12 @@ public:
     set_object_parameters(std::vector<double> const& object_parameters)
     {
         _line_edit_inputs.object_parameters = object_parameters;
+    }
+
+    void
+    set_control_signal_scaler(double control_signal_scaler)
+    {
+        _line_edit_inputs.control_signal_scaler = control_signal_scaler;
     }
 
     void
@@ -283,6 +290,12 @@ public:
     get_object_parameters() const
     {
         return _line_edit_inputs.object_parameters;
+    }
+
+    double
+    get_control_signal_scaler() const
+    {
+        return _line_edit_inputs.control_signal_scaler;
     }
 
     std::vector<std::vector<double>> const&

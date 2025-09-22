@@ -14,17 +14,18 @@ class Object_Differential_Equation_Representation : public Object_Representation
 public:
     Object_Differential_Equation_Representation(
         double time_step, std::size_t order, std::vector<double> const& init_state,
-        std::vector<double> const& coefficients)
+        std::vector<double> const& object_parameters, double control_signal_scaler)
         : Object_Representation_Base(time_step, order, init_state)
     {
-        assert(coefficients.size() == order + 1u);
-        _coefficients.reserve(order + 1u);
-        _coefficients = coefficients;
+        assert(object_parameters.size() == order);
+        _object_parameters.reserve(order);
+        _object_parameters     = object_parameters;
+        _control_signal_scaler = control_signal_scaler;
     }
 
     Object_Differential_Equation_Representation(double time_step, std::size_t order)
         : Object_Differential_Equation_Representation(
-              time_step, order, std::vector<double>(order), std::vector<double>(order + 1u))
+              time_step, order, std::vector<double>(order), std::vector<double>(order), 0.0)
     {
     }
 
@@ -32,19 +33,12 @@ public:
     update(double control) override
     {
         double highest_order_derivative_value = 0;
-
-        // Calculating the highest derivative order:
-        for(std::size_t i = 0; i < _coefficients.size(); i++)
+        for(std::size_t i = 0; i < _object_parameters.size(); i++)
         {
-            if(i < _coefficients.size() - 1)
-            {
-                highest_order_derivative_value -= _coefficients.at(i) * _state.get_value(i);
-            }
-            else
-            {
-                highest_order_derivative_value += _coefficients.at(i) * control;
-            }
+            highest_order_derivative_value -= _object_parameters.at(i) * _state.get_value(i);
         }
+        highest_order_derivative_value += _control_signal_scaler * control;
+
         // Update state variables values:
         _state.update(highest_order_derivative_value);
 
@@ -55,16 +49,23 @@ public:
     void
     set_parameters(std::vector<double> const& object_parameters) override
     {
-        assert(object_parameters.size() == (order() + 1u));
-        _coefficients = object_parameters;
+        assert(object_parameters.size() == order());
+        _object_parameters = object_parameters;
+    }
+
+    void
+    set_control_signal_scaler(double control_signal_scaler)
+    {
+        _control_signal_scaler = control_signal_scaler;
     }
 
     std::vector<double> const&
-    get_coefficients() const
+    get_object_parameters() const
     {
-        return _coefficients;
+        return _object_parameters;
     }
 
 private:
-    std::vector<double> _coefficients {};
+    std::vector<double> _object_parameters {};
+    double _control_signal_scaler;
 };

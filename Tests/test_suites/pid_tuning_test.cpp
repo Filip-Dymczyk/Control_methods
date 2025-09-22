@@ -37,7 +37,7 @@ private:
     Sine_Wave _sine_wave_1 {time_step, 1.0, 1.0, {}};
     std::shared_ptr<PID> pid_1 = std::make_shared<PID>(time_step, std::vector<double> {0.0, 0.0, 0.0});
     std::shared_ptr<ObjectEquationT> object_differential_equation_representation = std::make_shared<ObjectEquationT>(
-        time_step, order, std::vector<double> {0.0, 0.0}, std::vector<double> {2.0, 0.50, 3.0});
+        time_step, order, std::vector<double> {0.0, 0.0}, std::vector<double> {2.0, 0.50}, 3.0);
     Control_System system_1 {
         object_differential_equation_representation, pid_1, Control_System::Control_Mode::CLOSED_LOOP};
     Pid_Tuner _tuner_1 {system_1, {}};

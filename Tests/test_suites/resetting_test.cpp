@@ -24,7 +24,7 @@ protected:
     test_closed_loop_with_resets()
     {
         Test_With_Plot::test_closed_loop_control(_object_differential_equation_representation, _pid, &_step);
-        _object_differential_equation_representation.reset();
+        _object_differential_equation_representation->reset();
         _pid->reset();
         Test_With_Plot::test_closed_loop_control(_object_differential_equation_representation, _pid, &_step);
     }
@@ -42,7 +42,7 @@ private:
     Heaviside _step {_time_step, {5.0, 1.0}};
     std::shared_ptr<PID> _pid = std::make_shared<PID>(_time_step, std::vector<double> {1.0, 1.0, 1.0});
     std::shared_ptr<ObjectEquationT> _object_differential_equation_representation = std::make_shared<ObjectEquationT>(
-        _time_step, _order, std::vector<double> {0.0, -1.0}, std::vector<double> {2.0, 0.50, 3.0});
+        _time_step, _order, std::vector<double> {0.0, -1.0}, std::vector<double> {2.0, 0.50}, 3.0);
     Control_System _system {
         _object_differential_equation_representation, _pid, Control_System::Control_Mode::CLOSED_LOOP};
     Recursive_Linear_Regression _regression {};
