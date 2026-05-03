@@ -3,17 +3,15 @@
 :: Format changed files
 call code_format_changed 
 
-echo Configuring CMake...
-cmake -S . -B builds/test_builds
-
 echo Building project...
-cmake --build builds/test_builds --config Release
-:: Second build for proper initialization
-cmake --build builds/test_builds --config Release
+cmake --build build_test --verbose
 
 IF %ERRORLEVEL% NEQ 0 (
-    echo g++.exe failed! Build aborted.
+    echo Build failed!
     exit /b %ERRORLEVEL%
 )
+
+echo Copying compile_commands.json to project root...
+copy /Y build_test\compile_commands.json compile_commands.json
 
 echo Build finished successfully!!!

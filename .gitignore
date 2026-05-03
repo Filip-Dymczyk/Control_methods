@@ -41,5 +41,7 @@
 # Allow .bat scripts
 !*.bat
 
-# Notes:
-*.txt
+*.cache
+*.qt
+
+compile_commands.json

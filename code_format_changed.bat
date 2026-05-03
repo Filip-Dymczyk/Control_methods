@@ -8,7 +8,7 @@ for /f "delims=" %%f in ('git diff --name-only -- "*.cpp" "*.h"') do (
 
     echo !relative_path! | findstr /I "3rdParty" >nul
     if errorlevel 1 (
-        echo !relative_path! | findstr /I "builds" >nul
+        echo !relative_path! | findstr /I "*build*" >nul
         if errorlevel 1 (
             echo Formatting: %%~nxf
             clang-format -i "%%f"
