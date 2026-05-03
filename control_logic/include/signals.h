@@ -192,9 +192,9 @@ public:
     update() override
     {
         Rectangle::update();
-        if(time() >= (m_offset * m_period))
+        if(time() >= (m_period_counter * m_period))
         {
-            m_offset++;
+            m_period_counter++;
             reset_on_timer();
         }
     }
@@ -205,7 +205,7 @@ public:
         Rectangle::reset();
         set_value(0.0);
         reset_timer();
-        m_offset = 1u;
+        m_period_counter = 1u;
     }
 
     void
@@ -233,6 +233,6 @@ public:
     }
 
 private:
-    std::uint32_t m_offset {1u};
+    std::uint32_t m_period_counter {1u};
     double m_period {};
 };
