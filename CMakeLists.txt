@@ -1,60 +1,16 @@
-# Common configuration.
-#-------------------------------------------------
 cmake_minimum_required(VERSION 3.14)
 project(CONTROL_METHODS)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#-------------------------------------------------
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Googletest repository fetching.
-#-------------------------------------------------
-include(FetchContent)
-FetchContent_Declare(
-  googletest
-  URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
-)
+add_subdirectory(control_logic)
 
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-
-include(GoogleTest)
-#-------------------------------------------------
-
-# Enabling testing.
-#-------------------------------------------------
-enable_testing()
-#-------------------------------------------------
-
-# Include directories to search for headers.
-#-------------------------------------------------
-include_directories(
-  "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\include"
-  "C:\\Users\\User\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy\\core\\include"
-  LogicCode/include
-  3rdParty
-  Tests
-)
-#-------------------------------------------------
-
-# Helper macro to simplify the addition of test executables.
-#-------------------------------------------------
-macro(add_test_executable test_name test_source)
-  add_executable(${test_name} ${test_source})
-  target_link_libraries(${test_name} GTest::gtest_main)
-  gtest_discover_tests(${test_name})
-endmacro()
-#-------------------------------------------------
-
-# Add test executables with corresponding defined library.
-#-------------------------------------------------
-add_test_executable(algebra_test Tests/test_suites/algebra_test.cpp)
-add_test_executable(signals_test Tests/test_suites/signals_test.cpp)
-add_test_executable(components_test Tests/test_suites/components_test.cpp)
-add_test_executable(control_system_with_pid_test Tests/test_suites/control_system_with_pid_test.cpp)
-add_test_executable(pid_tuning_test Tests/test_suites/pid_tuning_test.cpp)
-add_test_executable(control_system_with_bang_bang_controller_test Tests/test_suites/control_system_with_bang_bang_controller_test.cpp)
-add_test_executable(resetting_test Tests/test_suites/resetting_test.cpp)
-add_test_executable(derivative_filtering_test Tests/test_suites/derivative_filtering_test.cpp)
-add_test_executable(initial_conditions_setting_test Tests/test_suites/initial_conditions_setting_test.cpp)
-#-------------------------------------------------
+option(BUILD_TESTS "Build tests" OFF)
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+else()
+    add_subdirectory(gui_logic)
+    add_subdirectory(main_application)
+endif()

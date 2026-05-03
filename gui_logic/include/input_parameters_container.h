@@ -1,0 +1,425 @@
+// Author : Filip Dymczyk
+// Description : Dependency handler input parameter container.
+
+#pragma once
+#include <array>
+#include <string>
+#include <unordered_map>
+#include <vector>
+#include "base_classes/signal_base.h"
+#include "enums.h"
+
+class Input_Parameters_Container
+{
+    struct LineEdit_Inputs
+    {
+        std::vector<double> initial_conditions {0.0, 0.0};
+        std::vector<double> object_parameters {1.0, 1.0};
+        double control_signal_scaler {1.0};
+        std::vector<double> pid_parameters {1.0, 0.0, 0.0};
+        std::vector<double> band_bang_parameters {-1.0, 1.0, 0.1};
+        std::vector<std::vector<double>> A_matrix = {{0.0, 1.0}, {-1.0, -1.0}};
+        std::vector<double> B_vector              = {0.0, 1.0};
+        std::vector<double> C_vector              = {1.0, 0.0};
+        double D {0.0};
+        std::unordered_map<Input_Signal, std::unordered_map<std::string, double>> input_signal_basic_parameters_map;
+        double on_time {5.0};
+        double omega {1.0};
+        double offset {0.0};
+        double duty_cycle {0.5};
+        double period {2.0};
+        double simulation_time {10.0};
+        double measurement_noise_std {0.001};
+        double pid_derivative_filtering_coefficient {0.5};
+        double RLS_forgetting_factor {0.99};
+
+        LineEdit_Inputs()
+        {
+            for(int i = static_cast<int>(Input_Signal::NO_SIGNAL); i <= static_cast<int>(Input_Signal::PULSE_WAVE); ++i)
+            {
+                Input_Signal const signal_type                               = static_cast<Input_Signal>(i);
+                input_signal_basic_parameters_map[signal_type]["start_time"] = 0.0;
+                input_signal_basic_parameters_map[signal_type]["scaler"]     = 1.0;
+            }
+        }
+    };
+
+    struct ComboBoxes_Inputs
+    {
+        Object_Representation object_representation = Object_Representation::EQUATION;
+        Control_Mode control_mode                   = Control_Mode::OPEN_LOOP;
+        Controller_Type controller_type             = Controller_Type::NONE;
+        Input_Signal input_signal                   = Input_Signal::NO_SIGNAL;
+        Operation_Type operation_type               = Operation_Type::SIMULATION;
+        double simulation_time_step {0.01};
+    };
+
+public:
+    bool
+    allowed_to_run() const
+    {
+        std::size_t const equation_order    = m_orders.at(static_cast<std::size_t>(Object_Representation::EQUATION));
+        std::size_t const state_space_order = m_orders.at(static_cast<std::size_t>(Object_Representation::STATE_SPACE));
+        bool const valid_state_space_matrices_sizes = (m_line_edit_inputs.A_matrix.size() == state_space_order) &&
+                                                      (m_line_edit_inputs.A_matrix.at(0).size() == state_space_order) &&
+                                                      (m_line_edit_inputs.B_vector.size() == state_space_order) &&
+                                                      (m_line_edit_inputs.C_vector.size() == state_space_order);
+
+        return ((m_comboboxes_inputs.object_representation == Object_Representation::EQUATION) &&
+                (equation_order == m_line_edit_inputs.object_parameters.size()) &&
+                (equation_order == m_line_edit_inputs.initial_conditions.size())) ||
+               ((m_comboboxes_inputs.object_representation == Object_Representation::STATE_SPACE) &&
+                valid_state_space_matrices_sizes &&
+                (state_space_order == m_line_edit_inputs.initial_conditions.size()));
+    }
+
+    void
+    set_plot_control_signal(bool checked)
+    {
+        m_plot_control_signal = checked;
+    }
+
+    void
+    set_enable_measurement_noise(bool checked)
+    {
+        m_enable_measurement_noise = checked;
+    }
+
+    void
+    set_enable_pid_derivative_filtering(bool checked)
+    {
+        m_enable_pid_derivative_filtering = checked;
+    }
+
+    void
+    set_order(std::size_t order, Object_Representation representation)
+    {
+        m_orders.at(static_cast<std::size_t>(representation)) = order;
+    }
+
+    void
+    set_initial_conditions(std::vector<double> const& initial_conditions)
+    {
+        m_line_edit_inputs.initial_conditions = initial_conditions;
+    }
+
+    void
+    set_object_parameters(std::vector<double> const& object_parameters)
+    {
+        m_line_edit_inputs.object_parameters = object_parameters;
+    }
+
+    void
+    set_control_signal_scaler(double control_signal_scaler)
+    {
+        m_line_edit_inputs.control_signal_scaler = control_signal_scaler;
+    }
+
+    void
+    set_A_matrix(std::vector<std::vector<double>> const& A_matrix)
+    {
+        m_line_edit_inputs.A_matrix = A_matrix;
+    }
+
+    void
+    set_B_vector(std::vector<double> const& B_vector)
+    {
+        m_line_edit_inputs.B_vector = B_vector;
+    }
+
+    void
+    set_C_vector(std::vector<double> const& C_vector)
+    {
+        m_line_edit_inputs.C_vector = C_vector;
+    }
+
+    void
+    set_D(double D)
+    {
+        m_line_edit_inputs.D = D;
+    }
+
+    void
+    set_controller_parameters(std::vector<double> const& controller_parameters)
+    {
+        switch(m_comboboxes_inputs.controller_type)
+        {
+            case Controller_Type::PID:
+                m_line_edit_inputs.pid_parameters = controller_parameters;
+                break;
+            case Controller_Type::BANG_BANG:
+                m_line_edit_inputs.band_bang_parameters = controller_parameters;
+            default:
+                break;
+        }
+    }
+
+    void
+    set_start_time(double start_time)
+    {
+        m_line_edit_inputs.input_signal_basic_parameters_map[get_input_signal()]["start_time"] = start_time;
+    }
+
+    void
+    set_scaler(double scaler)
+    {
+        m_line_edit_inputs.input_signal_basic_parameters_map[get_input_signal()]["scaler"] = scaler;
+    }
+
+    void
+    set_on_time(double on_time)
+    {
+        m_line_edit_inputs.on_time = on_time;
+    }
+
+    void
+    set_omega(double omega)
+    {
+        m_line_edit_inputs.omega = omega;
+    }
+
+    void
+    set_offset(double offset)
+    {
+        m_line_edit_inputs.offset = offset;
+    }
+
+    void
+    set_duty_cycle(double duty_cycle)
+    {
+        m_line_edit_inputs.duty_cycle = duty_cycle;
+    }
+
+    void
+    set_period(double period)
+    {
+        m_line_edit_inputs.period = period;
+    }
+
+    void
+    set_simulation_time(double simulation_time)
+    {
+        m_line_edit_inputs.simulation_time = simulation_time;
+    }
+
+    void
+    set_measurement_noise_std(double measurement_noise_std)
+    {
+        m_line_edit_inputs.measurement_noise_std = measurement_noise_std;
+    }
+
+    void
+    set_pid_derivative_filtering_coefficient(double filtering_coefficient)
+    {
+        m_line_edit_inputs.pid_derivative_filtering_coefficient = filtering_coefficient;
+    }
+
+    void
+    set_RLS_forgetting_factor(double forgetting_factor)
+    {
+        m_line_edit_inputs.RLS_forgetting_factor = forgetting_factor;
+    }
+
+    void
+    set_simulation_time_step(double simulation_time_step)
+    {
+        m_comboboxes_inputs.simulation_time_step = simulation_time_step;
+    }
+
+    void
+    set_object_representation(Object_Representation const& object_representation)
+    {
+        m_comboboxes_inputs.object_representation = object_representation;
+    }
+
+    void
+    set_control_mode(Control_Mode const& control_mode)
+    {
+        m_comboboxes_inputs.control_mode = control_mode;
+    }
+
+    void
+    set_controller_type(Controller_Type const& controller_type)
+    {
+        m_comboboxes_inputs.controller_type = controller_type;
+    }
+
+    void
+    set_input_signal(Input_Signal const& input_signal)
+    {
+        m_comboboxes_inputs.input_signal = input_signal;
+    }
+
+    void
+    set_operation_type(Operation_Type const& operation_type)
+    {
+        m_comboboxes_inputs.operation_type = operation_type;
+    }
+
+    bool
+    get_plot_control_signal() const
+    {
+        return m_plot_control_signal;
+    }
+
+    bool
+    get_enable_measurement_noise() const
+    {
+        return m_enable_measurement_noise;
+    }
+
+    bool
+    get_enable_pid_derivative_filtering() const
+    {
+        return m_enable_pid_derivative_filtering;
+    }
+
+    std::vector<std::size_t> const
+    get_orders() const
+    {
+        return m_orders;
+    }
+
+    std::vector<double> const&
+    get_initial_conditions() const
+    {
+        return m_line_edit_inputs.initial_conditions;
+    }
+
+    std::vector<double> const&
+    get_object_parameters() const
+    {
+        return m_line_edit_inputs.object_parameters;
+    }
+
+    double
+    get_control_signal_scaler() const
+    {
+        return m_line_edit_inputs.control_signal_scaler;
+    }
+
+    std::vector<std::vector<double>> const&
+    get_A_matrix() const
+    {
+        return m_line_edit_inputs.A_matrix;
+    }
+
+    std::vector<double> const&
+    get_B_vector() const
+    {
+        return m_line_edit_inputs.B_vector;
+    }
+
+    std::vector<double> const&
+    get_C_vector() const
+    {
+        return m_line_edit_inputs.C_vector;
+    }
+
+    double
+    get_D() const
+    {
+        return m_line_edit_inputs.D;
+    }
+
+    std::vector<double> const
+    get_controller_parameters() const
+    {
+        std::vector<double> controller_parameters {0.0, 0.0, 0.0};
+        switch(m_comboboxes_inputs.controller_type)
+        {
+            case Controller_Type::PID:
+                controller_parameters = m_line_edit_inputs.pid_parameters;
+                break;
+            case Controller_Type::BANG_BANG:
+                controller_parameters = m_line_edit_inputs.band_bang_parameters;
+            default:
+                break;
+        }
+        return controller_parameters;
+    }
+
+    double
+    get_simulation_time() const
+    {
+        return m_line_edit_inputs.simulation_time;
+    }
+
+    double
+    get_measurement_noise_std() const
+    {
+        return m_line_edit_inputs.measurement_noise_std;
+    }
+
+    double
+    get_pid_derivative_filtering_coefficient() const
+    {
+        return m_line_edit_inputs.pid_derivative_filtering_coefficient;
+    }
+
+    double
+    get_RLS_forgetting_factor() const
+    {
+        return m_line_edit_inputs.RLS_forgetting_factor;
+    }
+
+    double
+    get_simulation_time_step() const
+    {
+        return m_comboboxes_inputs.simulation_time_step;
+    }
+
+    Object_Representation
+    get_object_representation() const
+    {
+        return m_comboboxes_inputs.object_representation;
+    }
+
+    Control_Mode
+    get_control_mode() const
+    {
+        return m_comboboxes_inputs.control_mode;
+    }
+
+    Controller_Type
+    get_controller_type() const
+    {
+        return m_comboboxes_inputs.controller_type;
+    }
+
+    Input_Signal
+    get_input_signal() const
+    {
+        return m_comboboxes_inputs.input_signal;
+    }
+
+    Signal_Base::Signal_Basic_Parameters
+    get_input_signal_basic_parameters() const
+    {
+        return {
+            m_line_edit_inputs.input_signal_basic_parameters_map.at(get_input_signal()).at("start_time"),
+            m_line_edit_inputs.input_signal_basic_parameters_map.at(get_input_signal()).at("scaler")};
+    }
+
+    std::array<double, 5>
+    get_input_signal_advanced_parameters() const
+    {
+        return {
+            m_line_edit_inputs.on_time, m_line_edit_inputs.omega, m_line_edit_inputs.offset, m_line_edit_inputs.period,
+            m_line_edit_inputs.duty_cycle};
+    }
+
+    Operation_Type
+    get_operation_type() const
+    {
+        return m_comboboxes_inputs.operation_type;
+    }
+
+private:
+    bool m_plot_control_signal {false};
+    bool m_enable_measurement_noise {false};
+    bool m_enable_pid_derivative_filtering {false};
+    std::vector<std::size_t> m_orders {2u, 2u};
+    LineEdit_Inputs m_line_edit_inputs {};
+    ComboBoxes_Inputs m_comboboxes_inputs {};
+};
